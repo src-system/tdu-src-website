@@ -12,9 +12,11 @@
     "ci": "biome ci ."
   },
   "dependencies": {
+    "@t3-oss/env-nextjs": "^0.13.10",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.13",
