@@ -1,0 +1,3 @@
+# Biome ignore file
+# Tailwind CSS v4 uses custom directives that Biome cannot parse
+app/globals.css

@@ -1,0 +1,17 @@
+# Lefthook configuration for Git hooks
+# https://lefthook.dev/configuration/
+
+pre-commit:
+  parallel: true
+  commands:
+    biome-check:
+      glob: "*.{js,ts,jsx,tsx,json,jsonc,mjs,cjs}"
+      run: pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
+
+pre-push:
+  commands:
+    biome-ci:
+      run: pnpm biome ci --no-errors-on-unmatched
+    type-check:
+      run: pnpm tsc --noEmit
