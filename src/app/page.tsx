@@ -13,7 +13,7 @@ const Home = async () => {
 
   return (
     <main>
-      <section className="relative md:h-[540px] h-[300px] w-full overflow-hidden bg-gray-900">
+      <section className="relative md:aspect-3/1 aspect-4/3 w-full overflow-hidden bg-gray-900">
         <video
           className="h-full w-full object-cover"
           autoPlay
