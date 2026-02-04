@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 type TopicCardProps = {
   title: string;
@@ -7,8 +10,26 @@ type TopicCardProps = {
 }
 
 export const TopicCard = ({ title, description, image }: TopicCardProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
+      { threshold: 0.15 }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="flex border-2 shadow-sm border-gray-300 rounded-2xl overflow-hidden py-10">
+    <div
+      ref={ref}
+      className={`flex border-2 shadow-sm border-gray-300 rounded-2xl overflow-hidden py-10 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+    >
       {/* 左側の緑のアクセントライン */}
       <div className="w-5 bg-forest shrink-0" />
 
