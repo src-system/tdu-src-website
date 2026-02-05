@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Lexend_Deca, Noto_Sans, Zen_Maru_Gothic } from "next/font/google";
-import { MainLayout } from "./_components/main-layout";
+import { MainLayout } from "@/src/app/_components/main-layout";
 import "./globals.css";
 
 const lexendDeca = Lexend_Deca({

@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ContentBlock } from "../_components/content-block";
-import { Partition } from "../_components/partition";
-import { TopImage } from "../_components/top-image";
-import { NEWS_DATA } from "../_lib/api";
+import { ContentBlock } from "@/src/app/_components/content-block";
+import { Partition } from "@/src/app/_components/partition";
+import { TopImage } from "@/src/app/_components/top-image";
+import { NEWS_DATA } from "@/src/app/_lib/api";
 
 const NewsPage = () => {
   return (

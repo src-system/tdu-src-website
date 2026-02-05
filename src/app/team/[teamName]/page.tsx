@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { ContentBlock } from "../../_components/content-block";
-import { Partition } from "../../_components/partition";
-import { TopImage } from "../../_components/top-image";
-import { TEAM_DATA } from "../../_lib/api";
+import { ContentBlock } from "@/src/app/_components/content-block";
+import { Partition } from "@/src/app/_components/partition";
+import { TopImage } from "@/src/app/_components/top-image";
+import { TEAM_DATA } from "@/src/app/_lib/api";
 
 // 班の詳細データ
 const TEAM_DETAILS: Record<string, { description: string; activities: string[]; tools: string[] }> =

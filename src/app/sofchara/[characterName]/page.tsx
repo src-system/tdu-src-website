@@ -2,8 +2,8 @@ import { ChevronLeftIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Partition } from "../../_components/partition";
-import { CHARACTER_DATA } from "../../_lib/api";
+import { Partition } from "@/src/app/_components/partition";
+import { CHARACTER_DATA } from "@/src/app/_lib/api";
 
 export function generateStaticParams() {
   return CHARACTER_DATA.map((character) => ({

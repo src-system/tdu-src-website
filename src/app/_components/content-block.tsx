@@ -15,11 +15,11 @@ export const ContentBlock = ({ title, subtitle, description }: ContentBlockProps
 
       {/* 縦線と説明文 */}
       {description && (
-        <div className="flex gap-4 pl-3">
+        <div className="flex md:gap-4 gap-3 md:pl-3 pl-1.5 md:mr-0 mr-1.5">
           {/* 左側の緑色の縦線 */}
           <div className="w-2 shrink-0 bg-forest" />
           {/* 右側の説明文 */}
-          <p className="my-4 md:text-xl text-md leading-relaxed font-medium text-black whitespace-pre-line">
+          <p className="md:my-4 my-2 md:text-xl text-md leading-relaxed font-medium text-black whitespace-pre-line">
             {description}
           </p>
         </div>

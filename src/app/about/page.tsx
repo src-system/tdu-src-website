@@ -1,8 +1,8 @@
-import { ContentBlock } from "../_components/content-block";
-import { Partition } from "../_components/partition";
-import { TopImage } from "../_components/top-image";
-import { ClubActiveLabel } from "./_components/club-active-label";
-import { TopicCard } from "./_components/topic-card";
+import { ContentBlock } from "@/src/app/_components/content-block";
+import { Partition } from "@/src/app/_components/partition";
+import { TopImage } from "@/src/app/_components/top-image";
+import { ClubActiveLabel } from "@/src/app/about/_components/club-active-label";
+import { TopicCard } from "@/src/app/about/_components/topic-card";
 
 const About = () => {
   return (

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { CHARACTER_IMAGES } from "../_lib/api";
+import { CHARACTER_IMAGES } from "@/src/app/_lib/api";
 
 export const RandomCharacter = () => {
   const [imagePath, setImagePath] = useState<string | null>(null);
