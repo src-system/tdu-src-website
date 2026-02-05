@@ -1,20 +1,22 @@
-import { Partition } from "../_components/partition";
 import { ContentBlock } from "../_components/content-block";
+import { Partition } from "../_components/partition";
 import { TopImage } from "../_components/top-image";
-
+import { ClubActiveLabel } from "./_components/club-active-label";
 import { TopicCard } from "./_components/topic-card";
 
 const About = () => {
   return (
     <div>
-      <TopImage imagePath="/images/about.png" />
+      <TopImage imagePath="/images/about.png">
+        <ClubActiveLabel />
+      </TopImage>
       <Partition />
 
-      <section className="flex w-full flex-col gap-5 bg-white mx-auto max-w-6xl md:px-20 px-5 md:py-15 py-10">
+      <section className="flex flex-col w-full gap-5 bg-white mx-auto max-w-6xl md:px-20 px-5 md:py-15 py-12">
         <ContentBlock
           title="ABOUT"
           subtitle="活動内容"
-          description="こんにちは。\n\n東京電機大学 東京千住キャンパス学術研究部会所属のソフトウェア研究部です。 「ソフトウェア研究部」は総合創作系サークルで、「ソフ研」という愛称で呼ばれています。\nソフ研はとても伝統があるサークルで、 その歴史は50年以上にもなります。"
+          description="こんにちは。\n\n東京電機大学 東京千住キャンパス学術研究部会所属のソフトウェア研究部です。「ソフトウェア研究部」は総合創作系サークルで、「ソフ研」という愛称で呼ばれています。\nソフ研はとても伝統があるサークルで、 その歴史は50年以上にもなります。"
         />
       </section>
       <Partition />

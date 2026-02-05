@@ -34,14 +34,18 @@ export function HeaderMenu() {
           <div key={item.href} className="flex items-center">
             <Link
               href={item.href}
-              className="group relative px-6 py-1 text-center font-medium text-gray-700 hover:text-forest"
+              className="group relative 2xl:px-8 md:px-6 px-4 py-1 text-center font-medium text-gray-700 hover:text-forest"
             >
-              <span className="block font-lexend text-base">{item.label}</span>
-              <span className="block text-xs text-gray-500 group-hover:text-forest/70">
+              <span className="block font-lexend 2xl:text-2xl md:text-lg text-sm">
+                {item.label}
+              </span>
+              <span className="block 2xl:text-lg md:text-sm text-xs text-gray-500 group-hover:text-forest/70">
                 {item.sublabel}
               </span>
             </Link>
-            {index < menuItems.length - 1 && <span className="h-8 w-px bg-gray-300" />}
+            {index < menuItems.length - 1 && (
+              <span className="2xl:h-10 md:h-8 h-6 w-px bg-gray-300" />
+            )}
           </div>
         ))}
       </nav>

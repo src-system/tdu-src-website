@@ -1,29 +1,41 @@
-import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { LinkButton } from "./link-button";
 
 type NewsItem = {
   id: string;
   date: string;
   title: string;
   imagePath: string;
+  category: string;
 };
 
 type NewsCardProps = NewsItem;
 
-const NewsCard = ({ id, date, title, imagePath }: NewsCardProps) => {
+const NewsCard = ({ id, date, title, imagePath, category }: NewsCardProps) => {
   return (
     <Link
       href={`/news/${id}`}
-      className="relative block aspect-video w-full overflow-hidden rounded-lg border-4 border-forest transition-all duration-200 hover:scale-105"
+      className="flex gap-4 p-5 rounded-lg border border-gray-200 hover:border-forest hover:shadow-md transition-all duration-200 group"
     >
-      <Image src={imagePath} alt={title} fill className="object-cover" />
-      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
-      <div className="absolute top-2 left-2 rounded bg-forest px-1.5 py-0.5">
-        <span className="text-xs font-bold text-white">{date}</span>
+      <div className="relative w-40 aspect-video flex-shrink-0 rounded-lg overflow-hidden">
+        <Image
+          src={imagePath}
+          alt={title}
+          fill
+          className="object-cover group-hover:scale-110 transition-transform duration-300"
+        />
       </div>
-      <div className="absolute bottom-0 left-0 right-0 p-2">
-        <h3 className="text-sm font-bold text-white line-clamp-2">{title}</h3>
+      <div className="flex-1 flex flex-col justify-center gap-2.5">
+        <h3 className="font-bold text-base md:text-lg line-clamp-1 group-hover:text-forest transition-colors">
+          {title}
+        </h3>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-sm text-gray-600">{date}</span>
+          <span className="px-3 py-1 bg-forest text-white text-xs font-medium rounded">
+            {category}
+          </span>
+        </div>
       </div>
     </Link>
   );
@@ -35,19 +47,15 @@ type NewsListProps = {
 
 export const NewsList = ({ items }: NewsListProps) => {
   return (
-    <div className="flex items-center gap-4">
-      <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-3">
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4">
         {items.slice(0, 3).map((item) => (
           <NewsCard key={item.id} {...item} />
         ))}
       </div>
-      <Link
-        href="/news"
-        className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-2 border-forest bg-white text-forest shadow-[0_3px_0_0_var(--color-forest)] transition-all duration-200 hover:translate-y-0.5 hover:shadow-[0_1px_0_0_var(--color-forest)]"
-        aria-label="もっと見る"
-      >
-        <ChevronRightIcon className="size-6" />
-      </Link>
+      <div className="flex justify-end">
+        <LinkButton href="/news" text="もっとみる" />
+      </div>
     </div>
   );
 };

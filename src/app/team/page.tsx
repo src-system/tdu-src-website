@@ -1,23 +1,34 @@
-import { TopImage } from "../_components/top-image";
-import { Partition } from "../_components/partition";
 import { ContentBlock } from "../_components/content-block";
+import { Partition } from "../_components/partition";
+import { TeamCard, TeamCardGrid } from "../_components/team-card";
+import { TopImage } from "../_components/top-image";
+import { TEAM_DATA } from "../_lib/api";
 
-const TeamPage = () => {
-    return (
-      <div>
-        <TopImage imagePath="/images/team-card/HIBIKI.jpg" />
-        <Partition />
+const TeamListPage = () => {
+  return (
+    <main>
+      <TopImage imagePath="/images/team-card/game.png" />
+      <Partition />
 
-        <section className="flex w-full flex-col gap-5 bg-white mx-auto max-w-6xl md:px-20 px-5 md:py-15 py-10">
-          <ContentBlock
-            title="HIBIKI"
-            subtitle="活動内容"
-            description="ソフ研では、以下のような活動を行っています。"
-          />
-        </section>
-      </div>
-    );
-  };
-  
-  export default TeamPage;
-  
+      <section className="flex w-full flex-col gap-5 bg-white mx-auto max-w-6xl md:px-20 px-5 md:py-15 py-10">
+        <ContentBlock
+          title="TEAM"
+          subtitle="班紹介"
+          description="ソフトウェア研究部は6つの班で構成されています。それぞれの班で異なる分野の創作活動を行っており、興味のある分野を選んで活動できます。"
+        />
+      </section>
+
+      <Partition />
+
+      <section className="flex w-full flex-col gap-5 bg-white mx-auto max-w-6xl md:px-20 px-5 md:py-15 py-10">
+        <TeamCardGrid>
+          {TEAM_DATA.map((team) => (
+            <TeamCard key={team.teamName} {...team} />
+          ))}
+        </TeamCardGrid>
+      </section>
+    </main>
+  );
+};
+
+export default TeamListPage;

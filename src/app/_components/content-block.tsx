@@ -19,7 +19,7 @@ export const ContentBlock = ({ title, subtitle, description }: ContentBlockProps
           {/* 左側の緑色の縦線 */}
           <div className="w-2 shrink-0 bg-forest" />
           {/* 右側の説明文 */}
-          <p className="my-4 md:text-xl text-lg leading-relaxed font-medium text-black whitespace-pre-line">
+          <p className="my-4 md:text-xl text-md leading-relaxed font-medium text-black whitespace-pre-line">
             {description}
           </p>
         </div>

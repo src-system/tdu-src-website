@@ -9,7 +9,7 @@ export function WaveSection({ children, className = "" }: WaveSectionProps) {
   return (
     <section className={`relative ${className}`}>
       {/* 上部の波形 */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0]">
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-0">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120"
@@ -25,7 +25,7 @@ export function WaveSection({ children, className = "" }: WaveSectionProps) {
       </div>
 
       {/* 下部の波形 */}
-      <div className="absolute top-[30px] left-0 w-full overflow-hidden leading-[0]">
+      <div className="absolute top-[30px] left-0 w-full overflow-hidden leading-0">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120"

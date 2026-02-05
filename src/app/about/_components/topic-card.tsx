@@ -7,7 +7,7 @@ type TopicCardProps = {
   title: string;
   description: string;
   image: string;
-}
+};
 
 export const TopicCard = ({ title, description, image }: TopicCardProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -44,12 +44,7 @@ export const TopicCard = ({ title, description, image }: TopicCardProps) => {
         {/* 右側：画像 */}
         <div className="flex-1 flex items-center">
           <div className="relative w-full aspect-video">
-            <Image
-              src={image}
-              alt={title}
-              fill
-              className="object-cover rounded-lg"
-            />
+            <Image src={image} alt={title} fill className="object-cover rounded-lg" />
           </div>
         </div>
       </div>
