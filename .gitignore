@@ -43,3 +43,6 @@ next-env.d.ts
 # Cursor / Claude Code metadata
 .cursor/
 .claude/
+
+# vscode
+.vscode/
