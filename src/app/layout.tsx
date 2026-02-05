@@ -1,26 +1,7 @@
 import type { Metadata } from "next";
-import { Lexend_Deca, Noto_Sans, Zen_Maru_Gothic } from "next/font/google";
 import { MainLayout } from "@/src/app/_components/main-layout";
+import { lexendDeca, notoSans, zenMaruGothic } from "@/src/app/_lib/fonts";
 import "./globals.css";
-
-const lexendDeca = Lexend_Deca({
-  variable: "--font-lexend-deca",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const notoSans = Noto_Sans({
-  variable: "--font-noto-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const zenMaruGothic = Zen_Maru_Gothic({
-  variable: "--font-zen-maru-gothic",
-  weight: ["300", "400", "500", "700", "900"],
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "ソフトウェア研究部｜東京電機大学",

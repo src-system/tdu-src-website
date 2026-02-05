@@ -2,7 +2,9 @@ import { ChevronLeftIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CharacterCard } from "@/src/app/_components/character-card";
 import { Partition } from "@/src/app/_components/partition";
+import { ProfileGrid } from "@/src/app/_components/profile-item";
 import { CHARACTER_DATA } from "@/src/app/_lib/api";
 
 export function generateStaticParams() {
@@ -61,53 +63,27 @@ const CharacterDetailPage = async ({ params }: Props) => {
 
       <Partition />
 
-      <section className="mx-auto max-w-6xl md:px-20 px-5 md:py-15 py-10">
+      <section className="mx-auto max-w-6xl 2xl:max-w-7xl md:px-20 2xl:px-32 px-5 md:py-15 2xl:py-20 py-10">
         <h2 className="text-xl font-bold text-charcoal mb-6">プロフィール</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex items-center gap-4 rounded-lg bg-gray-50 p-4">
-            <span className="text-forest font-bold w-24">誕生日</span>
-            <span className="text-charcoal">{character.profile.birthday}</span>
-          </div>
-          <div className="flex items-center gap-4 rounded-lg bg-gray-50 p-4">
-            <span className="text-forest font-bold w-24">身長</span>
-            <span className="text-charcoal">{character.profile.height}</span>
-          </div>
-          <div className="flex items-center gap-4 rounded-lg bg-gray-50 p-4">
-            <span className="text-forest font-bold w-24">好きなもの</span>
-            <span className="text-charcoal">{character.profile.likes}</span>
-          </div>
-          <div className="flex items-center gap-4 rounded-lg bg-gray-50 p-4">
-            <span className="text-forest font-bold w-24">苦手なもの</span>
-            <span className="text-charcoal">{character.profile.dislikes}</span>
-          </div>
-        </div>
+        <ProfileGrid
+          items={[
+            { label: "誕生日", value: character.profile.birthday },
+            { label: "身長", value: character.profile.height },
+            { label: "好きなもの", value: character.profile.likes },
+            { label: "苦手なもの", value: character.profile.dislikes },
+          ]}
+        />
       </section>
 
       <Partition />
 
-      <section className="mx-auto max-w-6xl md:px-20 px-5 md:py-15 py-10">
+      <section className="mx-auto max-w-6xl 2xl:max-w-7xl md:px-20 2xl:px-32 px-5 md:py-15 2xl:py-20 py-10">
         <h2 className="text-xl font-bold text-charcoal mb-6">他のキャラクター</h2>
         <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
           {CHARACTER_DATA.filter((c) => c.id !== characterName)
             .slice(0, 5)
             .map((otherChar) => (
-              <Link
-                key={otherChar.id}
-                href={`/sofchara/${otherChar.id}`}
-                className="group flex flex-col items-center gap-2 rounded-lg p-2 transition-all hover:bg-forest/5"
-              >
-                <div className="relative w-16 h-20 md:w-20 md:h-28">
-                  <Image
-                    src={otherChar.imagePath}
-                    alt={otherChar.name}
-                    fill
-                    className="object-contain transition-transform group-hover:scale-105"
-                  />
-                </div>
-                <span className="text-xs md:text-sm text-charcoal text-center">
-                  {otherChar.name}
-                </span>
-              </Link>
+              <CharacterCard key={otherChar.id} {...otherChar} size="sm" />
             ))}
         </div>
       </section>

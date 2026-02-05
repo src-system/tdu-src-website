@@ -1,48 +1,48 @@
 import { ContentBlock } from "@/src/app/_components/content-block";
+import { HeroCatchphrase, type HeroCatchphraseProps } from "@/src/app/_components/hero-catchphrase";
 import { ImageCard } from "@/src/app/_components/image-card";
 import { LinkButton } from "@/src/app/_components/link-button";
 import { NewsList } from "@/src/app/_components/news-carousel";
 import { Partition } from "@/src/app/_components/partition";
 import { RandomCharacter } from "@/src/app/_components/random-character";
+import type { NavSection } from "@/src/app/_components/section-nav";
 import { SectionNav } from "@/src/app/_components/section-nav";
 import { SplashLogo } from "@/src/app/_components/splash-logo";
 import { TeamCard, TeamCardGrid } from "@/src/app/_components/team-card";
 import { getAllContentBlocks, NEWS_DATA, TEAM_DATA } from "@/src/app/_lib/api";
+
+const VIDEO_PATH = "/video/splash_movie.jpg";
+
+const HOME_SECTIONS = [
+  { id: "about", label: "ABOUT" },
+  { id: "team", label: "TEAM" },
+  { id: "news", label: "NEWS" },
+  { id: "characters", label: "CHARACTERS" },
+] as const satisfies NavSection[];
+
+const HERO_SEGMENTS = [
+  { text: "創造", highlighted: true },
+  { text: "を、", highlighted: false },
+  { text: "共有", highlighted: true },
+  { text: "する。", highlighted: false },
+] as const satisfies HeroCatchphraseProps["segments"];
+
+const SPLASH_LOGO_ENABLED = true;
 
 const Home = async () => {
   const content = await getAllContentBlocks();
 
   return (
     <main>
-      <SectionNav />
+      <SectionNav sections={HOME_SECTIONS} />
       <section className="relative h-[60svh] w-full overflow-hidden">
-        <video
-          className="h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/video-poster.jpg"
-        >
-          <source src="/video/splash_movie.mp4" type="video/mp4" />
+        <video className="h-full w-full object-cover" autoPlay muted loop playsInline>
+          <source src={VIDEO_PATH} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute bottom-8 left-4 md:bottom-15 md:left-10 z-30">
-          <div className="bg-white/95 backdrop-blur-sm px-4 py-2 md:px-6 md:py-3 rounded-sm mb-2">
-            <span className="text-4xl md:text-6xl lg:text-7xl font-bold">
-              <span className="bg-linear-to-r from-forest to-leaf bg-clip-text text-transparent">
-                創造
-              </span>
-              <span className="text-charcoal">を、</span>
-              <span className="bg-linear-to-r from-forest to-leaf bg-clip-text text-transparent">
-                共有
-              </span>
-              <span className="text-charcoal">する。</span>
-            </span>
-          </div>
-        </div>
+        <HeroCatchphrase segments={HERO_SEGMENTS} />
         <div className="absolute inset-0 flex items-center justify-center md:bottom-10 bottom-8">
-          <SplashLogo />
+          <SplashLogo enabled={SPLASH_LOGO_ENABLED} />
         </div>
       </section>
 

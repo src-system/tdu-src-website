@@ -64,12 +64,20 @@ const pathData = {
   ],
 };
 
-export function SplashLogo() {
+type SplashLogoProps = {
+  enabled: boolean;
+};
+
+export function SplashLogo({ enabled }: SplashLogoProps) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+
+  if (!enabled) {
+    return null;
+  }
 
   const getPathClass = (type: "c" | "sr" | "normal") => {
     if (!isLoaded) return "";

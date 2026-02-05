@@ -28,17 +28,19 @@ export const TopicCard = ({ title, description, image }: TopicCardProps) => {
   return (
     <div
       ref={ref}
-      className={`flex border-2 shadow-sm border-gray-300 rounded-2xl overflow-hidden py-10 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+      className={`flex border-2 shadow-sm bg-white border-gray-300 rounded-2xl overflow-hidden py-4 md:py-10 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
     >
       {/* 左側の緑のアクセントライン */}
-      <div className="w-5 bg-forest shrink-0" />
+      <div className="w-3 md:w-5 bg-forest shrink-0" />
 
       {/* コンテンツエリア */}
-      <div className="flex flex-1 gap-8 p-8">
+      <div className="flex flex-1 flex-col md:flex-row gap-4 md:gap-8 p-4 md:p-8">
         {/* 左側：タイトルと説明文 */}
         <div className="flex-1 flex flex-col justify-start">
-          <h3 className="text-3xl font-bold">{title}</h3>
-          <p className="text-xl leading-relaxed mt-4">{description}</p>
+          <h3 className="text-xl md:text-3xl font-bold">{title}</h3>
+          <p className="text-lg font-medium md:text-xl leading-relaxed mt-2 md:mt-4">
+            {description}
+          </p>
         </div>
 
         {/* 右側：画像 */}

@@ -7,7 +7,7 @@ type TopImageProps = {
 
 export const TopImage = ({ imagePath, children }: TopImageProps) => {
   return (
-    <div className="relative w-full overflow-hidden md:aspect-12/5 aspect-4/3">
+    <div className="relative md:h-[60svh] h-[50svh] w-full overflow-hidden">
       <Image src={imagePath} alt="" fill className="object-cover" priority />
       {children}
     </div>
