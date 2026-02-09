@@ -3,14 +3,12 @@ import { ContentBlock } from "@/src/app/_components/content-block";
 import { ContentCard } from "@/src/app/_components/content-card";
 import { ContentSection } from "@/src/app/_components/content-section";
 import { GuidelineSection } from "@/src/app/_components/guideline-section";
-import { PageHeader } from "@/src/app/_components/page-header";
 import { Section } from "@/src/app/_components/section";
 import { CHARACTER_DATA } from "@/src/app/_lib/api";
 
 const SofcharaPage = () => {
   return (
     <main>
-      <PageHeader imagePath="/images/sofcharatop/ワカツキ_web.png" />
       <ContentSection>
         <ContentCard>
           <ContentBlock
