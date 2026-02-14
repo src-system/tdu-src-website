@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { MainLayout } from "@/src/app/_components/main-layout";
 import { lexendDeca, notoSans, zenMaruGothic } from "@/src/app/_lib/fonts";
 import "./globals.css";
+import "highlight.js/styles/github.css";
 
 export const metadata: Metadata = {
   title: "ソフトウェア研究部｜東京電機大学",

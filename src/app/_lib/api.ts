@@ -503,4 +503,32 @@ export const CHARACTER_DATA = [
     backstory:
       "記憶を司る能力を持つとされる少女。部の歴史や思い出を大切にしており、アルバム係として活動記録を残している。おっとりした性格だが、大事なことは絶対に忘れない。",
   },
+  {
+    id: "mock-01",
+    name: "モック01",
+    imagePath: "/images/sofcharatop/ワカツキ_web.png",
+    description: "展開ボタン確認用のモック",
+    profile: {
+      birthday: "1月10日",
+      height: "160cm",
+      likes: "テスト表示、UI確認",
+      dislikes: "未検証の実装",
+    },
+    backstory:
+      "UIの表示確認のために追加したモックキャラクターです。展開ボタンの動作確認を目的として一時的に使用されます。",
+  },
+  {
+    id: "mock-02",
+    name: "モック02",
+    imagePath: "/images/sofcharatop/ゆうしゃ_web.png",
+    description: "展開ボタン確認用のモック",
+    profile: {
+      birthday: "2月20日",
+      height: "163cm",
+      likes: "モックデータ、表示切替",
+      dislikes: "不整合な状態",
+    },
+    backstory:
+      "UIの表示確認のために追加したモックキャラクターです。9件を超えた場合の展開UIを検証するために使用されます。",
+  },
 ] as const;
