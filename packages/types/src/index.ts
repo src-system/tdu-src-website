@@ -19,7 +19,7 @@ export type Video = {
 // Top Page Types
 // ======================
 
-export type HeroVideo = {
+export type TopVideo = {
   video: Video
   logoEnabled: boolean
 }
@@ -29,7 +29,7 @@ export type Segment = {
   highlighted: boolean
 }
 
-export type HeroCatchphrase = {
+export type Catchphrase = {
   segments: Segment[]
 }
 

@@ -1,7 +1,8 @@
-import { getPayloadHMR } from '@payloadcms/next/utilities'
+import config from '@payload-config'
 import { generatePageMetadata, RootPage } from '@payloadcms/next/views'
 import type { Metadata } from 'next'
-import configPromise from '@/payload.config'
+
+import { importMap } from '../importMap.js'
 
 type Args = {
   params: Promise<{
@@ -11,17 +12,9 @@ type Args = {
 }
 
 export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>
-  generatePageMetadata({ config: configPromise, params, searchParams })
+  generatePageMetadata({ config: Promise.resolve(config), params, searchParams })
 
-const Page = async ({ params, searchParams }: Args) => {
-  const payload = await getPayloadHMR({ config: configPromise })
-
-  return RootPage({
-    config: configPromise,
-    params,
-    searchParams,
-    importMap: payload.importMap,
-  })
-}
+const Page = ({ params, searchParams }: Args) =>
+  RootPage({ config: Promise.resolve(config), params, searchParams, importMap })
 
 export default Page

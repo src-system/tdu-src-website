@@ -2,21 +2,32 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { translations } from '@payloadcms/translations/all'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
-import { AboutSections } from './collections/AboutSections'
-import { Activities } from './collections/Activities'
-import { Characters } from './collections/Characters'
-import { HeroCatchphrases } from './collections/HeroCatchphrases'
-import { HeroVideos } from './collections/HeroVideos'
-import { History } from './collections/History'
-import { Media } from './collections/Media'
-import { News } from './collections/News'
-import { TeamSections } from './collections/TeamSections'
-import { Teams } from './collections/Teams'
-// Collections
-import { Users } from './collections/Users'
+import { AboutPage } from './contents/about'
+import { Activities } from './contents/about/Activities'
+import { History } from './contents/about/History'
+import { Media } from './contents/collections/Media'
+import { Users } from './contents/collections/Users'
+import { NewsPage } from './contents/news'
+import { News } from './contents/news/NewsItem'
+import { SofcharaPage } from './contents/sofchara'
+import { Characters } from './contents/sofchara/Character'
+import { Guideline } from './contents/sofchara/Guideline'
+import { Sofkentown } from './contents/sofchara/Sofkentown'
+import { Team2d } from './contents/team/2d'
+import { Team3d } from './contents/team/3d'
+import { TeamDesign } from './contents/team/design'
+import { TeamGame } from './contents/team/game'
+import { TeamSound } from './contents/team/sound'
+import { TeamWebapp } from './contents/team/webapp'
+import { AboutSection } from './contents/toppage/AboutSection'
+import { Catchphrase } from './contents/toppage/Catchphrase'
+import { TeamSection } from './contents/toppage/TeamSection'
+import { TopVideo } from './contents/toppage/TopVideo'
 
+const ja = translations.ja
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -27,20 +38,28 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [
-    Users,
-    Media,
-    HeroVideos,
-    HeroCatchphrases,
-    AboutSections,
-    TeamSections,
-    News,
-    Characters,
-    Activities,
-    History,
-    Teams,
+  collections: [Users, Media, News, Characters, Sofkentown, Activities, History],
+  globals: [
+    TopVideo,
+    Catchphrase,
+    AboutSection,
+    AboutPage,
+    NewsPage,
+    SofcharaPage,
+    Guideline,
+    TeamSection,
+    Team2d,
+    Team3d,
+    TeamGame,
+    TeamWebapp,
+    TeamSound,
+    TeamDesign,
   ],
   editor: lexicalEditor(),
+  i18n: {
+    supportedLanguages: { ja },
+    fallbackLanguage: 'ja',
+  },
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

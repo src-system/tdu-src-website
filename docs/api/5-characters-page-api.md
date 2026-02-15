@@ -2,10 +2,29 @@
 
 ソフキャラのトップページです。
 
+## Payload定義（全体）
+
+| 項目 | 値 |
+|------|-----|
+| 種別 | Global `sofchara-page` |
+| ファイル | `contents/sofchara/` |
+| API | `GET /api/globals/sofchara-page` |
+
+※ キャラクター一覧は `GET /api/characters` で取得
+
+---
+
 ## ページヘッダー（トップ画像）
 
-### ヘッター
+### 概要
 ソフキャラページ上部に表示されるヘッダー画像とタイトルです。
+
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| pageHeader.image | upload (relationTo: media) | ✓ | ヘッダー画像（16:9推奨） |
+| pageHeader.alt | text | ✓ | 代替テキスト |
+| pageHeader.title | text | ✓ | ページタイトル |
 
 ### フィールド
 | フィールド | 型 | 必須 | 備考 |
@@ -18,6 +37,16 @@
 
 ### 概要
 「ソフきゃら！」企画の説明セクションです。
+
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| aboutSection.title | text | - | defaultValue: "ソフきゃら！" |
+| aboutSection.subtitle | text | - | defaultValue: "ABOUT SOFCHARA" |
+| aboutSection.description | textarea | ✓ | 企画の説明文 |
+| aboutSection.cardTitle | text | ✓ | カード内のタイトル |
+| aboutSection.cardDescription | textarea | ✓ | カード内の文章 |
+| aboutSection.icon | upload (relationTo: media) | ✓ | カード内のアイコン |
 
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |
@@ -34,6 +63,17 @@
 
 ### 概要
 二次創作、キャラクター、ソフケンタウンの3つのコンセプトを紹介するカードセクションです。
+
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| conceptSection.title | text | - | defaultValue: "PROJECT CONCEPT" |
+| conceptSection.subtitle | text | - | defaultValue: "企画の広がり" |
+| conceptSection.concepts | array | ✓ | minRows: 3, maxRows: 3 |
+| conceptSection.concepts[].image | upload | ✓ | カード画像 |
+| conceptSection.concepts[].imageAlt | text | ✓ | 代替テキスト |
+| conceptSection.concepts[].title | text | ✓ | カードタイトル |
+| conceptSection.concepts[].description | textarea | ✓ | カードの説明 |
 
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |
@@ -55,6 +95,13 @@
 ### 概要
 二次創作ガイドラインページへの誘導セクションです。
 
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| guidelineSection.title | text | - | defaultValue: "二次創作ガイドライン" |
+| guidelineSection.subtitle | text | - | defaultValue: "GUIDELINE" |
+| guidelineSection.description | textarea | ✓ | 説明文 |
+
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |
 |-----------|-----|------|------------|------|
@@ -70,6 +117,13 @@
 ### 使用箇所
 - ソフキャラページ（キャラクター一覧）
 - トップページ（ランダム表示）
+
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| characterSection.title | text | - | defaultValue: "CHARACTERS" |
+| characterSection.subtitle | text | - | defaultValue: "キャラクター一覧" |
+| characters | Collection `characters` | - | `GET /api/characters` で取得 |
 
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |
@@ -92,6 +146,10 @@
 # `/sofchara/[characterName]` - キャラクター詳細ページ
 
 各キャラクターの詳細情報を表示するページです。
+
+## Payload定義
+Collection `characters`（`contents/sofchara/Character.ts`）
+API: `GET /api/characters` で url でフィルタ、または `GET /api/characters/:id`
 
 ## フィールド
 | フィールド | 型 | 必須 | 備考 |
@@ -159,6 +217,13 @@
 
 ソフキャラの二次創作ガイドラインページです。
 
+## Payload定義
+| 項目 | 値 |
+|------|-----|
+| 種別 | Global `guideline` |
+| ファイル | `contents/sofchara/Guideline.ts` |
+| API | `GET /api/globals/guideline` |
+
 ## フィールド
 | フィールド | 型 | 必須 | 備考 |
 |-----------|-----|------|------|
@@ -171,6 +236,13 @@
 # `/sofchara/sofkentown` - ソフケンタウンページ
 
 ソフキャラの共通世界観「ソフケンタウン」の情報です。
+
+## Payload定義
+| 項目 | 値 |
+|------|-----|
+| 種別 | Collection `sofkentown` |
+| ファイル | `contents/sofchara/Sofkentown.ts` |
+| API | `GET /api/sofkentown` |
 
 ## フィールド
 | フィールド | 型 | 必須 | 備考 |

@@ -52,6 +52,7 @@ next-env.d.ts
 /apps/cms/payload-types.ts
 /apps/cms/node_modules
 /apps/cms/.next
+/apps/cms/migrations
 
 # packages build output
 /packages/*/dist

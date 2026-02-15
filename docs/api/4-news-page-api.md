@@ -2,6 +2,15 @@
 
 Newsページで使用するデータの管理項目です。
 
+## Payload定義（全体）
+
+| 項目 | 値 |
+|------|-----|
+| 1.2. 種別 | Global `news-page` |
+| 3. 種別 | Collection `news` |
+| ファイル | `contents/news/` |
+| API | `GET /api/globals/news-page`（1.2）, `GET /api/news`（3） |
+
 ---
 
 ## 1. ページヘッダー（トップ画像）
@@ -12,6 +21,13 @@ Newsページ上部に表示されるヘッダー画像とタイトルです。
 ### 使用箇所
 - Newsページ（ページヘッダー）
 
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| pageHeader.image | upload (relationTo: media) | ✓ | ヘッダー画像（16:9推奨） |
+| pageHeader.alt | text | ✓ | 代替テキスト |
+| pageHeader.title | text | ✓ | ページタイトル |
+
 ### フィールド
 | フィールド | 型 | 必須 | 備考 |
 |-----------|-----|------|------|
@@ -21,7 +37,21 @@ Newsページ上部に表示されるヘッダー画像とタイトルです。
 
 ---
 
-## 2. 記事一覧
+## 2. News概要
+
+### 概要
+Newsセクションのタイトル・説明文です。
+
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| newsOverview.title | text | - | defaultValue: "NEWS" |
+| newsOverview.subtitle | text | - | defaultValue: "お知らせ" |
+| newsOverview.description | textarea | ✓ | 説明文（改行対応） |
+
+---
+
+## 3. 記事一覧（NewsItem）
 
 ### 概要
 お知らせや活動報告などのニュース記事を一覧表示します。
@@ -29,6 +59,19 @@ Newsページ上部に表示されるヘッダー画像とタイトルです。
 ### 使用箇所
 - Newsページ（記事一覧）
 - トップページ（最新3件）
+
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| title | text | ✓ | 記事タイトル |
+| date | date | ✓ | 公開日 |
+| category | select | ✓ | announcement, event, report, sofchara, work, game, web, sound, 2d, 3d, design |
+| summary | textarea | ✓ | 要約文 |
+| thumbnail | upload (relationTo: media) | ✓ | サムネイル（16:9推奨） |
+| alt | text | ✓ | サムネイルの代替テキスト |
+| content | richText | ✓ | 本文 |
+| author | text | - | 著者名 |
+| tags | array | - | tags[].tag |
 
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |

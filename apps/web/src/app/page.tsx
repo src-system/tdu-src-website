@@ -1,6 +1,6 @@
+import { Catchphrase, type CatchphraseProps } from '@/src/app/_components/catchphrase'
 import { ContentBlock } from '@/src/app/_components/content-block'
 import { ContentCard } from '@/src/app/_components/content-card'
-import { HeroCatchphrase, type HeroCatchphraseProps } from '@/src/app/_components/hero-catchphrase'
 import { ImageCard } from '@/src/app/_components/image-card'
 import { LinkButton } from '@/src/app/_components/link-button'
 import { NewsList } from '@/src/app/_components/news-carousel'
@@ -29,7 +29,7 @@ const HERO_SEGMENTS = [
   { text: 'を、', highlighted: false },
   { text: '共有', highlighted: true },
   { text: 'する。', highlighted: false },
-] as const satisfies HeroCatchphraseProps['segments']
+] as const satisfies CatchphraseProps['segments']
 
 const SPLASH_LOGO_ENABLED = true
 
@@ -44,7 +44,7 @@ const Home = async () => {
           <source src={VIDEO_PATH} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/40" />
-        <HeroCatchphrase segments={HERO_SEGMENTS} />
+        <Catchphrase segments={HERO_SEGMENTS} />
         <div className="absolute inset-0 flex items-center justify-center md:bottom-10 bottom-8">
           <SplashLogo enabled={SPLASH_LOGO_ENABLED} />
         </div>

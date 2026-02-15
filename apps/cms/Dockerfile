@@ -16,8 +16,8 @@ RUN pnpm install --frozen-lockfile
 # ビルダー
 FROM base AS builder
 
-# workspaceの設定ファイルをコピー
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# workspaceの設定ファイルをコピー（tsconfig.json は apps/cms の extends で必要）
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json ./
 
 # 依存関係をコピー
 COPY --from=deps /app/node_modules ./node_modules
@@ -48,8 +48,10 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/apps/cms/package.json ./apps/cms/
 COPY --from=builder /app/apps/cms/.next ./apps/cms/.next
-COPY --from=builder /app/apps/cms/public ./apps/cms/public
 COPY --from=builder /app/packages/types/dist ./packages/types/dist
+
+# public フォルダが存在する場合のみコピー（Next.js の静的ファイル用）
+RUN mkdir -p ./apps/cms/public
 COPY --from=builder /app/node_modules ./node_modules
 
 RUN mkdir -p ./apps/cms/media && chown -R nextjs:nodejs ./apps/cms/media

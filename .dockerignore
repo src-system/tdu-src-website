@@ -1,0 +1,29 @@
+# Dependencies - ビルド時に deps ステージでインストールするため除外
+node_modules
+**/node_modules
+
+# Build outputs - ビルド時に生成するため除外
+.next
+**/.next
+out
+**/dist
+*.tsbuildinfo
+
+# Git
+.git
+.gitignore
+
+# IDE / Editor
+.cursor
+.claude
+.vscode
+
+# Env files - コンテナには docker-compose で渡す
+.env*
+!.env.example
+
+# Misc
+.DS_Store
+*.log
+coverage
+.vercel

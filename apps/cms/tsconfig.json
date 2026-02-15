@@ -22,6 +22,7 @@
     ],
     "paths": {
       "@/*": ["./*"],
+      "@payload-config": ["./payload.config.ts"],
       "@tdu-src/types": ["../../packages/types/src"]
     }
   },

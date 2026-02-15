@@ -2,6 +2,17 @@
 
 Aboutページで使用するデータの管理項目です。
 
+## Payload定義（全体）
+
+| 項目 | 値 |
+|------|-----|
+| 種別 | Global |
+| slug | `about-page` |
+| ファイル | `contents/about/index.ts` |
+| API | `GET /api/globals/about-page` |
+
+※ pageHeader, aboutSection, activitySection, historySection をグループで保持
+
 ---
 
 ## 1. ページヘッダー（トップ画像）
@@ -11,6 +22,13 @@ Aboutページ上部に表示されるヘッダー画像とタイトルです。
 
 ### 使用箇所
 - Aboutページ（ページヘッダー）
+
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| pageHeader.image | upload (relationTo: media) | ✓ | ヘッダー画像（16:9推奨） |
+| pageHeader.alt | text | ✓ | 代替テキスト |
+| pageHeader.title | text | ✓ | ページタイトル |
 
 ### フィールド
 | フィールド | 型 | 必須 | 備考 |
@@ -28,6 +46,13 @@ Aboutページ上部に表示されるヘッダー画像とタイトルです。
 
 ### 使用箇所
 - Aboutページ（メインコンテンツ）
+
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| aboutSection.title | text | - | defaultValue: "ABOUT" |
+| aboutSection.subtitle | text | - | defaultValue: "ソフトウェア研究部について" |
+| aboutSection.description | textarea | ✓ | Markdown対応 |
 
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |
@@ -48,6 +73,17 @@ Aboutページ上部に表示されるヘッダー画像とタイトルです。
 
 ### 使用箇所
 - Aboutページ（アクティビティセクション）
+
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| activitySection.title | text | - | defaultValue: "ACTIVITY" |
+| activitySection.subtitle | text | - | defaultValue: "主な活動" |
+| activitySection.items | array | ✓ | minRows: 1 |
+| activitySection.items[].title | text | ✓ | 活動タイトル |
+| activitySection.items[].description | textarea | ✓ | 活動の説明 |
+| activitySection.items[].image | upload (relationTo: media) | ✓ | アイコン画像 |
+| activitySection.items[].alt | text | ✓ | 代替テキスト |
 
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |
@@ -73,6 +109,17 @@ Aboutページ上部に表示されるヘッダー画像とタイトルです。
 
 ### 使用箇所
 - Aboutページ（ヒストリーセクション）
+
+### Payload定義
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| historySection.title | text | - | defaultValue: "HISTORY" |
+| historySection.subtitle | text | - | defaultValue: "沿革" |
+| historySection.timeline | array | ✓ | minRows: 1 |
+| historySection.timeline[].year | number | ✓ | 年（西暦） |
+| historySection.timeline[].month | number | - | 月（1-12） |
+| historySection.timeline[].title | text | ✓ | イベントタイトル |
+| historySection.timeline[].description | textarea | ✓ | 詳細説明 |
 
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |
