@@ -8,7 +8,8 @@
     "build": "cross-env NODE_OPTIONS=\"${NODE_OPTIONS} --no-deprecation\" next build",
     "start": "cross-env NODE_OPTIONS=\"${NODE_OPTIONS} --no-deprecation\" next start -p 3001",
     "payload": "cross-env NODE_OPTIONS=\"${NODE_OPTIONS} --no-deprecation\" payload",
-    "generate:types": "cross-env NODE_OPTIONS=\"${NODE_OPTIONS} --no-deprecation\" payload generate:types"
+    "generate:types": "cross-env NODE_OPTIONS=\"${NODE_OPTIONS} --no-deprecation\" payload generate:types",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.6.1",
