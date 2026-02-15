@@ -1,47 +1,38 @@
 import type { ReactNode } from "react";
+import { WaveDivider } from "@/src/app/_components/wave-divider";
 
-interface WaveSectionProps {
+type WaveSectionProps = {
+  id?: string;
   children: ReactNode;
-  className?: string;
-}
+  bgColor?: string;
+  topWaveBgColor?: string;
+  topWaveColor?: string;
+  bottomWaveBgColor?: string;
+  bottomWaveColor?: string;
+  hasTopWave?: boolean;
+  hasBottomWave?: boolean;
+};
 
-export function WaveSection({ children, className = "" }: WaveSectionProps) {
+export const WaveSection = ({
+  id,
+  children,
+  bgColor = "bg-white",
+  topWaveBgColor = "bg-green-50",
+  topWaveColor = "white",
+  bottomWaveBgColor = "bg-white",
+  bottomWaveColor = "#f0fdf4",
+  hasTopWave = true,
+  hasBottomWave = true,
+}: WaveSectionProps) => {
   return (
-    <section className={`relative ${className}`}>
-      {/* 上部の波形 */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-0">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          className="relative block w-full h-[60px]"
-          aria-hidden="true"
-        >
-          <path
-            d="M0,0 C200,80 400,80 600,40 C800,0 1000,0 1200,60 L1200,0 L0,0 Z"
-            fill="#006400"
-          />
-        </svg>
-      </div>
+    <>
+      {hasTopWave && <WaveDivider bgColor={topWaveBgColor} waveColor={topWaveColor} />}
 
-      {/* 下部の波形 */}
-      <div className="absolute top-[30px] left-0 w-full overflow-hidden leading-0">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          className="relative block w-full h-[90px]"
-          aria-hidden="true"
-        >
-          <path
-            d="M0,0 C300,60 500,100 700,80 C900,60 1100,20 1200,50 L1200,0 L0,0 Z"
-            fill="#7CCD7C"
-          />
-        </svg>
-      </div>
+      <section id={id} className={`relative ${bgColor} py-16 md:py-24 overflow-hidden`}>
+        {children}
+      </section>
 
-      {/* コンテンツエリア */}
-      <div className="relative pt-[120px]">{children}</div>
-    </section>
+      {hasBottomWave && <WaveDivider bgColor={bottomWaveBgColor} waveColor={bottomWaveColor} />}
+    </>
   );
-}
+};

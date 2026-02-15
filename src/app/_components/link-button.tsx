@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronRightIcon } from "lucide-react";
 
 import Link from "next/link";
@@ -30,9 +32,30 @@ const colorStyles = {
 export const LinkButton = ({ href, text, color = "forest" }: LinkButtonProps) => {
   const styles = colorStyles[color];
 
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // ハッシュリンクの場合のみスムーズスクロールを適用
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      const targetId = href.substring(1);
+      const element = document.getElementById(targetId);
+
+      if (element) {
+        const offset = 100; // ヘッダーの高さ分のオフセット
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+
   return (
     <Link
       href={href}
+      onClick={handleClick}
       className={`inline-flex items-center justify-center rounded-md border-2 px-3 py-1.5 md:px-5 md:py-2.5 text-sm md:text-base transition-all duration-200 hover:translate-y-1 active:translate-y-2 active:shadow-none ${styles.base} ${styles.hover}`}
     >
       {text}

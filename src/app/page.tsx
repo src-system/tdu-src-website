@@ -1,17 +1,21 @@
 import { ContentBlock } from "@/src/app/_components/content-block";
+import { ContentCard } from "@/src/app/_components/content-card";
 import { HeroCatchphrase, type HeroCatchphraseProps } from "@/src/app/_components/hero-catchphrase";
 import { ImageCard } from "@/src/app/_components/image-card";
 import { LinkButton } from "@/src/app/_components/link-button";
 import { NewsList } from "@/src/app/_components/news-carousel";
 import { Partition } from "@/src/app/_components/partition";
+import { PatternBackground } from "@/src/app/_components/pattern-background";
 import { RandomCharacter } from "@/src/app/_components/random-character";
+import { Section } from "@/src/app/_components/section";
 import type { NavSection } from "@/src/app/_components/section-nav";
 import { SectionNav } from "@/src/app/_components/section-nav";
 import { SplashLogo } from "@/src/app/_components/splash-logo";
 import { TeamCard, TeamCardGrid } from "@/src/app/_components/team-card";
+import { WaveSection } from "@/src/app/_components/wave-section";
 import { getAllContentBlocks, NEWS_DATA, TEAM_DATA } from "@/src/app/_lib/api";
 
-const VIDEO_PATH = "/video/splash_movie.jpg";
+const VIDEO_PATH = "/video/splash_movie.mp4";
 
 const HOME_SECTIONS = [
   { id: "about", label: "ABOUT" },
@@ -35,7 +39,7 @@ const Home = async () => {
   return (
     <main>
       <SectionNav sections={HOME_SECTIONS} />
-      <section className="relative h-[60svh] w-full overflow-hidden">
+      <div className="relative h-[60svh] min-h-[500px] w-full overflow-hidden">
         <video className="h-full w-full object-cover" autoPlay muted loop playsInline>
           <source src={VIDEO_PATH} type="video/mp4" />
         </video>
@@ -44,12 +48,12 @@ const Home = async () => {
         <div className="absolute inset-0 flex items-center justify-center md:bottom-10 bottom-8">
           <SplashLogo enabled={SPLASH_LOGO_ENABLED} />
         </div>
-      </section>
-
+      </div>
       <Partition />
-      <section id="about" className="relative bg-white py-16 md:py-24 overflow-hidden">
-        <div className="relative mx-auto max-w-5xl 2xl:max-w-7xl px-6 md:px-8">
-          <div className="bg-white border-3 border-forest/20 rounded-2xl md:p-12 p-6">
+
+      <div id="about" className="relative bg-white py-16 md:py-24 overflow-hidden">
+        <Section as="div" size="container">
+          <ContentCard>
             <ContentBlock
               title={content.about.title}
               subtitle={content.about.subtitle}
@@ -63,23 +67,19 @@ const Home = async () => {
             <div className="mt-8">
               <LinkButton href="/about" text="詳しく見る" />
             </div>
-          </div>
-        </div>
-      </section>
+          </ContentCard>
+        </Section>
+      </div>
 
-      {/* 波形セクション区切り（TEAM上部） */}
-      <svg
-        className="w-full h-20 md:h-32 bg-green-50 block"
-        viewBox="0 0 1920 120"
-        preserveAspectRatio="none"
-        aria-hidden="true"
+      <WaveSection
+        id="team"
+        bgColor="bg-green-50"
+        topWaveBgColor="bg-green-50"
+        topWaveColor="white"
+        bottomWaveBgColor="bg-white"
+        bottomWaveColor="#f0fdf4"
       >
-        <path d="M0 0H1920V60Q1440 120 960 60Q480 0 0 60V0Z" fill="white" />
-      </svg>
-
-      {/* TEAMセクション */}
-      <section id="team" className="relative bg-green-50 py-16 md:py-24 overflow-hidden">
-        <div className="relative mx-auto max-w-5xl 2xl:max-w-7xl px-6 md:px-8">
+        <Section as="div" size="container">
           <ContentBlock
             title={content.team.title}
             subtitle={content.team.subtitle}
@@ -95,45 +95,24 @@ const Home = async () => {
           <div className="mt-8">
             <LinkButton href="/team" text="班の詳細を見る" />
           </div>
-        </div>
-      </section>
+        </Section>
+      </WaveSection>
 
-      {/* 波形セクション区切り（TEAM下部） */}
-      <svg
-        className="w-full h-20 md:h-32 bg-white block"
-        viewBox="0 0 1920 120"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path d="M0 0H1920V60Q1440 120 960 60Q480 0 0 60V0Z" fill="#f0fdf4" />
-      </svg>
-
-      {/* NEWSセクション */}
-      <section id="news" className="relative bg-white py-16 md:py-24 overflow-hidden">
-        <div className="relative mx-auto max-w-5xl 2xl:max-w-7xl px-6 md:px-8">
-          <div className="bg-white border-3 border-forest/20 rounded-2xl p-8 md:p-12">
+      <div id="news" className="relative bg-white py-16 md:py-24 overflow-hidden">
+        <Section as="div" size="container">
+          <ContentCard>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
               <ContentBlock title={content.news.title} subtitle={content.news.subtitle} />
             </div>
             <NewsList items={[...NEWS_DATA]} />
-          </div>
-        </div>
-      </section>
+          </ContentCard>
+        </Section>
+      </div>
 
       <Partition />
 
-      {/* CHARACTERSセクション */}
-      <section id="characters" className="relative bg-green-50 py-16 md:py-24 overflow-hidden">
-        {/* 背景パターン */}
-        <div
-          className="absolute inset-0 opacity-[0.06] z-0"
-          style={{
-            backgroundImage: "url('/images/pattern/sofchara-pattern.png')",
-            backgroundSize: "400px",
-            backgroundRepeat: "repeat",
-          }}
-        />
-        <div className="relative z-10 mx-auto max-w-5xl 2xl:max-w-7xl px-6 md:px-8">
+      <PatternBackground as="section" id="characters" className="py-16 md:py-24">
+        <Section as="div" size="container">
           <div className="bg-white rounded-2xl p-4 md:p-12 shadow-sm">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
               <div className="md:flex-3">
@@ -151,8 +130,8 @@ const Home = async () => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </Section>
+      </PatternBackground>
     </main>
   );
 };

@@ -19,9 +19,9 @@ const GuidelinePage = async () => {
             <div className="space-y-4">
               <Link
                 href="/sofchara"
-                className="inline-flex items-center gap-1.5 text-base md:text-lg font-semibold text-forest hover:underline"
+                className="inline-flex items-center gap-1.5 text-base md:text-2xl font-semibold text-forest"
               >
-                <ChevronLeftIcon className="size-4" />
+                <ChevronLeftIcon className="size-8" />
                 ソフきゃらトップに戻る
               </Link>
               <ContentBlock title="GUIDELINE" subtitle="二次創作ガイドライン" />

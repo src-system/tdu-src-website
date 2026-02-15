@@ -2,11 +2,23 @@ type ContentBlockProps = {
   title: string;
   subtitle: string;
   description?: string;
+  maxWidth?: "default" | "wide" | "full";
 };
 
-export const ContentBlock = ({ title, subtitle, description }: ContentBlockProps) => {
+export const ContentBlock = ({
+  title,
+  subtitle,
+  description,
+  maxWidth = "default",
+}: ContentBlockProps) => {
+  const widthClasses = {
+    default: "max-w-4xl",
+    wide: "max-w-5xl",
+    full: "max-w-full",
+  };
+
   return (
-    <div className="flex w-full max-w-4xl flex-col gap-3">
+    <div className={`flex w-full ${widthClasses[maxWidth]} flex-col gap-3`}>
       {/* タイトルとサブタイトル */}
       <div className="flex flex-col">
         <h2 className="font-lexend text-4xl font-semibold text-forest">{title}</h2>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo, useState } from "react";
 
 type CharacterListItem = {
   id: string;
@@ -19,7 +19,7 @@ export const CharacterList = ({ characters }: CharacterListProps) => {
   const hasOverflow = characters.length > 9;
   const visibleCharacters = useMemo(
     () => (isExpanded || !hasOverflow ? characters : characters.slice(0, 9)),
-    [characters, hasOverflow, isExpanded],
+    [characters, hasOverflow, isExpanded]
   );
 
   return (

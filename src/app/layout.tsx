@@ -5,7 +5,7 @@ import "./globals.css";
 import "highlight.js/styles/github.css";
 
 export const metadata: Metadata = {
-  title: "ソフトウェア研究部｜東京電機大学",
+  title: "東京電機大学 ソフトウェア研究部",
   description:
     "東京電機大学ソフトウェア研究部のホームページです。当部活では、ゲームプログラミング班、Webアプリ班、サウンド班、2D班、3D班、デザイン班が活動しています。",
   keywords: [

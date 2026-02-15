@@ -1,22 +1,35 @@
-import type { ReactNode } from "react";
+import type { ElementType, ReactNode } from "react";
 
 type PatternBackgroundProps = {
   children: ReactNode;
+  as?: ElementType;
+  className?: string;
+  id?: string;
+  bgColor?: string;
+  opacity?: string;
+  patternSize?: string;
 };
 
-export const PatternBackground = ({ children }: PatternBackgroundProps) => {
+export const PatternBackground = ({
+  children,
+  as: Component = "div",
+  className = "",
+  id,
+  bgColor = "bg-green-50",
+  opacity = "opacity-[0.06]",
+  patternSize = "400px",
+}: PatternBackgroundProps) => {
   return (
-    <div className="relative bg-green-50 min-h-screen overflow-hidden">
-      {/* 背景パターン */}
+    <Component id={id} className={`relative ${bgColor} overflow-hidden ${className}`}>
       <div
-        className="absolute inset-0 opacity-[0.06] z-0"
+        className={`absolute inset-0 ${opacity} z-0`}
         style={{
           backgroundImage: "url('/images/pattern/sofchara-pattern.png')",
-          backgroundSize: "400px",
+          backgroundSize: patternSize,
           backgroundRepeat: "repeat",
         }}
       />
       <div className="relative z-10">{children}</div>
-    </div>
+    </Component>
   );
 };
