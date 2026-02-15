@@ -82,6 +82,8 @@ export function getTeamCardFieldsFor(teamType: string): Field[] {
         description: '班種別（自動設定）',
       },
     },
-    ...teamCardFields.filter((f) => f.name !== 'teamType'),
+    ...teamCardFields.filter(
+      (f): f is Field & { name: string } => 'name' in f && f.name !== 'teamType',
+    ),
   ]
 }
