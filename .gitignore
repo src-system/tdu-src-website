@@ -46,3 +46,19 @@ next-env.d.ts
 
 # vscode
 .vscode/
+
+# Payload CMS
+/apps/cms/media
+/apps/cms/payload-types.ts
+/apps/cms/node_modules
+/apps/cms/.next
+
+# packages build output
+/packages/*/dist
+
+# Docker
+docker-compose.override.yml
+
+# Web
+/apps/web/node_modules
+/apps/web/.next

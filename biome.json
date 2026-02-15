@@ -3,87 +3,58 @@
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true,
-    "defaultBranch": "main"
+    "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": true,
+    "ignoreUnknown": false,
     "includes": [
-      "**/*.js",
-      "**/*.jsx",
-      "**/*.ts",
-      "**/*.tsx",
-      "**/*.json",
-      "**/*.jsonc",
-      "**/*.mjs",
-      "**/*.cjs"
+      "**/*",
+      "!!**/node_modules",
+      "!!**/dist",
+      "!!**/build",
+      "!!**/.next",
+      "!!**/out",
+      "!!**/coverage",
+      "!!**/*.min.js",
+      "!!**/pnpm-lock.yaml"
     ]
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineWidth": 100,
-    "lineEnding": "lf"
+    "lineWidth": 100
   },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
-      "a11y": {
-        "noSvgWithoutTitle": "warn"
-      },
-      "complexity": {
-        "noExcessiveCognitiveComplexity": "warn",
-        "noForEach": "off"
-      },
-      "correctness": {
-        "noUnusedVariables": "error",
-        "useExhaustiveDependencies": "warn",
-        "useHookAtTopLevel": "error"
-      },
-      "performance": {
-        "noAccumulatingSpread": "warn"
-      },
       "style": {
-        "noNonNullAssertion": "warn",
-        "useConst": "error",
-        "useImportType": "error"
+        "noNonNullAssertion": "off",
+        "useImportType": "off"
       },
       "suspicious": {
-        "noArrayIndexKey": "warn",
         "noExplicitAny": "warn"
       }
     }
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "double",
-      "jsxQuoteStyle": "double",
-      "trailingCommas": "es5",
-      "semicolons": "always",
-      "arrowParentheses": "always",
-      "bracketSpacing": true,
-      "quoteProperties": "asNeeded"
-    }
-  },
-  "json": {
-    "formatter": {
-      "enabled": true,
-      "indentWidth": 2
-    },
-    "parser": {
-      "allowComments": true,
-      "allowTrailingCommas": false
+      "quoteStyle": "single",
+      "trailingCommas": "all",
+      "semicolons": "asNeeded",
+      "arrowParentheses": "always"
     }
   },
   "css": {
     "parser": {
       "cssModules": false,
-      "allowWrongLineComments": false
+      "allowWrongLineComments": true,
+      "tailwindDirectives": true
     },
     "formatter": {
       "enabled": true,
+      "indentStyle": "space",
       "indentWidth": 2,
       "lineWidth": 100
     }

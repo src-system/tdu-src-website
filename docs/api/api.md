@@ -2,3 +2,4 @@
 
 このドキュメントは、TDU SRC Websiteで管理するコンテンツのスキーマ定義です。
 
+Payload CMSを使う
