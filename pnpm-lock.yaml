@@ -38,6 +38,9 @@ importers:
       '@payloadcms/ui':
         specifier: ^3.6.1
         version: 3.76.1(@types/react@19.2.10)(monaco-editor@0.55.1)(next@16.1.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))(payload@3.76.1(graphql@16.12.0)(typescript@5.9.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3)
+      '@tdu-src/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
       '@tdu-src/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -84,6 +87,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.1.18)
+      '@tdu-src/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
       '@tdu-src/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -145,6 +151,8 @@ importers:
       typescript:
         specifier: ^5
         version: 5.9.3
+
+  packages/theme: {}
 
   packages/types:
     devDependencies:

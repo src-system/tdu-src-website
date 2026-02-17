@@ -12,6 +12,7 @@
     "tsc": "tsc --noEmit"
   },
   "dependencies": {
+    "@tdu-src/theme": "workspace:*",
     "@payloadcms/db-postgres": "^3.6.1",
     "@payloadcms/next": "^3.6.1",
     "@payloadcms/richtext-lexical": "^3.6.1",

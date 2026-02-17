@@ -1,8 +1,9 @@
 @import "tailwindcss";
+@import "@tdu-src/theme/tokens.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--tdu-background);
+  --foreground: var(--tdu-foreground);
 }
 
 @theme inline {
@@ -12,11 +13,11 @@
   --font-noto: var(--font-noto-sans);
   --font-zen: var(--font-zen-maru-gothic);
 
-  /* Custom colors */
-  --color-forest: #068200;
-  --color-leaf: #21b219;
-  --color-mint: #5dc757;
-  --color-charcoal: #454545;
+  /* Custom colors（@tdu-src/theme と統一） */
+  --color-forest: var(--tdu-forest);
+  --color-leaf: var(--tdu-leaf);
+  --color-mint: var(--tdu-mint);
+  --color-charcoal: var(--tdu-charcoal);
 
   /* Animations */
   --animate-fade-in: fade-in 0.2s ease-out;
@@ -83,8 +84,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--tdu-background);
+    --foreground: var(--tdu-foreground);
   }
 }
 

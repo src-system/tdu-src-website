@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm --parallel --filter \"./apps/*\" dev",
+    "dev": "docker compose up postgres -d --wait && pnpm --parallel --filter \"./apps/*\" dev",
+    "dev:local": "pnpm --parallel --filter \"./apps/*\" dev",
     "dev:web": "pnpm --filter @tdu-src/web dev",
     "dev:cms": "pnpm --filter @tdu-src/cms dev",
     "build": "pnpm --filter @tdu-src/types build && pnpm --filter \"./apps/*\" build",
@@ -20,6 +21,7 @@
     "docker:logs": "docker-compose logs -f",
     "cms:migrate": "pnpm --filter @tdu-src/cms payload migrate",
     "cms:migrate:create": "pnpm --filter @tdu-src/cms payload migrate:create",
+    "cms:migrate:create:ci": "pnpm --filter @tdu-src/cms payload migrate:create --force-accept-warning --skip-empty",
     "cms:migrate:fresh": "pnpm --filter @tdu-src/cms payload migrate:fresh",
     "cms:migrate:status": "pnpm --filter @tdu-src/cms payload migrate:status"
   },

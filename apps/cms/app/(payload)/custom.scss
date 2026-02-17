@@ -1,1 +1,156 @@
-/* Payload CMS カスタムスタイル */
+/* TDU SRC ウェブサイトのデザインを Payload 管理画面に適用 */
+/* カラーは @tdu-src/theme/tokens.css で一元管理（globals.css で import） */
+
+/* Google Fonts: Noto Sans JP, Zen Maru Gothic（web と同様） */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap');
+
+/* フォント適用（theme と統一） */
+body,
+.template-default,
+.payload-admin,
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--tdu-font-sans) !important;
+}
+
+/* ライトテーマ: アクセントカラーを forest green に */
+html:not([data-theme='dark']) {
+  --theme-success-50: #e6f7e6;
+  --theme-success-100: #b3eab3;
+  --theme-success-200: #80dd80;
+  --theme-success-300: #4dd04d;
+  --theme-success-400: #21b219;
+  --theme-success-500: var(--tdu-forest);
+  --theme-success-600: #056b00;
+  --theme-success-700: #045400;
+  --theme-success-800: #033d00;
+  --theme-success-900: #022600;
+}
+
+/* プライマリボタン・リンクを forest green に */
+.btn--style-primary {
+  background-color: var(--tdu-forest) !important;
+  color: white !important;
+
+  &:hover:not(.btn--disabled) {
+    background-color: var(--tdu-leaf) !important;
+  }
+}
+
+/* サイドバー背景をさらに薄いグリーンに（mint: 最も明るい） */
+.template-default .nav,
+.nav {
+  background-color: var(--tdu-mint) !important;
+  /* サイドバー内のテーマ色を白に（Payload の theme-elevation を上書き） */
+  --theme-elevation-0: var(--tdu-mint);
+  --theme-elevation-50: rgba(255, 255, 255, 0.05);
+  --theme-elevation-100: rgba(255, 255, 255, 0.1);
+  --theme-elevation-150: rgba(255, 255, 255, 0.15);
+  --theme-elevation-200: rgba(255, 255, 255, 0.2);
+  --theme-elevation-250: rgba(255, 255, 255, 0.25);
+  --theme-elevation-300: rgba(255, 255, 255, 0.3);
+  --theme-elevation-350: rgba(255, 255, 255, 0.35);
+  --theme-elevation-400: rgba(255, 255, 255, 0.4);
+  --theme-elevation-450: rgba(255, 255, 255, 0.45);
+  --theme-elevation-500: rgba(255, 255, 255, 0.9);
+  --theme-elevation-550: rgba(255, 255, 255, 0.95);
+  --theme-elevation-600: white;
+  --theme-elevation-650: white;
+  --theme-elevation-700: white;
+  --theme-elevation-750: white;
+  --theme-elevation-800: white;
+  --theme-elevation-850: white;
+  --theme-elevation-900: white;
+  --theme-elevation-950: white;
+  --theme-elevation-1000: white;
+  --theme-text: white;
+}
+
+/* サイドバー内のテキスト・アイコンを白に（灰色を上書き） */
+.nav a,
+.nav span,
+.nav__link,
+.nav__link span,
+.template-default .nav a,
+.template-default .nav span {
+  color: white !important;
+}
+
+.nav svg path,
+.nav .icon path {
+  fill: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* メニュー項目 */
+.template-default .nav__link,
+.nav__link {
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  color: white !important;
+
+  &:hover {
+    color: white !important;
+    background-color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  * {
+    color: white !important;
+  }
+}
+
+.nav__link--active {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: white !important;
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  border-color: white !important;
+
+  * {
+    color: white !important;
+  }
+}
+
+/* サイドバーのグループラベル・折りたたみヘッダーを大きく */
+.nav__label,
+.nav .label {
+  font-size: 1.35rem !important;
+  font-weight: 600 !important;
+  color: white !important;
+}
+
+/* サブメニュー・ネストされた項目も白に（灰色対策） */
+.nav [class*='nav'],
+.nav [class*='list'],
+.nav [class*='item'] {
+  color: white !important;
+
+  a, span {
+    color: white !important;
+  }
+}
+
+/* ブランドアイコン（白で統一） */
+.template-default .nav__brand .icon path,
+.login .logo path {
+  fill: white !important;
+}
+
+/* バナー（成功メッセージ等） */
+.banner--type-success {
+  background: var(--tdu-forest) !important;
+  color: white !important;
+}
+
+/* フォーカス・ホバー時のアクセント */
+input:focus,
+button:focus-visible,
+[data-theme='light'] .input:focus {
+  border-color: var(--tdu-mint) !important;
+  box-shadow: 0 0 0 2px rgba(6, 130, 0, 0.2) !important;
+}
+
+/* チェックボックス・ラジオのアクセント */
+input[type='checkbox']:checked,
+input[type='radio']:checked {
+  background-color: var(--tdu-forest) !important;
+  border-color: var(--tdu-forest) !important;
+}
