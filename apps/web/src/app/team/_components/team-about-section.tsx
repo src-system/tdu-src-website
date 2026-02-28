@@ -10,7 +10,12 @@ type TeamAboutSectionProps = {
   images: { imagePath: string; alt: string }[]
 }
 
-export const TeamAboutSection = ({ title, subtitle, description, images }: TeamAboutSectionProps) => {
+export const TeamAboutSection = ({
+  title,
+  subtitle,
+  description,
+  images,
+}: TeamAboutSectionProps) => {
   const hasLexical = isValidLexicalContent(description)
 
   return (

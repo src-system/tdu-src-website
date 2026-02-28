@@ -884,9 +884,8 @@ export async function getTeamDetail(teamName: string): Promise<TeamDetailData | 
             title: g.title,
             description: g.description,
             relatedLinks:
-              g.relatedLinks?.filter(
-                (r): r is { linkName: string; link: string } =>
-                  Boolean(r?.linkName && r?.link),
+              g.relatedLinks?.filter((r): r is { linkName: string; link: string } =>
+                Boolean(r?.linkName && r?.link),
               ) ?? [],
           })),
         }

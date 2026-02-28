@@ -34,7 +34,7 @@ const CharacterDetailPage = async ({ params }: Props) => {
 
   return (
     <main>
-      <div className="bg-gradient-to-b from-forest/10 to-white">
+      <div className="bg-linear-to-b from-forest/10 to-white">
         <div className="mx-auto max-w-6xl md:px-20 px-5 pt-8 pb-4">
           <Link
             href="/sofchara"
@@ -47,7 +47,7 @@ const CharacterDetailPage = async ({ params }: Props) => {
 
         <div className="mx-auto max-w-6xl md:px-20 px-5 pb-12">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-            <div className="relative w-64 h-80 md:w-80 md:h-[26rem] flex-shrink-0">
+            <div className="relative w-64 h-80 md:w-80 md:h-104 shrink-0">
               <Image
                 src={character.imagePath}
                 alt={character.name}

@@ -63,9 +63,7 @@ const TeamDetailPage = async ({ params }: Props) => {
                   />
                 )}
 
-                {softwares && (
-                  <TeamSoftwaresSection items={softwares.items} />
-                )}
+                {softwares && <TeamSoftwaresSection items={softwares.items} />}
 
                 {gallery && <TeamGallerySection items={gallery.items} />}
 
