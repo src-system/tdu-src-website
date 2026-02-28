@@ -1,3 +1,5 @@
+import { Markdown } from '@/src/app/_components/markdown'
+
 type ContentBlockProps = {
   title: string
   subtitle: string
@@ -31,9 +33,9 @@ export const ContentBlock = ({
           {/* 左側の緑色の縦線 */}
           <div className="w-2 shrink-0 bg-forest" />
           {/* 右側の説明文 */}
-          <p className="md:my-4 my-2 md:text-xl text-md leading-relaxed font-medium text-black whitespace-pre-line">
-            {description}
-          </p>
+          <div className="md:my-4 my-2 md:text-xl text-md leading-relaxed font-medium text-black [&_p]:my-1 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0">
+            <Markdown content={description} />
+          </div>
         </div>
       )}
     </div>

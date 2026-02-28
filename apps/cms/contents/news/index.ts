@@ -5,6 +5,7 @@ import { pageHeaderFields } from './PageHeader'
 export const NewsPage: GlobalConfig = {
   slug: 'news-page',
   label: 'Newsページ',
+  access: { read: () => true },
   admin: {
     group: 'News',
     description: 'Newsページのヘッダーと概要',

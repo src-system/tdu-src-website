@@ -199,12 +199,26 @@
 ### 使用箇所
 - トップページ（Newsセクション）
 
-### Payload定義
+### Payload定義（news-section：セクション見出し）
+| 項目 | 値 |
+|------|-----|
+| 種別 | toppage |
+| slug | `news-section` |
+| ファイル | `contents/toppage/NewsSection.ts` |
+| API | `GET /api/globals/news-section` |
+
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| title | text | - | defaultValue: "NEWS" |
+| subtitle | text | - | defaultValue: "お知らせ" |
+| description | textarea | ✓ | 改行対応 |
+
+### Payload定義（news：記事一覧）
 | 項目 | 値 |
 |------|-----|
 | 種別 | Collection |
 | slug | `news` |
-| ファイル | `contents/collections/News.ts` |
+| ファイル | `contents/news/NewsItem.ts` |
 | API | `GET /api/news`（limit: 3, sort: -date） |
 
 | フィールド | Payload型 | 必須 | 備考 |
@@ -217,10 +231,10 @@
 | author | text | - | 著者 |
 | tags | array | - | tags[].tag: text |
 
-※ セクションの title, subtitle は固定値または別設定
-
 ### フィールド（管理）
-News コレクションのフィールド（記事データ）:
+**news-section（NewsSection）:** title, subtitle, description（トップページのセクション見出し）
+
+**News コレクション（記事データ）:**
 | フィールド | 型 | 必須 | 備考 |
 |-----------|-----|------|------|
 | title | string | ✓ | 記事タイトル |
@@ -231,13 +245,11 @@ News コレクションのフィールド（記事データ）:
 | author | string | - | 著者 |
 | tags | string[] | - | タグ |
 
-※ セクションの title, subtitle は別フィールドで管理
-
 ### 取得する値
 | フィールド | 種別 | 型 | 備考 |
 |-----------|------|-----|------|
-| title | - | string | セクションタイトル（"NEWS"） |
-| subtitle | - | string | サブタイトル（"お知らせ"） |
+| title | news-section | string | セクションタイトル |
+| subtitle | news-section | string | サブタイトル |
 | newslist | news | NewsItem[] | 最新3件 |
 
 **NewsItem（トップページ取得時）:**
@@ -264,13 +276,27 @@ News コレクションのフィールド（記事データ）:
 ### 使用箇所
 - トップページ（キャラクターセクション）
 
-### Payload定義
+### Payload定義（characters-section：セクション見出し）
+| 項目 | 値 |
+|------|-----|
+| 種別 | toppage |
+| slug | `characters-section` |
+| ファイル | `contents/toppage/CharactersSection.ts` |
+| API | `GET /api/globals/characters-section` |
+
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| title | text | - | defaultValue: "CHARACTERS" |
+| subtitle | text | - | defaultValue: "ソフきゃら！" |
+| description | textarea | - | トップページのキャラクターセクションで表示 |
+
+### Payload定義（characters：キャラクター一覧）
 | 項目 | 値 |
 |------|-----|
 | 種別 | Collection |
 | slug | `characters` |
-| ファイル | `contents/collections/Characters.ts` |
-| API | `GET /api/characters`（limit: 1, ランダム） |
+| ファイル | `contents/sofchara/Character.ts` |
+| API | `GET /api/characters`（limit: 100, depth: 1） |
 
 | フィールド | Payload型 | 必須 | 備考 |
 |-----------|-----------|------|------|
@@ -279,6 +305,7 @@ News コレクションのフィールド（記事データ）:
 | englishName | text | - | 英名 |
 | iconImage | upload (relationTo: media) | ✓ | mimeType: image |
 | fullbodyImage | upload (relationTo: media) | ✓ | mimeType: image |
+| portraitImage | upload (relationTo: media) | - | 縦長画像（fullbodyImage の代替） |
 | url | text | ✓ | URL（スラッグ） |
 | profile | group | - | birthday, height, personality, likes, dislikes |
 | content | richText | - | 紹介文 |
@@ -286,10 +313,10 @@ News コレクションのフィールド（記事データ）:
 | alternates | array | - | name, image, alt, description |
 | relations | array | - | character (relationship), description |
 
-※ セクションの title, subtitle, description は固定値または別設定
-
 ### フィールド（管理）
-Characters コレクションのフィールド:
+**characters-section（CharactersSection）:** title, subtitle, description（トップページのセクション見出し）
+
+**Characters コレクション:**
 | フィールド | 型 | 必須 | 備考 |
 |-----------|-----|------|------|
 | name | string | ✓ | キャラクター名 |
@@ -301,24 +328,13 @@ Characters コレクションのフィールド:
 | profile | group | - | プロフィール等 |
 | content | richText | - | 紹介文 |
 
-※ セクションの title, subtitle, description は別フィールドで管理
-
 ### 取得する値
 | フィールド | 種別 | 型 | 備考 |
 |-----------|------|-----|------|
-| title | - | string | セクションタイトル（"CHARACTERS"） |
-| subtitle | - | string | サブタイトル（"ソフキャラ"） |
-| description | - | string | 説明文 |
-| characters | characters | Character[] | ランダム1件 |
-
-**Character（トップページ取得時）:**
-| フィールド | 種別 | 型 | 備考 |
-|-----------|------|-----|------|
-| id | characters | number | 識別番号 |
-| fullbodyImage | characters | image | 全身画像 |
-| url | characters | string | 詳細ページURL |
-
-※ name, profile, content 等は取得しない
+| title | characters-section | string | セクションタイトル |
+| subtitle | characters-section | string | サブタイトル |
+| description | characters-section | string | 説明文 |
+| characterImages | characters | string[] | 全身画像URLの配列（fullbodyImage または portraitImage）。ランダム表示用 |
 
 **注意:**
 - キャラクターデータは `characters-page-api` で管理

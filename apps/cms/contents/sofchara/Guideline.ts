@@ -12,7 +12,14 @@ export const Guideline: GlobalConfig = {
       name: 'title',
       type: 'text',
       required: true,
-      label: 'ページタイトル',
+      label: 'メインタイトル',
+      defaultValue: 'GUIDELINE',
+    },
+    {
+      name: 'subtitle',
+      type: 'text',
+      label: 'サブタイトル',
+      defaultValue: '二次創作ガイドライン',
     },
     {
       name: 'content',

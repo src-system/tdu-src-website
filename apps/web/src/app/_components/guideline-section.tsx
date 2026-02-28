@@ -27,6 +27,8 @@ const GuidelineBlock = ({ title, items, variant = 'ok' }: GuidelineBlockProps) =
   )
 }
 
+import { Markdown } from '@/src/app/_components/markdown'
+
 type GuidelineSectionProps = {
   description?: string
   okItems: string[]
@@ -42,7 +44,7 @@ export const GuidelineSection = ({
 }: GuidelineSectionProps) => {
   return (
     <div className="space-y-4 text-charcoal">
-      <p>{description}</p>
+      <Markdown content={description} />
       <div className="rounded-lg bg-forest/5 p-6 space-y-4">
         <GuidelineBlock title="OK" items={okItems} variant="ok" />
         <GuidelineBlock title="NG" items={ngItems} variant="ng" />

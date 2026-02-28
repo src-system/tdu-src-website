@@ -10,7 +10,15 @@ export const characterSectionFields: Field[] = [
   {
     name: 'subtitle',
     type: 'text',
-    defaultValue: 'キャラクター一覧',
+    defaultValue: 'ソフきゃら！',
     label: 'サブタイトル',
+  },
+  {
+    name: 'description',
+    type: 'textarea',
+    label: '説明文',
+    admin: {
+      description: 'トップページのキャラクターセクションで表示',
+    },
   },
 ]

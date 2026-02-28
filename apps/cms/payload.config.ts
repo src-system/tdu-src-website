@@ -9,13 +9,14 @@ import { AboutPage } from './contents/about'
 import { Activities } from './contents/about/Activities'
 import { History } from './contents/about/History'
 import { Media } from './contents/collections/Media'
-import { Users } from './contents/collections/Users'
+import { Users } from './contents/collections/users'
 import { NewsPage } from './contents/news'
 import { News } from './contents/news/NewsItem'
 import { SofcharaPage } from './contents/sofchara'
 import { Characters } from './contents/sofchara/Character'
 import { Guideline } from './contents/sofchara/Guideline'
 import { Sofkentown } from './contents/sofchara/Sofkentown'
+import { TeamPage } from './contents/team'
 import { Team2d } from './contents/team/2d'
 import { Team3d } from './contents/team/3d'
 import { TeamDesign } from './contents/team/design'
@@ -24,6 +25,8 @@ import { TeamSound } from './contents/team/sound'
 import { TeamWebapp } from './contents/team/webapp'
 import { AboutSection } from './contents/toppage/AboutSection'
 import { Catchphrase } from './contents/toppage/Catchphrase'
+import { CharactersSection } from './contents/toppage/CharactersSection'
+import { NewsSection } from './contents/toppage/NewsSection'
 import { TeamSection } from './contents/toppage/TeamSection'
 import { TopVideo } from './contents/toppage/TopVideo'
 
@@ -32,22 +35,28 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  routes: {
+    admin: '/admin',
+  },
   admin: {
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    suppressHydrationWarning: true,
   },
-  collections: [Users, Media, News, Characters, Sofkentown, Activities, History],
   globals: [
+    AboutPage,
     TopVideo,
     Catchphrase,
     AboutSection,
-    AboutPage,
+    NewsSection,
+    TeamSection,
+    CharactersSection,
     NewsPage,
+    TeamPage,
     SofcharaPage,
     Guideline,
-    TeamSection,
     Team2d,
     Team3d,
     TeamGame,
@@ -55,6 +64,7 @@ export default buildConfig({
     TeamSound,
     TeamDesign,
   ],
+  collections: [Activities, History, News, Characters, Sofkentown, Users, Media],
   editor: lexicalEditor(),
   i18n: {
     supportedLanguages: { ja },
@@ -68,6 +78,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    push: false,
   }),
   sharp,
 })

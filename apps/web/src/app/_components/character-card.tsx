@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { Markdown } from '@/src/app/_components/markdown'
 
 export type CharacterCardData = {
   id: string
@@ -40,7 +41,9 @@ export const CharacterCard = ({
       </div>
       <div className="text-center">
         <h3 className="font-bold text-lg text-charcoal">{name}</h3>
-        <p className="text-sm text-gray-500">{description}</p>
+        <div className="text-sm text-gray-500 [&_p]:my-0">
+          <Markdown content={description} />
+        </div>
       </div>
     </Link>
   )

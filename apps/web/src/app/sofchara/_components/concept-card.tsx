@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { LinkButton } from '@/src/app/_components/link-button'
+import { Markdown } from '@/src/app/_components/markdown'
 
 type ConceptCardProps = {
   imagePath: string
@@ -25,7 +26,9 @@ export const ConceptCard = ({
       </div>
       <div className="flex flex-col grow space-y-3">
         <h3 className="text-2xl font-bold text-forest">{title}</h3>
-        <p className="grow text-base text-charcoal leading-relaxed">{description}</p>
+        <div className="grow text-base text-charcoal leading-relaxed [&_p]:my-0">
+          <Markdown content={description} />
+        </div>
         <div className="pt-2">
           <LinkButton href={buttonHref} text={buttonText} />
         </div>

@@ -1,4 +1,5 @@
-import { Catchphrase, type CatchphraseProps } from '@/src/app/_components/catchphrase'
+import { redirect } from 'next/navigation'
+import { Catchphrase } from '@/src/app/_components/catchphrase'
 import { ContentBlock } from '@/src/app/_components/content-block'
 import { ContentCard } from '@/src/app/_components/content-card'
 import { ImageCard } from '@/src/app/_components/image-card'
@@ -13,9 +14,20 @@ import { SectionNav } from '@/src/app/_components/section-nav'
 import { SplashLogo } from '@/src/app/_components/splash-logo'
 import { TeamCard, TeamCardGrid } from '@/src/app/_components/team-card'
 import { WaveSection } from '@/src/app/_components/wave-section'
-import { getAllContentBlocks, NEWS_DATA, TEAM_DATA } from '@/src/app/_lib/api'
+import { getTopPageData } from '@/src/app/_lib/payload'
 
-const VIDEO_PATH = '/video/splash_movie.mp4'
+const TEAM_DATA_MOCK = [
+  {
+    teamName: 'game',
+    displayName: 'ゲームプログラミング班',
+    imagePath: '/images/team-card/game.png',
+  },
+  { teamName: 'webapp', displayName: 'Webアプリ班', imagePath: '/images/team-card/webapp.png' },
+  { teamName: 'sound', displayName: 'サウンド班', imagePath: '/images/team-card/sound.jpg' },
+  { teamName: '2d', displayName: '2D班', imagePath: '/images/team-card/2D.png' },
+  { teamName: '3d', displayName: '3D班', imagePath: '/images/team-card/3D.png' },
+  { teamName: 'design', displayName: 'デザイン班', imagePath: '/images/team-card/design.png' },
+] as const
 
 const HOME_SECTIONS = [
   { id: 'about', label: 'ABOUT' },
@@ -24,29 +36,37 @@ const HOME_SECTIONS = [
   { id: 'characters', label: 'CHARACTERS' },
 ] as const satisfies NavSection[]
 
-const HERO_SEGMENTS = [
-  { text: '創造', highlighted: true },
-  { text: 'を、', highlighted: false },
-  { text: '共有', highlighted: true },
-  { text: 'する。', highlighted: false },
-] as const satisfies CatchphraseProps['segments']
-
-const SPLASH_LOGO_ENABLED = true
-
 const Home = async () => {
-  const content = await getAllContentBlocks()
+  const result = await getTopPageData()
+
+  if (!result.success) {
+    const failedItemsParam = result.failedItems.join(',')
+    const params = new URLSearchParams({
+      type: 'no-content',
+      failedItems: failedItemsParam,
+    })
+    if (result.failedItems.includes('about-images')) {
+      params.set(
+        'message',
+        'Aboutセクションには3枚の画像が必要です。\n\n画像が1枚も取得できなかったか、3枚に不足しています。Payload CMS の管理画面で About セクションに3枚以上の画像を設定してください。',
+      )
+    }
+    redirect(`/error?${params.toString()}`)
+  }
+
+  const { topVideo, catchphrase, content, newsData, characterImages } = result.data
 
   return (
     <main>
       <SectionNav sections={HOME_SECTIONS} />
       <div className="relative h-[60svh] min-h-[500px] w-full overflow-hidden">
         <video className="h-full w-full object-cover" autoPlay muted loop playsInline>
-          <source src={VIDEO_PATH} type="video/mp4" />
+          <source src={topVideo.videoUrl} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/40" />
-        <Catchphrase segments={HERO_SEGMENTS} />
+        <Catchphrase segments={catchphrase.segments} />
         <div className="absolute inset-0 flex items-center justify-center md:bottom-10 bottom-8">
-          <SplashLogo enabled={SPLASH_LOGO_ENABLED} />
+          <SplashLogo enabled={topVideo.logoEnabled} />
         </div>
       </div>
       <Partition />
@@ -60,9 +80,9 @@ const Home = async () => {
               description={content.about.description}
             />
             <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <ImageCard imagePath="/images/example/1.jpg" alt="千住キャンパス" />
-              <ImageCard imagePath="/images/example/2.jpg" alt="旭祭の様子" />
-              <ImageCard imagePath="/images/example/3.jpg" alt="ソフ会の様子" />
+              {content.about.images.map((img) => (
+                <ImageCard key={img.alt} imagePath={img.imagePath} alt={img.alt} />
+              ))}
             </div>
             <div className="mt-8">
               <LinkButton href="/about" text="詳しく見る" />
@@ -87,7 +107,7 @@ const Home = async () => {
           />
           <div className="mt-8">
             <TeamCardGrid>
-              {TEAM_DATA.map((team) => (
+              {TEAM_DATA_MOCK.map((team) => (
                 <TeamCard key={team.teamName} {...team} />
               ))}
             </TeamCardGrid>
@@ -102,9 +122,13 @@ const Home = async () => {
         <Section as="div" size="container">
           <ContentCard>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-              <ContentBlock title={content.news.title} subtitle={content.news.subtitle} />
+              <ContentBlock
+                title={content.news.title}
+                subtitle={content.news.subtitle}
+                description={content.news.description}
+              />
             </div>
-            <NewsList items={[...NEWS_DATA]} />
+            <NewsList items={newsData} />
           </ContentCard>
         </Section>
       </div>
@@ -119,14 +143,20 @@ const Home = async () => {
                 <ContentBlock
                   title={content.characters.title}
                   subtitle={content.characters.subtitle}
-                  description="ソフトウェア研究部のオリジナルキャラクター「ソフきゃら」。個性豊かな9人のキャラクターたちをご覧ください。"
+                  description={content.characters.description}
                 />
                 <div className="mt-6">
                   <LinkButton href="/sofchara" text="キャラクター紹介" />
                 </div>
               </div>
               <div className="flex justify-center md:justify-end md:flex-2">
-                <RandomCharacter />
+                <RandomCharacter
+                  images={
+                    characterImages.length > 0
+                      ? characterImages
+                      : ['/images/sofcharatop/ワカツキ_web.png']
+                  }
+                />
               </div>
             </div>
           </div>

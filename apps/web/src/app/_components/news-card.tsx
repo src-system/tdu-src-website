@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Badge } from '@/src/app/_components/badge'
+import { NewsBadges } from '@/src/app/_components/news-badges'
 
 export type NewsCardData = {
   id: string
@@ -8,7 +8,8 @@ export type NewsCardData = {
   title: string
   imagePath: string
   category: string
-  content?: string
+  subcategory?: string
+  summary?: string
 }
 
 type NewsCardProps = NewsCardData & {
@@ -21,7 +22,8 @@ export const NewsCard = ({
   title,
   imagePath,
   category,
-  content,
+  subcategory,
+  summary,
   variant = 'compact',
 }: NewsCardProps) => {
   if (variant === 'full') {
@@ -39,14 +41,14 @@ export const NewsCard = ({
           />
         </div>
         <div className="flex flex-col justify-center gap-2">
-          <div className="flex items-center gap-3">
-            <Badge variant="secondary">{category}</Badge>
+          <div className="flex items-center gap-3 flex-wrap">
+            <NewsBadges category={category} subcategory={subcategory} />
             <span className="text-sm text-gray-500">{date}</span>
           </div>
           <h3 className="text-lg font-bold text-charcoal group-hover:text-forest transition-colors">
             {title}
           </h3>
-          {content && <p className="text-sm text-gray-600 line-clamp-2">{content}</p>}
+          {summary && <p className="text-sm text-gray-600 line-clamp-2">{summary}</p>}
         </div>
       </Link>
     )
@@ -71,9 +73,7 @@ export const NewsCard = ({
         </h3>
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-sm text-gray-600">{date}</span>
-          <Badge variant="primary" size="md">
-            {category}
-          </Badge>
+          <NewsBadges category={category} subcategory={subcategory} size="md" />
         </div>
       </div>
     </Link>

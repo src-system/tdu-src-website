@@ -2,10 +2,14 @@ import type { GlobalConfig } from 'payload'
 
 export const Catchphrase: GlobalConfig = {
   slug: 'catchphrase',
-  label: 'キャッチコピー',
+  label: '部のキャッチコピー',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'トップページ',
-    description: 'トップビデオ上に重ねて表示されるキャッチコピー',
+    description:
+      'トップ動画上に重ねて表示される、部のキャッチコピーの設定を行います。 ハイライトを設定した文字は緑色のアクセントが加わります。',
   },
   fields: [
     {

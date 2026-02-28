@@ -45,6 +45,9 @@ next-env.d.ts
 .cursor/
 .claude/
 
+# Agent
+.agents/
+
 # vscode
 .vscode/
 
@@ -54,6 +57,7 @@ next-env.d.ts
 /apps/cms/node_modules
 /apps/cms/.next
 /apps/cms/migrations
+/apps/cms/payload-generated-schema.ts
 
 # packages build output
 /packages/*/dist

@@ -16,7 +16,8 @@
       "!!**/out",
       "!!**/coverage",
       "!!**/*.min.js",
-      "!!**/pnpm-lock.yaml"
+      "!!**/pnpm-lock.yaml",
+      "!!**/importMap.js"
     ]
   },
   "formatter": {

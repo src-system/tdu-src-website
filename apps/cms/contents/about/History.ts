@@ -2,15 +2,17 @@ import type { CollectionConfig } from 'payload'
 
 export const History: CollectionConfig = {
   slug: 'history',
+  labels: { singular: 'ヒストリー', plural: 'ヒストリー' },
+  access: { read: () => true },
   admin: {
-    group: 'About',
-    useAsTitle: 'year',
-    description: '沿革（AboutページのHistorySectionで使用）',
+    group: 'Aboutページ',
+    useAsTitle: 'title',
+    description: '沿革イベント（Aboutページのヒストリーセクションで参照）',
   },
   fields: [
     {
       name: 'year',
-      type: 'text',
+      type: 'number',
       required: true,
       label: '年',
       admin: {
@@ -18,19 +20,24 @@ export const History: CollectionConfig = {
       },
     },
     {
-      name: 'events',
-      type: 'array',
+      name: 'month',
+      type: 'number',
+      label: '月',
+      admin: {
+        description: '1-12（オプション、指定なしは年のみ表示）',
+      },
+    },
+    {
+      name: 'title',
+      type: 'text',
       required: true,
-      minRows: 1,
-      label: 'イベント一覧',
-      fields: [
-        {
-          name: 'event',
-          type: 'text',
-          required: true,
-          label: 'イベント',
-        },
-      ],
+      label: 'イベントタイトル',
+    },
+    {
+      name: 'description',
+      type: 'textarea',
+      required: true,
+      label: '詳細説明',
     },
   ],
 }

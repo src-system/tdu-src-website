@@ -8,6 +8,7 @@ import { pageHeaderFields } from './PageHeader'
 export const SofcharaPage: GlobalConfig = {
   slug: 'sofchara-page',
   label: 'ソフキャラページ',
+  access: { read: () => true },
   admin: {
     group: 'ソフキャラ',
     description: 'ソフキャラトップページ（/sofchara）',

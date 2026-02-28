@@ -1,36 +1,5 @@
 import type { Field } from 'payload'
 
-const activityItemFields: Field[] = [
-  {
-    name: 'title',
-    type: 'text',
-    required: true,
-    label: '活動タイトル',
-  },
-  {
-    name: 'description',
-    type: 'textarea',
-    required: true,
-    label: '活動の説明',
-  },
-  {
-    name: 'image',
-    type: 'upload',
-    relationTo: 'media',
-    required: true,
-    filterOptions: {
-      mimeType: { contains: 'image' },
-    },
-    label: 'アイコン画像',
-  },
-  {
-    name: 'alt',
-    type: 'text',
-    required: true,
-    label: '代替テキスト',
-  },
-]
-
 export const activitySectionFields: Field[] = [
   {
     name: 'title',
@@ -50,6 +19,17 @@ export const activitySectionFields: Field[] = [
     required: true,
     minRows: 1,
     label: '活動項目',
-    fields: activityItemFields,
+    admin: {
+      description: 'アクティビティコレクションから選択し、表示順に並べてください',
+    },
+    fields: [
+      {
+        name: 'activity',
+        type: 'relationship',
+        relationTo: 'activities' as const,
+        required: true,
+        label: 'アクティビティ',
+      },
+    ],
   },
 ]

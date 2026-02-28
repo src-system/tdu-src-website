@@ -12,6 +12,7 @@ Aboutページで使用するデータの管理項目です。
 | API | `GET /api/globals/about-page` |
 
 ※ pageHeader, aboutSection, activitySection, historySection をグループで保持
+※ アクティビティ・ヒストリーは各コレクションページで登録し、Aboutページで参照して表示順を指定
 
 ---
 
@@ -52,91 +53,69 @@ Aboutページ上部に表示されるヘッダー画像とタイトルです。
 |-----------|-----------|------|------|
 | aboutSection.title | text | - | defaultValue: "ABOUT" |
 | aboutSection.subtitle | text | - | defaultValue: "ソフトウェア研究部について" |
-| aboutSection.description | textarea | ✓ | Markdown対応 |
+| aboutSection.description | richText | ✓ | Lexicalエディタ（見出し、リスト、強調等） |
 
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |
 |-----------|-----|------|------------|------|
 | title | string | - | "ABOUT" | セクションタイトル |
 | subtitle | string | - | "ソフトウェア研究部について" | サブタイトル |
-| description | markdown | ✓ | - | 紹介文（Markdown対応） |
+| description | richText (Lexical) | ✓ | - | 紹介文（リッチテキスト） |
 
 **注意:**
-- Markdownで記述可能（見出し、リスト、強調等）
+- 見出し、リスト、強調等をLexicalエディタで編集可能。フロントではLexicalのレンダラーで表示
 
 ---
 
 ## 3. アクティビティセクション
 
 ### 概要
-主な活動内容を紹介するセクションです。
+主な活動内容を紹介するセクションです。**アクティビティ**コレクションで登録し、Aboutページで参照・表示順を指定。
 
-### 使用箇所
-- Aboutページ（アクティビティセクション）
+### 登録ページ
+- **Collections > アクティビティ** で活動項目を登録
 
 ### Payload定義
 | フィールド | Payload型 | 必須 | 備考 |
 |-----------|-----------|------|------|
 | activitySection.title | text | - | defaultValue: "ACTIVITY" |
 | activitySection.subtitle | text | - | defaultValue: "主な活動" |
-| activitySection.items | array | ✓ | minRows: 1 |
-| activitySection.items[].title | text | ✓ | 活動タイトル |
-| activitySection.items[].description | textarea | ✓ | 活動の説明 |
-| activitySection.items[].image | upload (relationTo: media) | ✓ | アイコン画像 |
-| activitySection.items[].alt | text | ✓ | 代替テキスト |
+| activitySection.items | array | ✓ | relationship で activities を参照 |
+| activitySection.items[].activity | relationship (activities) | ✓ | 表示順に並べる |
 
-### フィールド
-| フィールド | 型 | 必須 | デフォルト値 | 備考 |
-|-----------|-----|------|------------|------|
-| title | string | - | "ACTIVITY" | セクションタイトル |
-| subtitle | string | - | "主な活動" | サブタイトル |
-| items | ActivityItem[] | ✓ | - | 活動項目の配列 1つ以上必須 |
-
-**ActivityItem:**
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
-| title | string | ✓ | 活動タイトル |
-| description | string | ✓ | 活動の説明 |
-| image | image | ✓ | アイコン名 |
-
+**アクティビティコレクション（activities）:**
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| title | text | ✓ | 活動タイトル |
+| description | textarea | ✓ | 活動の説明 |
+| image | upload (media) | ✓ | アイコン画像 |
+| alt | text | ✓ | 代替テキスト |
 
 ---
 
 ## 4. ヒストリーセクション
 
 ### 概要
-ソフトウェア研究部の歴史を時系列で表示するセクションです。
+ソフトウェア研究部の歴史を時系列で表示するセクションです。**ヒストリー**コレクションで登録し、Aboutページで参照・表示順を指定。
 
-### 使用箇所
-- Aboutページ（ヒストリーセクション）
+### 登録ページ
+- **Collections > ヒストリー** で沿革イベントを登録
 
 ### Payload定義
 | フィールド | Payload型 | 必須 | 備考 |
 |-----------|-----------|------|------|
 | historySection.title | text | - | defaultValue: "HISTORY" |
 | historySection.subtitle | text | - | defaultValue: "沿革" |
-| historySection.timeline | array | ✓ | minRows: 1 |
-| historySection.timeline[].year | number | ✓ | 年（西暦） |
-| historySection.timeline[].month | number | - | 月（1-12） |
-| historySection.timeline[].title | text | ✓ | イベントタイトル |
-| historySection.timeline[].description | textarea | ✓ | 詳細説明 |
+| historySection.timeline | array | ✓ | relationship で history を参照 |
+| historySection.timeline[].event | relationship (history) | ✓ | 古い順に並べる |
 
-### フィールド
-| フィールド | 型 | 必須 | デフォルト値 | 備考 |
-|-----------|-----|------|------------|------|
-| title | string | - | "HISTORY" | セクションタイトル |
-| subtitle | string | - | "沿革" | サブタイトル |
-| timeline | HistoryItem[] | ✓ | - | 歴史イベントの配列 1個以上必須 |
-
-**HistoryItem:**
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
+**ヒストリーコレクション（history）:**
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
 | year | number | ✓ | 年（西暦） |
-| month | number | - | 月（1-12、オプション） |
-| title | string | ✓ | イベントタイトル |
-| description | string | ✓ | 詳細説明 |
-
+| month | number | - | 月（1-12） |
+| title | text | ✓ | イベントタイトル |
+| description | textarea | ✓ | 詳細説明 |
 
 **注意:**
 - `timeline`は古い順（年代昇順）に並べて表示
-- `month`が指定されていない場合は年のみ表示

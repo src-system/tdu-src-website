@@ -15,11 +15,11 @@ export const aboutSectionFields: Field[] = [
   },
   {
     name: 'description',
-    type: 'textarea',
+    type: 'richText',
     required: true,
     label: '紹介文',
     admin: {
-      description: 'Markdown対応（見出し、リスト、強調等）',
+      description: '見出し、リスト、強調等のマークダウンテキスト',
     },
   },
 ]

@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { LinkButton } from '@/src/app/_components/link-button'
+import { Markdown } from '@/src/app/_components/markdown'
 
 type TeamIntroCardProps = {
   teamName: string
@@ -43,7 +44,6 @@ export const TeamIntroCard = ({
       ref={ref}
       className={`group relative overflow-hidden rounded-3xl transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
     >
-      {/* 背景画像 */}
       <div className="absolute inset-0">
         <Image
           src={imagePath}
@@ -51,23 +51,19 @@ export const TeamIntroCard = ({
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        {/* 多層グラデーションで自然な暗さを作る */}
         <div
           className={`absolute inset-0 bg-gradient-to-${isEven ? 'r' : 'l'} from-black/95 via-black/60 to-transparent`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-black/20" />
       </div>
 
-      {/* コンテンツ */}
       <div
         className={`relative flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} min-h-[400px] md:min-h-[450px]`}
       >
-        {/* テキストコンテンツ */}
         <div
           className={`flex-1 flex flex-col justify-center p-6 md:p-12 ${isEven ? 'md:pr-8' : 'md:pl-8'}`}
         >
           <div className="relative z-10">
-            {/* 番号バッジ */}
             <div className="flex items-center gap-4 mb-4">
               <span
                 className="text-5xl md:text-7xl font-bold text-white/40"
@@ -85,16 +81,14 @@ export const TeamIntroCard = ({
             >
               {displayName}
             </h3>
-            <p
-              className="text-base md:text-lg leading-relaxed text-white/95 mb-6 max-w-xl"
+            <div
+              className="text-base md:text-lg leading-relaxed text-white/95 mb-6 max-w-xl **:text-white/95 [&_a]:text-mint [&_a]:underline"
               style={{
                 textShadow: '0 1px 8px rgba(0,0,0,0.7), 0 2px 15px rgba(0,0,0,0.4)',
               }}
             >
-              {description}
-            </p>
-
-            {/* 活動内容タグ */}
+              <Markdown content={description} />
+            </div>
             <div className="flex flex-wrap gap-2 mb-6">
               {activities.map((activity) => (
                 <span
@@ -106,15 +100,11 @@ export const TeamIntroCard = ({
                 </span>
               ))}
             </div>
-
-            {/* もっと見るボタン */}
             <div>
               <LinkButton href={`/team/${teamName}`} text="もっと見る" color="black" />
             </div>
           </div>
         </div>
-
-        {/* 右側の余白 */}
         <div className="hidden md:flex flex-1" />
       </div>
     </div>

@@ -8,6 +8,7 @@ const RULE_LEVEL_OPTIONS = [
 
 export const Characters: CollectionConfig = {
   slug: 'characters',
+  access: { read: () => true },
   admin: {
     group: 'ソフキャラ',
     useAsTitle: 'jpName',

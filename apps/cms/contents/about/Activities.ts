@@ -2,10 +2,12 @@ import type { CollectionConfig } from 'payload'
 
 export const Activities: CollectionConfig = {
   slug: 'activities',
+  labels: { singular: 'アクティビティ', plural: 'アクティビティ' },
+  access: { read: () => true },
   admin: {
-    group: 'About',
+    group: 'Aboutページ',
     useAsTitle: 'title',
-    description: '活動項目（AboutページのActivitySectionで使用）',
+    description: '活動項目（Aboutページのアクティビティセクションで参照）',
   },
   fields: [
     {

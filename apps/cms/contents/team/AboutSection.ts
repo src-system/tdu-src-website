@@ -22,6 +22,13 @@ export const imageCardFields: Field[] = [
 
 export const aboutSectionFields: Field[] = [
   {
+    name: 'aboutTitle',
+    type: 'text',
+    required: true,
+    defaultValue: 'ABOUT',
+    label: 'セクションタイトル',
+  },
+  {
     name: 'subtitle',
     type: 'text',
     required: true,
@@ -32,22 +39,17 @@ export const aboutSectionFields: Field[] = [
   },
   {
     name: 'description',
-    type: 'textarea',
+    type: 'richText',
     required: true,
     label: '班の詳細説明',
-    admin: {
-      description: 'Markdown対応',
-    },
   },
   {
     name: 'images',
     type: 'array',
-    required: true,
-    minRows: 1,
     maxRows: 3,
     label: '画像',
     admin: {
-      description: '1〜3枚（4:3～16:9推奨）',
+      description: '任意。最大3枚（4:3～16:9推奨）',
     },
     fields: imageCardFields,
   },

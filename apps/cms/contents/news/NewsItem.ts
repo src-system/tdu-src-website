@@ -6,6 +6,9 @@ const CATEGORY_OPTIONS = [
   { label: '活動報告', value: 'report' },
   { label: 'ソフキャラ', value: 'sofchara' },
   { label: '作品紹介', value: 'work' },
+]
+
+const SUB_CATEGORY_OPTIONS = [
   { label: 'ゲームプログラミング', value: 'game' },
   { label: 'Webアプリ', value: 'web' },
   { label: 'サウンド', value: 'sound' },
@@ -16,11 +19,12 @@ const CATEGORY_OPTIONS = [
 
 export const News: CollectionConfig = {
   slug: 'news',
+  access: { read: () => true },
   admin: {
     group: 'News',
     useAsTitle: 'title',
     description: 'お知らせ記事',
-    defaultColumns: ['title', 'category', 'date', 'updatedAt'],
+    defaultColumns: ['title', 'category', 'subcategory', 'date', 'updatedAt'],
   },
   fields: [
     {
@@ -36,7 +40,8 @@ export const News: CollectionConfig = {
       label: '公開日',
       admin: {
         date: {
-          pickerAppearance: 'dayOnly',
+          pickerAppearance: 'dayAndTime',
+          timeIntervals: 1,
         },
       },
     },
@@ -46,6 +51,15 @@ export const News: CollectionConfig = {
       required: true,
       label: 'カテゴリー',
       options: CATEGORY_OPTIONS,
+    },
+    {
+      name: 'subcategory',
+      type: 'select',
+      label: '班（任意）',
+      options: SUB_CATEGORY_OPTIONS,
+      admin: {
+        description: '班に関連する記事の場合のみ選択',
+      },
     },
     {
       name: 'summary',
@@ -88,18 +102,6 @@ export const News: CollectionConfig = {
       name: 'author',
       type: 'text',
       label: '著者名',
-    },
-    {
-      name: 'tags',
-      type: 'array',
-      label: 'タグ',
-      fields: [
-        {
-          name: 'tag',
-          type: 'text',
-          label: 'タグ',
-        },
-      ],
     },
   ],
 }

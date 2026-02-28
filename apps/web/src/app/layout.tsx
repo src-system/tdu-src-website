@@ -52,6 +52,7 @@ export default function RootLayout({
     <html lang="ja">
       <body
         className={`${lexendDeca.variable} ${notoSans.variable} ${zenMaruGothic.variable} antialiased`}
+        suppressHydrationWarning
       >
         <MainLayout>{children}</MainLayout>
       </body>

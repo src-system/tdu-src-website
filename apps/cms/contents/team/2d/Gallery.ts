@@ -35,10 +35,34 @@ const galleryFields: Field[] = [
   {
     name: 'title',
     type: 'text',
+    label: '作品タイトル',
+  },
+  {
+    name: 'description',
+    type: 'textarea',
+    label: '作品説明',
+  },
+  {
+    name: 'relatedLinks',
+    type: 'array',
+    label: '関連リンク',
     admin: {
-      condition: (_data, siblingData) => siblingData?.type === 'sound',
-      description: '曲名等',
+      description: '任意。複数追加可能',
     },
+    fields: [
+      {
+        name: 'linkName',
+        type: 'text',
+        label: 'リンク名',
+        required: true,
+      },
+      {
+        name: 'link',
+        type: 'text',
+        label: 'リンク',
+        required: true,
+      },
+    ],
   },
 ]
 

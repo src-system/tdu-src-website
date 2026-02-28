@@ -1,37 +1,5 @@
 import type { Field } from 'payload'
 
-const historyItemFields: Field[] = [
-  {
-    name: 'year',
-    type: 'number',
-    required: true,
-    label: '年',
-    admin: {
-      description: '西暦',
-    },
-  },
-  {
-    name: 'month',
-    type: 'number',
-    label: '月',
-    admin: {
-      description: '1-12（オプション、指定なしは年のみ表示）',
-    },
-  },
-  {
-    name: 'title',
-    type: 'text',
-    required: true,
-    label: 'イベントタイトル',
-  },
-  {
-    name: 'description',
-    type: 'textarea',
-    required: true,
-    label: '詳細説明',
-  },
-]
-
 export const historySectionFields: Field[] = [
   {
     name: 'title',
@@ -52,8 +20,16 @@ export const historySectionFields: Field[] = [
     minRows: 1,
     label: '歴史イベント',
     admin: {
-      description: '古い順（年代昇順）に並べてください',
+      description: 'ヒストリーコレクションから選択し、古い順（年代昇順）に並べてください',
     },
-    fields: historyItemFields,
+    fields: [
+      {
+        name: 'event',
+        type: 'relationship',
+        relationTo: 'history' as const,
+        required: true,
+        label: 'ヒストリー',
+      },
+    ],
   },
 ]

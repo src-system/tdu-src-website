@@ -2,15 +2,21 @@
 
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { CHARACTER_IMAGES } from '@/src/app/_lib/api'
 
-export const RandomCharacter = () => {
+const FALLBACK_IMAGES = ['/images/sofcharatop/ワカツキ_web.png']
+
+type RandomCharacterProps = {
+  images?: string[]
+}
+
+export const RandomCharacter = ({ images = [] }: RandomCharacterProps) => {
   const [imagePath, setImagePath] = useState<string | null>(null)
+  const imageList = images.length > 0 ? images : FALLBACK_IMAGES
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * CHARACTER_IMAGES.length)
-    setImagePath(CHARACTER_IMAGES[randomIndex])
-  }, [])
+    const randomIndex = Math.floor(Math.random() * imageList.length)
+    setImagePath(imageList[randomIndex])
+  }, [imageList])
 
   if (!imagePath) {
     return (

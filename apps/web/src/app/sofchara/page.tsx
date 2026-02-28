@@ -7,7 +7,7 @@ import { LinkButton } from '@/src/app/_components/link-button'
 import { PageHeader } from '@/src/app/_components/page-header'
 import { Section } from '@/src/app/_components/section'
 import { type NavSection, SectionNav } from '@/src/app/_components/section-nav'
-import { CHARACTER_DATA } from '@/src/app/_lib/api'
+import { getCharacterData } from '@/src/app/_lib/api'
 import { CharacterList } from '@/src/app/sofchara/_components/character-list'
 import { ConceptCard } from '@/src/app/sofchara/_components/concept-card'
 
@@ -18,10 +18,13 @@ const sections: NavSection[] = [
   { id: 'characters', label: 'キャラクター' },
 ]
 
-const SofcharaPage = () => {
+const SofcharaPage = async () => {
+  const characterData = await getCharacterData()
+  const fallbackImage = '/images/sofchara/sofchara_icon.avif'
+
   return (
     <main>
-      <PageHeader imagePath={CHARACTER_DATA[0].imagePath}>
+      <PageHeader imagePath={characterData[0]?.imagePath ?? fallbackImage}>
         <HeroLabel text="ソフきゃら！" />
       </PageHeader>
       <SectionNav sections={sections} />
@@ -92,7 +95,7 @@ const SofcharaPage = () => {
             buttonHref="/sofchara/guideline"
           />
           <ConceptCard
-            imagePath={CHARACTER_DATA[1].imagePath}
+            imagePath={characterData[1]?.imagePath ?? fallbackImage}
             imageAlt="キャラクターイメージ"
             title="キャラクター"
             description="キャラクターは部員の「好き」から生まれます。個性豊かなキャラクターが集まり、誰かの推しになる場を目指しています。"
@@ -100,7 +103,7 @@ const SofcharaPage = () => {
             buttonHref="#characters"
           />
           <ConceptCard
-            imagePath={CHARACTER_DATA[2].imagePath}
+            imagePath={characterData[2]?.imagePath ?? fallbackImage}
             imageAlt="ソフケンタウンイメージ"
             title="ソフケンタウン"
             description="全キャラクター共通の舞台設定として発展中。公式・ファンメイドを横断して関係性が広がっていきます。"
@@ -124,7 +127,7 @@ const SofcharaPage = () => {
 
       <Section id="characters" className="gap-6">
         <ContentBlock title="キャラクター" subtitle="CHARACTER LIST" maxWidth="wide" />
-        <CharacterList characters={CHARACTER_DATA} />
+        <CharacterList characters={characterData} />
       </Section>
     </main>
   )

@@ -12,6 +12,7 @@
     "tsc": "tsc --noEmit"
   },
   "dependencies": {
+    "@payloadcms/richtext-lexical": "^3.6.1",
     "@tdu-src/theme": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.10",
     "@tailwindcss/typography": "^0.5.19",

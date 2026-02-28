@@ -16,7 +16,6 @@ export const newsOverviewFields: Field[] = [
   {
     name: 'description',
     type: 'textarea',
-    required: true,
     label: '説明文',
     admin: {
       description: '改行対応',

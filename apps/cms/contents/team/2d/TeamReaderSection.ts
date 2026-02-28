@@ -12,6 +12,14 @@ export const teamReaderSectionFields: Field[] = [
       {
         name: 'title',
         type: 'text',
+        required: true,
+        label: 'タイトル',
+        defaultValue: 'Team Reader Interview',
+      },
+      {
+        name: 'subtitle',
+        type: 'textarea',
+        label: 'サブタイトル',
         defaultValue: '班長インタビュー',
       },
       {
@@ -19,12 +27,6 @@ export const teamReaderSectionFields: Field[] = [
         type: 'text',
         required: true,
         label: '班長名',
-      },
-      {
-        name: 'role',
-        type: 'text',
-        required: true,
-        label: '役職',
       },
       {
         name: 'image',
@@ -40,13 +42,23 @@ export const teamReaderSectionFields: Field[] = [
         name: 'alt',
         type: 'text',
         required: true,
+        label: '班長画像の代替テキスト',
+      },
+      {
+        name: 'body',
+        type: 'textarea',
+        label: 'インタビュー本文',
+        admin: {
+          description: 'インタビュー内容をテキストで記載',
+        },
       },
       {
         name: 'qa',
         type: 'array',
-        required: true,
-        minRows: 1,
         label: 'Q&A',
+        admin: {
+          description: '任意。質問と回答の形式で追加',
+        },
         fields: [
           {
             name: 'question',

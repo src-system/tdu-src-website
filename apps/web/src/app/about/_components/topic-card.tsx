@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import { Markdown } from '@/src/app/_components/markdown'
 
 type TopicCardProps = {
   title: string
@@ -38,9 +39,9 @@ export const TopicCard = ({ title, description, image }: TopicCardProps) => {
         {/* 左側：タイトルと説明文 */}
         <div className="flex-1 flex flex-col justify-start">
           <h3 className="text-xl md:text-3xl font-bold">{title}</h3>
-          <p className="text-lg font-medium md:text-xl leading-relaxed mt-2 md:mt-4">
-            {description}
-          </p>
+          <div className="text-lg font-medium md:text-xl leading-relaxed mt-2 md:mt-4 [&_p]:my-0">
+            <Markdown content={description} />
+          </div>
         </div>
 
         {/* 右側：画像 */}

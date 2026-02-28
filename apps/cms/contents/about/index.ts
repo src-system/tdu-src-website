@@ -7,8 +7,9 @@ import { pageHeaderFields } from './PageHeader'
 export const AboutPage: GlobalConfig = {
   slug: 'about-page',
   label: 'Aboutページ',
+  access: { read: () => true },
   admin: {
-    group: 'About',
+    group: 'Aboutページ',
     description: 'Aboutページの全セクション',
   },
   fields: [

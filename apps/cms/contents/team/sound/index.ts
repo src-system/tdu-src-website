@@ -1,24 +1,13 @@
 import type { GlobalConfig } from 'payload'
-import { getTeamCardFieldsFor } from '../TeamCard'
-import { aboutSectionFields } from './AboutSection'
-import { galleryField } from './Gallery'
-import { pageHeaderFields } from './PageHeader'
-import { softwaresField } from './SoftwareItem'
-import { teamReaderSectionFields } from './TeamReaderSection'
+import { getTeamDetailFieldsFor } from '../teamDetailFields'
 
 export const TeamSound: GlobalConfig = {
   slug: 'team-sound',
   label: 'サウンド班',
+  access: { read: () => true },
   admin: {
     group: 'team',
     description: 'サウンド班の詳細情報（1件のみ）',
   },
-  fields: [
-    ...getTeamCardFieldsFor('sound'),
-    ...pageHeaderFields,
-    ...aboutSectionFields,
-    ...teamReaderSectionFields,
-    softwaresField,
-    galleryField,
-  ],
+  fields: getTeamDetailFieldsFor('sound'),
 }

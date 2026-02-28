@@ -3,6 +3,7 @@
 import type { LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import { Markdown } from '@/src/app/_components/markdown'
 
 type ActivityCardProps = {
   number: string
@@ -54,9 +55,9 @@ export const ActivityCard = ({
             <span className="text-mint font-bold text-lg md:text-xl">{number}</span>
           </div>
           <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">{title}</h3>
-          <p className="text-base md:text-lg text-white/90 leading-relaxed max-w-2xl">
-            {description}
-          </p>
+          <div className="text-base md:text-lg text-white/90 leading-relaxed max-w-2xl **:text-white/90 [&_p]:my-0">
+            <Markdown content={description} />
+          </div>
         </div>
       </div>
     )
@@ -99,7 +100,9 @@ export const ActivityCard = ({
               </div>
             </div>
             <h3 className="text-xl md:text-3xl font-bold text-forest mb-3">{title}</h3>
-            <p className="text-base md:text-lg text-gray-600 leading-relaxed">{description}</p>
+            <div className="text-base md:text-lg text-gray-600 leading-relaxed [&_p]:my-0">
+              <Markdown content={description} />
+            </div>
           </div>
         </div>
       </div>

@@ -1,18 +1,31 @@
-import fs from 'node:fs/promises'
-import path from 'node:path'
+import { redirect } from 'next/navigation'
 import { ContentBlock } from '@/src/app/_components/content-block'
 import { ContentCard } from '@/src/app/_components/content-card'
 import { ContentSection } from '@/src/app/_components/content-section'
 import { HeroLabel } from '@/src/app/_components/hero-label'
-import { Markdown } from '@/src/app/_components/markdown'
 import { PageHeader } from '@/src/app/_components/page-header'
+import { type LexicalContent, RichText } from '@/src/app/_components/rich-text'
 import { SectionNav } from '@/src/app/_components/section-nav'
+import { isValidLexicalContent } from '@/src/app/_lib/lexical-utils'
+import { getAboutPageData } from '@/src/app/_lib/payload'
 import { HistorySection } from '@/src/app/about/_components/history-section'
 import { TopicCard } from '@/src/app/about/_components/topic-card'
 
 const About = async () => {
-  const markdownPath = path.join(process.cwd(), 'public/markdown/部の活動(仮).md')
-  const markdownContent = await fs.readFile(markdownPath, 'utf-8')
+  const data = await getAboutPageData()
+
+  if (!data) {
+    const params = new URLSearchParams({
+      type: 'no-content',
+      failedItems: 'about-page',
+      message:
+        'Aboutページのコンテンツを取得できませんでした。\n\nPayload CMS の管理画面で Aboutページ の設定を確認してください。',
+    })
+    redirect(`/error?${params.toString()}`)
+  }
+
+  const { pageHeader, aboutSection, activitySection, historySection } = data
+
   return (
     <main>
       <SectionNav
@@ -22,14 +35,16 @@ const About = async () => {
           { id: 'history', label: 'History' },
         ]}
       />
-      <PageHeader imagePath="/images/about.png">
-        <HeroLabel text="部の活動" />
+      <PageHeader imagePath={pageHeader.imagePath || '/images/about.png'}>
+        <HeroLabel text={pageHeader.title} />
       </PageHeader>
       <ContentSection sectionId="about">
         <ContentCard>
           <div>
-            <ContentBlock title="ABOUT" subtitle="ソフトウェア研究部とは？" />
-            <Markdown content={markdownContent} />
+            <ContentBlock title={aboutSection.title} subtitle={aboutSection.subtitle} />
+            {isValidLexicalContent(aboutSection.description) && (
+              <RichText content={aboutSection.description as LexicalContent} className="mt-4" />
+            )}
           </div>
         </ContentCard>
       </ContentSection>
@@ -53,32 +68,33 @@ const About = async () => {
         </div>
         <div className="relative mx-auto max-w-6xl 2xl:max-w-7xl md:px-20 2xl:px-32 px-5 md:py-15 2xl:py-20 py-10">
           <ContentBlock
-            title="Activity"
-            subtitle="活動内容"
+            title={activitySection.title}
+            subtitle={activitySection.subtitle}
             description="ソフ研では、以下のような活動を行っています。"
           />
           <div className="flex flex-col gap-10 mt-8">
-            <TopicCard
-              title="活動内容"
-              description="ソフ研では、以下のような活動を行っています。"
-              image="/images/team-card/YAMAZAKI.jpg"
-            />
-            <TopicCard
-              title="活動内容"
-              description="ソフ研では、以下のような活動を行っています。"
-              image="/images/team-card/YAMAZAKI.jpg"
-            />
-            <TopicCard
-              title="活動内容"
-              description="ソフ研では、以下のような活動を行っています。"
-              image="/images/team-card/YAMAZAKI.jpg"
-            />
+            {activitySection.items.length > 0 ? (
+              activitySection.items.map((item, i) => (
+                <TopicCard
+                  key={`${item.title}-${i}`}
+                  title={item.title}
+                  description={item.description}
+                  image={item.imagePath || '/images/team-card/YAMAZAKI.jpg'}
+                />
+              ))
+            ) : (
+              <p className="text-gray-500">活動内容はまだ登録されていません。</p>
+            )}
           </div>
         </div>
       </section>
 
       <div id="history">
-        <HistorySection />
+        <HistorySection
+          title={historySection.title}
+          subtitle={historySection.subtitle}
+          items={historySection.timeline}
+        />
       </div>
     </main>
   )

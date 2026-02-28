@@ -1,14 +1,19 @@
+/** CMS 更新を即時反映するため動的レンダリング */
+export const dynamic = 'force-dynamic'
+
 import { ChevronLeftIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CharacterCard } from '@/src/app/_components/character-card'
+import { Markdown } from '@/src/app/_components/markdown'
 import { Partition } from '@/src/app/_components/partition'
 import { ProfileGrid } from '@/src/app/_components/profile-item'
-import { CHARACTER_DATA } from '@/src/app/_lib/api'
+import { getCharacterData } from '@/src/app/_lib/api'
 
-export function generateStaticParams() {
-  return CHARACTER_DATA.map((character) => ({
+export async function generateStaticParams() {
+  const characterData = await getCharacterData()
+  return characterData.map((character) => ({
     characterName: character.id,
   }))
 }
@@ -20,7 +25,8 @@ type Props = {
 const CharacterDetailPage = async ({ params }: Props) => {
   const { characterName } = await params
 
-  const character = CHARACTER_DATA.find((c) => c.id === characterName)
+  const characterData = await getCharacterData()
+  const character = characterData.find((c) => c.id === characterName)
 
   if (!character) {
     notFound()
@@ -54,8 +60,14 @@ const CharacterDetailPage = async ({ params }: Props) => {
               <h1 className="text-3xl md:text-4xl font-bold text-charcoal mb-2">
                 {character.name}
               </h1>
-              <p className="text-lg text-forest mb-6">{character.description}</p>
-              <p className="text-charcoal leading-relaxed">{character.backstory}</p>
+              <div className="text-lg text-forest mb-6 [&_p]:my-0">
+                <Markdown content={character.description} />
+              </div>
+              {character.backstory && (
+                <div className="text-charcoal leading-relaxed">
+                  <Markdown content={character.backstory} />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -67,11 +79,11 @@ const CharacterDetailPage = async ({ params }: Props) => {
         <h2 className="text-xl font-bold text-charcoal mb-6">プロフィール</h2>
         <ProfileGrid
           items={[
-            { label: '誕生日', value: character.profile.birthday },
-            { label: '身長', value: character.profile.height },
-            { label: '好きなもの', value: character.profile.likes },
-            { label: '苦手なもの', value: character.profile.dislikes },
-          ]}
+            { label: '誕生日', value: character.profile?.birthday },
+            { label: '身長', value: character.profile?.height },
+            { label: '好きなもの', value: character.profile?.likes },
+            { label: '苦手なもの', value: character.profile?.dislikes },
+          ].filter((item): item is { label: string; value: string } => !!item.value)}
         />
       </section>
 
@@ -80,7 +92,8 @@ const CharacterDetailPage = async ({ params }: Props) => {
       <section className="mx-auto max-w-6xl 2xl:max-w-7xl md:px-20 2xl:px-32 px-5 md:py-15 2xl:py-20 py-10">
         <h2 className="text-xl font-bold text-charcoal mb-6">他のキャラクター</h2>
         <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
-          {CHARACTER_DATA.filter((c) => c.id !== characterName)
+          {characterData
+            .filter((c) => c.id !== characterName)
             .slice(0, 5)
             .map((otherChar) => (
               <CharacterCard key={otherChar.id} {...otherChar} size="sm" />

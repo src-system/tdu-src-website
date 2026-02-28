@@ -8,6 +8,9 @@ import { importMap } from './(payload)/admin/importMap.js'
 import './(payload)/custom.scss'
 import './globals.css'
 
+/** Admin UI の useId hydration mismatch を軽減 */
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'TDU SRC CMS',
   description: 'Content Management System for TDU SRC Website',

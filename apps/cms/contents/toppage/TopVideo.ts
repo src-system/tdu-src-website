@@ -2,10 +2,14 @@ import type { GlobalConfig } from 'payload'
 
 export const TopVideo: GlobalConfig = {
   slug: 'top-video',
-  label: 'トップビデオ',
+  label: 'トップ動画',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'トップページ',
-    description: 'トップページ上部に表示される背景動画とスプラッシュロゴの設定',
+    description:
+      'トップページ上部に表示される背景動画と、動く部のロゴを表示するかの設定を行います。',
   },
   fields: [
     {
@@ -26,7 +30,7 @@ export const TopVideo: GlobalConfig = {
       type: 'checkbox',
       required: true,
       defaultValue: true,
-      label: 'スプラッシュロゴを表示',
+      label: '動く部のロゴを表示',
     },
   ],
 }
