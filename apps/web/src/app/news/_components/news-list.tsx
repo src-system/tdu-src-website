@@ -52,6 +52,7 @@ const Pagination = ({ currentPage, totalPages, category, subcategory }: Paginati
           subcategory,
           page: currentPage > 1 ? currentPage - 1 : undefined,
         })}
+        scroll={false}
         aria-label="前のページ"
         className={`p-2 rounded-lg border border-gray-300 transition-colors ${
           currentPage === 1 ? 'pointer-events-none opacity-50' : 'hover:bg-gray-100'
@@ -69,6 +70,7 @@ const Pagination = ({ currentPage, totalPages, category, subcategory }: Paginati
               subcategory,
               page: page > 1 ? page : undefined,
             })}
+            scroll={false}
             className={`w-10 h-10 rounded-lg text-sm font-medium flex items-center justify-center transition-all duration-200 ${
               currentPage === page
                 ? 'bg-forest text-white'
@@ -86,6 +88,7 @@ const Pagination = ({ currentPage, totalPages, category, subcategory }: Paginati
           subcategory,
           page: currentPage < totalPages ? currentPage + 1 : currentPage,
         })}
+        scroll={false}
         aria-label="次のページ"
         className={`p-2 rounded-lg border border-gray-300 transition-colors ${
           currentPage === totalPages ? 'pointer-events-none opacity-50' : 'hover:bg-gray-100'

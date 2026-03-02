@@ -971,6 +971,7 @@ export type TopPageFailedItem =
   | 'news-data'
   | 'characters-section'
   | 'characters-data'
+  | 'no-characters'
 
 export type TopPageData = {
   topVideo: TopVideoData
@@ -978,7 +979,7 @@ export type TopPageData = {
   content: ContentBlocksData
   teamData: TeamCardData[]
   newsData: NewsItemData[]
-  characterImages: string[]
+  characters: { imagePath: string; href: string }[]
 }
 
 export type TopPageFetchResult =
@@ -1041,6 +1042,8 @@ export async function getTopPageData(): Promise<TopPageFetchResult> {
     }>(`${CMS_URL}/api/news?limit=3&sort=-date&depth=1`),
     fetchJson<{
       docs?: Array<{
+        id?: number
+        order?: number
         url?: string
         fullbodyImage?: { url?: string }
         portraitImage?: { url?: string }
@@ -1082,15 +1085,17 @@ export async function getTopPageData(): Promise<TopPageFetchResult> {
   if (!newsRes) failedItems.push('news-data')
 
   const charDocs = charactersRes?.docs ?? []
-  const characterImages = charDocs
-    .map((doc) =>
-      resolveMediaUrl(
+  const characters = charDocs
+    .map((doc) => ({
+      imagePath: resolveMediaUrl(
         (typeof doc.fullbodyImage === 'object' ? doc.fullbodyImage?.url : undefined) ??
           (typeof doc.portraitImage === 'object' ? doc.portraitImage?.url : undefined),
       ),
-    )
-    .filter(Boolean)
+      href: `/sofchara/${doc.url ?? String(doc.id ?? doc.order ?? '')}`,
+    }))
+    .filter((c) => c.imagePath)
   if (!charactersRes) failedItems.push('characters-data')
+  if (charactersRes && characters.length === 0) failedItems.push('no-characters')
 
   if (failedItems.length > 0) {
     return { success: false, failedItems }
@@ -1139,7 +1144,7 @@ export async function getTopPageData(): Promise<TopPageFetchResult> {
       content,
       teamData,
       newsData,
-      characterImages,
+      characters,
     },
   }
 }

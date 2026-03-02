@@ -16,19 +16,6 @@ import { TeamCard, TeamCardGrid } from '@/src/app/_components/team-card'
 import { WaveSection } from '@/src/app/_components/wave-section'
 import { getTopPageData } from '@/src/app/_lib/payload'
 
-const TEAM_DATA_MOCK = [
-  {
-    teamName: 'game',
-    displayName: 'ゲームプログラミング班',
-    imagePath: '/images/team-card/game.png',
-  },
-  { teamName: 'webapp', displayName: 'Webアプリ班', imagePath: '/images/team-card/webapp.png' },
-  { teamName: 'sound', displayName: 'サウンド班', imagePath: '/images/team-card/sound.jpg' },
-  { teamName: '2d', displayName: '2D班', imagePath: '/images/team-card/2D.png' },
-  { teamName: '3d', displayName: '3D班', imagePath: '/images/team-card/3D.png' },
-  { teamName: 'design', displayName: 'デザイン班', imagePath: '/images/team-card/design.png' },
-] as const
-
 const HOME_SECTIONS = [
   { id: 'about', label: 'ABOUT' },
   { id: 'team', label: 'TEAM' },
@@ -51,10 +38,16 @@ const Home = async () => {
         'Aboutセクションには3枚の画像が必要です。\n\n画像が1枚も取得できなかったか、3枚に不足しています。Payload CMS の管理画面で About セクションに3枚以上の画像を設定してください。',
       )
     }
+    if (result.failedItems.includes('no-characters')) {
+      params.set(
+        'message',
+        'キャラクターが1件も登録されていません。\n\nPayload CMS の管理画面でキャラクターを1件以上登録してください。',
+      )
+    }
     redirect(`/error?${params.toString()}`)
   }
 
-  const { topVideo, catchphrase, content, newsData, characterImages } = result.data
+  const { topVideo, catchphrase, content, teamData, newsData, characters } = result.data
 
   return (
     <main>
@@ -107,7 +100,7 @@ const Home = async () => {
           />
           <div className="mt-8">
             <TeamCardGrid>
-              {TEAM_DATA_MOCK.map((team) => (
+              {teamData.map((team) => (
                 <TeamCard key={team.teamName} {...team} />
               ))}
             </TeamCardGrid>
@@ -150,13 +143,7 @@ const Home = async () => {
                 </div>
               </div>
               <div className="flex justify-center md:justify-end md:flex-2">
-                <RandomCharacter
-                  images={
-                    characterImages.length > 0
-                      ? characterImages
-                      : ['/images/sofcharatop/ワカツキ_web.png']
-                  }
-                />
+                <RandomCharacter characters={characters} />
               </div>
             </div>
           </div>
