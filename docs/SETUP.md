@@ -1,6 +1,6 @@
 # セットアップガイド
 
-## 🚀 クイックスタート
+## クイックスタート
 
 ### 1. 依存関係のインストール
 
@@ -10,33 +10,25 @@ pnpm install
 
 ### 2. 環境変数の設定
 
-`.env`ファイルが自動的に作成されています。`PAYLOAD_SECRET`を必ず変更してください。
-
 ```bash
-# .env を開いて PAYLOAD_SECRET を変更
-code .env
+cp .env.example .env
 ```
 
-推奨：以下のコマンドでランダムな秘密鍵を生成できます。
+`.env`ファイルを開いて`PAYLOAD_SECRET`を必ず変更してください。
 
 ```bash
+# ランダムな秘密鍵を生成
 # PowerShell
 [Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
 
-# Bash/Linux
+# Bash/Linux/macOS
 openssl rand -base64 32
 ```
 
-### 3. データベースの起動
+### 3. 開発サーバーの起動
 
 ```bash
-pnpm docker:up
-```
-
-### 4. 開発サーバーの起動
-
-```bash
-# すべてのアプリを並列起動
+# Docker + 全アプリを起動（推奨）
 pnpm dev
 
 # または個別に起動
@@ -44,71 +36,107 @@ pnpm dev:web  # フロントエンド http://localhost:3000
 pnpm dev:cms  # CMS http://localhost:3001
 ```
 
-### 5. Payload CMSの初期設定
+### 4. Payload CMS の初期設定
 
-1. ブラウザで `http://localhost:3001/admin` にアクセス
+1. ブラウザで http://localhost:3001/admin にアクセス
 2. 管理者アカウントを作成
-3. コレクションにコンテンツを追加
+3. コンテンツを追加
 
-## 📂 プロジェクト構成
+## プロジェクト構成
 
 ```
 tdu-src-website/
 ├── apps/
-│   ├── web/                 # Next.js フロントエンド
-│   │   ├── src/
-│   │   │   ├── app/        # App Router ページ
-│   │   │   └── _components/ # 共通コンポーネント
-│   │   ├── public/          # 静的ファイル
-│   │   └── package.json
+│   ├── web/                    # Next.js フロントエンド
+│   │   └── src/app/
+│   │       ├── _components/    # 共通コンポーネント
+│   │       ├── _lib/           # API クライアント・ユーティリティ
+│   │       ├── about/          # About ページ
+│   │       ├── team/           # 班紹介ページ
+│   │       ├── news/           # ニュースページ
+│   │       └── sofchara/       # ソフきゃらページ
 │   │
-│   └── cms/                 # Payload CMS
-│       ├── app/             # Next.js App Router
-│       ├── collections/     # Payload コレクション定義
-│       ├── media/           # アップロードされたメディア
-│       ├── payload.config.ts
-│       └── package.json
+│   └── cms/                    # Payload CMS
+│       ├── contents/           # コンテンツ定義
+│       │   ├── about/          # About 関連
+│       │   ├── news/           # ニュース関連
+│       │   ├── sofchara/       # ソフきゃら関連
+│       │   ├── team/           # 班関連
+│       │   ├── toppage/        # トップページ関連
+│       │   └── collections/    # Media, Users
+│       ├── media/              # アップロードファイル
+│       └── migrations/         # DBマイグレーション
 │
 ├── packages/
-│   └── types/               # 共有型定義
-│       ├── src/
-│       │   └── index.ts
-│       └── package.json
+│   ├── theme/                  # 共有デザイントークン
+│   │   └── tokens.css          # CSS変数定義
+│   └── types/                  # 共有型定義
 │
 ├── docs/
-│   ├── api/                 # API仕様書
-│   └── SETUP.md             # このファイル
+│   ├── api/                    # API仕様書
+│   └── SETUP.md                # このファイル
 │
-├── docker-compose.yml       # Docker設定
-├── pnpm-workspace.yaml      # pnpm workspace設定
-├── package.json             # ルートpackage.json
-└── .env                     # 環境変数
+├── docker-compose.yml          # Docker設定
+├── biome.json                  # Biome設定
+├── lefthook.yml                # Git hooks設定
+└── .env                        # 環境変数
 ```
 
-## 🔧 開発ワークフロー
+## 開発ワークフロー
 
 ### フロントエンド開発
 
-1. `apps/web/src/app/` でページを編集
-2. `apps/web/src/app/_components/` で共通コンポーネントを編集
-3. 型定義が必要な場合は `packages/types/src/index.ts` に追加
+```bash
+# 開発サーバー起動
+pnpm dev:web
 
-### CMS開発
+# ビルド
+pnpm build:web
+```
 
-1. `apps/cms/collections/` でコレクションを編集
-2. Payload CMSを再起動して変更を反映
-3. 管理画面でコンテンツを追加/編集
+- ページ: `apps/web/src/app/[route]/page.tsx`
+- コンポーネント: `apps/web/src/app/_components/`
+- API クライアント: `apps/web/src/app/_lib/payload.ts`
 
-### 型定義の追加
-
-1. `packages/types/src/index.ts` に型を追加
-2. 型をビルド：`pnpm --filter @tdu-src/types build`
-3. 両方のアプリで型が自動的に利用可能になります
-
-## 🐳 Docker コマンド
+### CMS 開発
 
 ```bash
-# PostgreSQLコンテナを起動
+# 開発サーバー起動
+pnpm dev:cms
+
+# マイグレーション作成
+pnpm cms:migrate:create
+
+# マイグレーション実行
+pnpm cms:migrate
+```
+
+- コンテンツ定義: `apps/cms/contents/`
+- 設定: `apps/cms/payload.config.ts`
+
+### ISR / キャッシュについて
+
+このプロジェクトは ISR (Incremental Static Regeneration) を使用しています。
+
+```typescript
+// ページの再検証間隔を設定
+export const revalidate = 300 // 5分
+
+// API フェッチのデフォルト再検証間隔
+const FETCH_OPTIONS = { next: { revalidate: 60 } } // 60秒
+```
+
+**開発時に CMS 更新を即反映させるには:**
+
+```bash
+# 開発サーバーを使用（キャッシュなし）
+pnpm dev
+```
+
+## Docker コマンド
+
+```bash
+# PostgreSQL コンテナを起動
 pnpm docker:up
 
 # コンテナを停止
@@ -119,15 +147,20 @@ pnpm docker:logs
 
 # コンテナの状態を確認
 docker ps
+
+# データベースをリセット
+pnpm docker:down
+docker volume rm tdu-src-website_postgres_data
+pnpm docker:up
 ```
 
-## 📦 パッケージ管理
+## パッケージ管理
 
 ```bash
-# ルートで依存関係を追加
+# ルートに依存関係を追加
 pnpm add <package> -w
 
-# 特定のアプリに依存関係を追加
+# 特定のアプリに追加
 pnpm --filter @tdu-src/web add <package>
 pnpm --filter @tdu-src/cms add <package>
 
@@ -135,7 +168,7 @@ pnpm --filter @tdu-src/cms add <package>
 pnpm update -r
 ```
 
-## 🎨 コード品質
+## コード品質
 
 ```bash
 # Lint
@@ -151,39 +184,40 @@ pnpm check
 pnpm ci
 ```
 
-## 🏗️ ビルド
+Git commit 時に Lefthook が自動的に `pnpm check` を実行します。
+
+## ビルド
 
 ```bash
 # すべてのアプリをビルド
 pnpm build
-
-# 個別にビルド
-pnpm build:web
-pnpm build:cms
 
 # 本番サーバーを起動
 pnpm start:web
 pnpm start:cms
 ```
 
-## 🔍 トラブルシューティング
+## トラブルシューティング
 
 ### ポート競合エラー
 
-ポート3000または3001が既に使用されている場合、`.env`で変更できます。
+`.env`でポートを変更:
 
 ```env
 WEB_PORT=3002
 CMS_PORT=3003
 ```
 
-### PostgreSQL接続エラー
-
-1. Dockerが起動しているか確認：`docker ps`
-2. ログを確認：`pnpm docker:logs`
-3. データベースをリセット：
+### PostgreSQL 接続エラー
 
 ```bash
+# Docker が起動しているか確認
+docker ps
+
+# ログを確認
+pnpm docker:logs
+
+# データベースをリセット
 pnpm docker:down
 docker volume rm tdu-src-website_postgres_data
 pnpm docker:up
@@ -191,39 +225,41 @@ pnpm docker:up
 
 ### 型定義エラー
 
-型定義をビルドし直してください。
-
 ```bash
 pnpm --filter @tdu-src/types build
 ```
 
 ### pnpm install エラー
 
-キャッシュをクリアして再インストール。
-
 ```bash
 pnpm store prune
 pnpm install
 ```
 
-### Next.js バージョン警告
+### CMS API がアクセス拒否を返す
 
-`@payloadcms/next`のpeer dependency警告は無視しても問題ありません。Next.js 16.1.6は動作します。
+CMS のコンテンツ定義に `access: { read: () => true }` が設定されているか確認してください。
 
-## 📚 参考リンク
+```typescript
+// apps/cms/contents/SomeContent.ts
+export const SomeContent: GlobalConfig = {
+  slug: 'some-content',
+  access: { read: () => true }, // これが必要
+  // ...
+}
+```
+
+## 参考リンク
 
 - [Next.js ドキュメント](https://nextjs.org/docs)
 - [Payload CMS ドキュメント](https://payloadcms.com/docs)
 - [Tailwind CSS ドキュメント](https://tailwindcss.com/docs)
+- [Biome ドキュメント](https://biomejs.dev/)
 - [pnpm ドキュメント](https://pnpm.io/)
 
-## 🤝 コントリビューション
+## コントリビューション
 
-1. 機能ブランチを作成：`git checkout -b feature/your-feature`
-2. 変更をコミット：`git commit -m "Add your feature"`
-3. プッシュ：`git push origin feature/your-feature`
+1. 機能ブランチを作成: `git checkout -b feature/your-feature`
+2. 変更をコミット: `git commit -m "Add your feature"`
+3. プッシュ: `git push origin feature/your-feature`
 4. プルリクエストを作成
-
-## 📝 ライセンス
-
-このプロジェクトは東京電機大学ソフトウェア研究部によって管理されています。
