@@ -39,7 +39,7 @@ const TeamDetailPage = async ({ params }: Props) => {
         <HeroLabel text={pageHeader.title} />
       </PageHeader>
 
-      <PatternBackground>
+      <PatternBackground className="min-h-screen">
         <div className="py-16 md:py-24">
           <div className="mx-auto max-w-5xl 2xl:max-w-7xl px-6 md:px-8">
             <ContentCard>

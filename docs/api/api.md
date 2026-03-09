@@ -8,7 +8,18 @@
 
 ### ER図（エンティティ関連図）
 
-#### トップページ・共通
+#### サイト設定・共通
+
+```mermaid
+erDiagram
+    SiteSettings {
+        email string
+        githubUrl string
+        location string
+    }
+```
+
+#### トップページ
 
 ```mermaid
 erDiagram
@@ -41,6 +52,41 @@ erDiagram
     }
 ```
 
+#### Aboutページ
+
+```mermaid
+erDiagram
+    AboutPage ||--|| PageHeader : "pageHeader"
+    AboutPage ||--|| AboutSection : "aboutSection"
+    AboutPage ||--o{ ActivityItem : "activitySection"
+    AboutPage ||--o{ HistoryItem : "historySection"
+
+    PageHeader {
+        image image
+        alt string
+        title string
+    }
+
+    AboutSection {
+        title string
+        subtitle string
+        description richText
+    }
+
+    ActivityItem {
+        title string
+        description string
+        image image
+    }
+
+    HistoryItem {
+        year number
+        month number
+        title string
+        description string
+    }
+```
+
 #### Team
 
 ```mermaid
@@ -50,6 +96,7 @@ erDiagram
     Team ||--o{ ImageCard : "about"
     Team ||--o{ SoftwareItem : "software"
     Team ||--o{ GalleryItem : "gallery"
+    Team ||--o| LeaderInterview : "leaderInterview"
 
     TeamSection {
         title string
@@ -60,14 +107,14 @@ erDiagram
     TeamCard {
         teamName TeamType
         image image
-        alt string
         description string
+        activityLabels string[]
     }
 
     Team {
         image image
         subtitle string
-        description markdown
+        description richText
     }
 
     SoftwareItem {
@@ -80,6 +127,16 @@ erDiagram
         type image_video_sound
         media upload
         alt string
+        thumbnail image
+        title string
+        relatedLinks link[]
+    }
+
+    LeaderInterview {
+        name string
+        image image
+        body string
+        qa QA[]
     }
 ```
 
@@ -91,10 +148,11 @@ erDiagram
         id string PK
         title string
         date date
-        categories CategoryType
+        category CategoryType
+        subcategory SubCategoryType
         summary string
         thumbnail image
-        content markdown
+        content richText
     }
 ```
 
@@ -105,7 +163,7 @@ erDiagram
     Concepts ||--o{ ConceptCard : "concepts"
     Character ||--o{ Alternate : "alternates"
     Character ||--o{ Relation : "relations"
-    Relation }o--|| SofkenTown : "sofkenTownId"
+    Relation }o--|| SofkenTown : "sofkentown"
     SofkenTown ||--o{ Character : "relatedCharacters"
 
     Concepts {
@@ -116,33 +174,46 @@ erDiagram
     ConceptCard {
         image image
         title string
+        showButton boolean
+        buttonHref string
     }
 
     Character {
-        id number PK
+        order number
         url string UK
         jpName string
+        enName string
         fullbodyImage image
+        portraitImage image
+        author string
+        profile Profile
+        rules Rules
     }
 
     Alternate {
-        id string
         alternateName string
+        author string
+        fullbodyImage image
     }
 
     Relation {
-        sofkenTownId string FK
+        sofkentown ref FK
         description string
     }
 
     SofkenTown {
         id string PK
+        url string UK
+        order number
         name string
+        image image
+        description richText
     }
 
     Guideline {
         title string
-        content markdown
+        subtitle string
+        content richText
     }
 ```
 
@@ -151,23 +222,26 @@ erDiagram
 ```mermaid
 flowchart TB
     ROOT["/ トップ"]
+    ROOT --> ABOUT["/about"]
     ROOT --> TEAM["/team"]
     ROOT --> NEWS["/news"]
     ROOT --> SOFCHARA["/sofchara"]
 
     TEAM --> TEAM_DETAIL["/team/[teamName]"]
-    NEWS --> NEWS_DETAIL["/news/[id]"]
-    SOFCHARA --> CHARA["/sofchara/[url]"]
+    NEWS --> NEWS_DETAIL["/news/[newsId]"]
+    SOFCHARA --> CHARA["/sofchara/[characterName]"]
     SOFCHARA --> GUIDELINE["/sofchara/guideline"]
     SOFCHARA --> SOFKENTOWN["/sofchara/sofkentown"]
+    SOFKENTOWN --> SOFKENTOWN_DETAIL["/sofchara/sofkentown/[townId]"]
 ```
 
 ## ドキュメント一覧
 
 | ドキュメント | 対象 |
 |-------------|------|
-| [0-general-api.md](./0-general-api.md) | 共通（SNSリンク等） |
+| [0-general-api.md](./0-general-api.md) | サイト設定・ソフケンタウン |
 | [1-top-page-api.md](./1-top-page-api.md) | トップページ |
+| [2-about-page-api.md](./2-about-page-api.md) | Aboutページ |
 | [3-team-page-api.md](./3-team-page-api.md) | Teamページ・班詳細 |
 | [4-news-page-api.md](./4-news-page-api.md) | Newsページ |
-| [5-characters-page-api.md](./5-characters-page-api.md) | ソフキャラ・キャラクター |
+| [5-characters-page-api.md](./5-characters-page-api.md) | ソフキャラ・キャラクター・ガイドライン |

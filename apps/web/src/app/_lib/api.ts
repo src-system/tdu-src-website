@@ -6,23 +6,38 @@
 import {
   type AboutPageData,
   type AboutSectionData,
+  type CharacterAlternate,
   type CharacterData,
+  type CharacterGalleryItem,
+  type CharacterProfile,
+  type CharacterRules,
   type ContentBlockData,
   type ContentBlocksData,
+  type GuidelinePageData,
   getAboutPageData,
+  getCharacterByUrl,
   getCharacterImages,
   getCharacters,
   getContentBlocks,
+  getGuidelinePageData,
   getNewsItem,
   getNewsList,
   getNewsListPaginated,
   getNewsPageData,
+  getSiteSettings,
+  getSofcharaPageData,
+  getSofkentownByUrl,
+  getSofkentownList,
+  getSofkentownsByCharacterUrl,
   getTeamData,
   getTeamDetail,
   getTeamIntroData,
   getTeamPageData,
   type NewsItemData,
   type NewsListResult,
+  type SiteSettingsData,
+  type SofcharaPageData,
+  type SofkentownItemData,
   type TeamCardData,
   type TeamDetailData,
   type TeamIntroData,
@@ -123,12 +138,56 @@ export async function getTeamIntroDataFromApi(): Promise<TeamIntroData[]> {
   return getTeamIntroData()
 }
 
-export type { CharacterData }
+export type {
+  CharacterAlternate,
+  CharacterData,
+  CharacterGalleryItem,
+  CharacterProfile,
+  CharacterRules,
+}
 
 export async function getCharacterData(): Promise<CharacterData[]> {
   return getCharacters()
 }
 
+export async function getCharacterByUrlFromApi(url: string): Promise<CharacterData | null> {
+  return getCharacterByUrl(url)
+}
+
 export async function getCharacterImagesFromApi(): Promise<string[]> {
   return getCharacterImages()
+}
+
+export type { SofcharaPageData }
+
+export async function getSofcharaPageDataFromApi(): Promise<SofcharaPageData | null> {
+  return getSofcharaPageData()
+}
+
+export type { GuidelinePageData }
+
+export async function getGuidelinePageDataFromApi(): Promise<GuidelinePageData | null> {
+  return getGuidelinePageData()
+}
+
+export type { SofkentownItemData }
+
+export async function getSofkentownListFromApi(): Promise<SofkentownItemData[]> {
+  return getSofkentownList()
+}
+
+export async function getSofkentownByUrlFromApi(url: string): Promise<SofkentownItemData | null> {
+  return getSofkentownByUrl(url)
+}
+
+export async function getSofkentownsByCharacterUrlFromApi(
+  characterUrl: string,
+): Promise<SofkentownItemData[]> {
+  return getSofkentownsByCharacterUrl(characterUrl)
+}
+
+export type { SiteSettingsData }
+
+export async function getSiteSettingsFromApi(): Promise<SiteSettingsData> {
+  return getSiteSettings()
 }

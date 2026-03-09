@@ -83,10 +83,9 @@ export const Characters: CollectionConfig = {
     {
       name: 'introduction',
       type: 'textarea',
-      required: true,
       label: 'キャラクター紹介文',
       admin: {
-        description: '簡潔に',
+        description: '簡潔に（任意）',
       },
     },
     {
@@ -122,15 +121,24 @@ export const Characters: CollectionConfig = {
           type: 'text',
           label: '体重',
         },
+        {
+          name: 'likes',
+          type: 'text',
+          label: '好きなもの',
+        },
+        {
+          name: 'dislikes',
+          type: 'text',
+          label: '苦手なもの',
+        },
       ],
     },
     {
       name: 'description',
       type: 'richText',
-      required: true,
-      label: '詳細説明',
+      label: '詳細説明（ソフきゃらメモ）',
       admin: {
-        description: 'Markdown対応',
+        description: 'Markdown対応（任意）',
       },
     },
     {
@@ -160,16 +168,15 @@ export const Characters: CollectionConfig = {
       label: '別衣装',
       fields: [
         {
-          name: 'id',
-          type: 'text',
-          required: true,
-          label: '衣装ID',
-        },
-        {
           name: 'alternateName',
           type: 'text',
           required: true,
           label: '衣装名',
+        },
+        {
+          name: 'author',
+          type: 'text',
+          label: '作者名',
         },
         {
           name: 'fullbodyImage',
@@ -179,33 +186,16 @@ export const Characters: CollectionConfig = {
           filterOptions: {
             mimeType: { contains: 'image' },
           },
+          label: '全身画像',
         },
         {
           name: 'portraitImage',
           type: 'upload',
           relationTo: 'media',
-          required: true,
           filterOptions: {
             mimeType: { contains: 'image' },
           },
-        },
-      ],
-    },
-    {
-      name: 'relations',
-      type: 'array',
-      label: 'ソフケンタウンとの関連性',
-      fields: [
-        {
-          name: 'sofkenTownId',
-          type: 'text',
-          required: true,
-          label: 'ソフケンタウンのID',
-        },
-        {
-          name: 'description',
-          type: 'textarea',
-          label: '関連性の説明',
+          label: '顔画像（任意）',
         },
       ],
     },

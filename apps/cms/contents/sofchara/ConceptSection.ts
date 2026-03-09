@@ -29,6 +29,29 @@ const conceptCardFields: Field[] = [
     required: true,
     label: 'カードの説明',
   },
+  {
+    name: 'showButton',
+    type: 'checkbox',
+    defaultValue: true,
+    label: 'ボタンを表示',
+  },
+  {
+    name: 'buttonText',
+    type: 'text',
+    label: 'ボタンテキスト',
+    admin: {
+      condition: (_, siblingData) => siblingData?.showButton,
+    },
+  },
+  {
+    name: 'buttonHref',
+    type: 'text',
+    label: 'ボタンリンク先',
+    admin: {
+      description: '/sofchara/guideline（ページ遷移）, #characters（キャラクター一覧へスクロール）',
+      condition: (_, siblingData) => siblingData?.showButton,
+    },
+  },
 ]
 
 export const conceptSectionFields: Field[] = [

@@ -17,9 +17,15 @@ function resolveMediaUrl(url: string | null | undefined): string {
   return url.startsWith('/') ? `${base}${url}` : `${base}/${url}`
 }
 
+const FETCH_TIMEOUT = 5000 // 5秒でタイムアウト
+
 async function fetchJson<T>(url: string): Promise<T | null> {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT)
+
   try {
-    const res = await fetch(url, FETCH_OPTIONS)
+    const res = await fetch(url, { ...FETCH_OPTIONS, signal: controller.signal })
+    clearTimeout(timeoutId)
     if (!res.ok) {
       if (isDev) {
         console.warn(`[payload] ${url} → ${res.status} ${res.statusText}`)
@@ -28,8 +34,10 @@ async function fetchJson<T>(url: string): Promise<T | null> {
     }
     return (await res.json()) as T
   } catch (err) {
+    clearTimeout(timeoutId)
     if (isDev) {
-      console.warn(`[payload] ${url} → fetch failed:`, err instanceof Error ? err.message : err)
+      const message = err instanceof Error ? err.message : String(err)
+      console.warn(`[payload] ${url} → ${message}`)
     }
     return null
   }
@@ -914,48 +922,418 @@ export async function getTeamDetail(teamName: string): Promise<TeamDetailData | 
 
 // --- キャラクター ---
 
+export type CharacterAlternate = {
+  name: string
+  author?: string
+  fullbodyImagePath: string
+  portraitImagePath?: string
+}
+
+export type CharacterRules = {
+  r18: 'allowed' | 'conditional' | 'prohibited'
+  r18g: 'allowed' | 'conditional' | 'prohibited'
+  colabo: 'allowed' | 'conditional' | 'prohibited'
+  coupling: 'allowed' | 'conditional' | 'prohibited'
+  snsRolePlaying: 'allowed' | 'conditional' | 'prohibited'
+  modification: 'allowed' | 'conditional' | 'prohibited'
+  others?: unknown
+}
+
+export type CharacterGalleryItem = {
+  imagePath: string
+  alt: string
+}
+
+export type CharacterProfile = {
+  birthday?: string
+  gender?: string
+  height?: string
+  weight?: string
+  likes?: string
+  dislikes?: string
+}
+
 export type CharacterData = {
   id: string
   name: string
+  enName: string
   imagePath: string
-  description: string
-  profile?: { birthday?: string; height?: string; likes?: string; dislikes?: string }
-  backstory?: string
+  portraitImagePath: string
+  imageLabel: string
+  author: string
+  introduction?: string
+  catchphrase?: string
+  profile?: CharacterProfile
+  description?: unknown
+  gallery: CharacterGalleryItem[]
+  alternates: CharacterAlternate[]
+  rules?: CharacterRules
+}
+
+type CharacterApiDoc = {
+  id?: number
+  order?: number
+  jpName?: string
+  enName?: string
+  url?: string
+  portraitImage?: { url?: string }
+  fullbodyImage?: { url?: string }
+  imageLabel?: string
+  author?: string
+  introduction?: string
+  catchphrase?: string
+  profile?: CharacterProfile
+  description?: unknown
+  gallery?: Array<{ image?: { url?: string }; alt?: string }>
+  alternates?: Array<{
+    alternateName?: string
+    author?: string
+    fullbodyImage?: { url?: string }
+    portraitImage?: { url?: string }
+  }>
+  rules?: {
+    r18?: string
+    r18g?: string
+    colabo?: string
+    coupling?: string
+    snsRolePlaying?: string
+    modification?: string
+    others?: unknown
+  }
+}
+
+function mapCharacterDoc(doc: CharacterApiDoc): CharacterData {
+  const gallery: CharacterGalleryItem[] =
+    doc.gallery?.map((g) => ({
+      imagePath: resolveMediaUrl(typeof g.image === 'object' ? g.image?.url : undefined),
+      alt: g.alt ?? '',
+    })) ?? []
+
+  const alternates: CharacterAlternate[] =
+    doc.alternates?.map((a) => {
+      const fullbodyUrl = typeof a.fullbodyImage === 'object' ? a.fullbodyImage?.url : undefined
+      const portraitUrl = typeof a.portraitImage === 'object' ? a.portraitImage?.url : undefined
+      return {
+        name: a.alternateName ?? '',
+        author: a.author,
+        fullbodyImagePath: resolveMediaUrl(fullbodyUrl),
+        portraitImagePath: portraitUrl ? resolveMediaUrl(portraitUrl) : undefined,
+      }
+    }) ?? []
+
+  const rules: CharacterRules | undefined = doc.rules
+    ? {
+        r18: (doc.rules.r18 as CharacterRules['r18']) ?? 'prohibited',
+        r18g: (doc.rules.r18g as CharacterRules['r18g']) ?? 'prohibited',
+        colabo: (doc.rules.colabo as CharacterRules['colabo']) ?? 'prohibited',
+        coupling: (doc.rules.coupling as CharacterRules['coupling']) ?? 'prohibited',
+        snsRolePlaying:
+          (doc.rules.snsRolePlaying as CharacterRules['snsRolePlaying']) ?? 'prohibited',
+        modification: (doc.rules.modification as CharacterRules['modification']) ?? 'prohibited',
+        others: doc.rules.others,
+      }
+    : undefined
+
+  const fullbodyUrl = typeof doc.fullbodyImage === 'object' ? doc.fullbodyImage?.url : undefined
+  const portraitUrl = typeof doc.portraitImage === 'object' ? doc.portraitImage?.url : undefined
+
+  return {
+    id: doc.url ?? String(doc.id ?? doc.order ?? ''),
+    name: doc.jpName ?? doc.enName ?? '',
+    enName: doc.enName ?? '',
+    imagePath: resolveMediaUrl(fullbodyUrl ?? portraitUrl),
+    portraitImagePath: resolveMediaUrl(portraitUrl ?? fullbodyUrl),
+    imageLabel: doc.imageLabel ?? '',
+    author: doc.author ?? '',
+    introduction: doc.introduction ?? '',
+    catchphrase: doc.catchphrase,
+    profile: doc.profile,
+    description: doc.description,
+    gallery,
+    alternates,
+    rules,
+  }
 }
 
 export async function getCharacters(): Promise<CharacterData[]> {
-  const data = await fetchJson<{
-    docs?: Array<{
-      id?: number
-      order?: number
-      jpName?: string
-      enName?: string
-      url?: string
-      portraitImage?: { url?: string }
-      fullbodyImage?: { url?: string }
-      introduction?: string
-      description?: unknown
-      profile?: { birthday?: string; height?: string; likes?: string; dislikes?: string }
-    }>
-  }>(`${CMS_URL}/api/characters?depth=1&limit=100`)
+  const data = await fetchJson<{ docs?: CharacterApiDoc[] }>(
+    `${CMS_URL}/api/characters?depth=1&limit=100`,
+  )
+  return (data?.docs ?? []).map(mapCharacterDoc)
+}
 
-  const docs = data?.docs ?? []
-  return docs.map((doc) => ({
-    id: doc.url ?? String(doc.id ?? doc.order ?? ''),
-    name: doc.jpName ?? doc.enName ?? '',
-    imagePath: resolveMediaUrl(
-      (typeof doc.fullbodyImage === 'object' ? doc.fullbodyImage?.url : undefined) ??
-        (typeof doc.portraitImage === 'object' ? doc.portraitImage?.url : undefined),
-    ),
-    description: doc.introduction ?? '',
-    profile: doc.profile,
-    backstory: typeof doc.description === 'string' ? doc.description : undefined,
-  }))
+export async function getCharacterByUrl(url: string): Promise<CharacterData | null> {
+  const data = await fetchJson<{ docs?: CharacterApiDoc[] }>(
+    `${CMS_URL}/api/characters?depth=1&where[url][equals]=${encodeURIComponent(url)}`,
+  )
+  const doc = data?.docs?.[0]
+  return doc ? mapCharacterDoc(doc) : null
 }
 
 export async function getCharacterImages(): Promise<string[]> {
   const chars = await getCharacters()
   return chars.map((c) => c.imagePath).filter(Boolean)
+}
+
+// --- ソフキャラページ ---
+
+export type SofcharaPageConceptCard = {
+  imagePath: string
+  imageAlt: string
+  title: string
+  description: string
+  showButton: boolean
+  buttonText: string
+  buttonHref: string
+}
+
+export type SofcharaPageData = {
+  pageHeader: {
+    imagePath: string
+    alt: string
+    title: string
+  }
+  aboutSection: {
+    title: string
+    subtitle: string
+    description: string
+    cardTitle: string
+    cardDescription: string
+    iconPath: string
+  }
+  conceptSection: {
+    title: string
+    subtitle: string
+    concepts: SofcharaPageConceptCard[]
+  }
+  guidelineSection: {
+    title: string
+    subtitle: string
+    description: string
+  }
+  characterSection: {
+    title: string
+    subtitle: string
+  }
+}
+
+export async function getSofcharaPageData(): Promise<SofcharaPageData | null> {
+  const data = await fetchJson<{
+    pageHeader?: {
+      image?: { url?: string }
+      alt?: string
+      title?: string
+    }
+    aboutSection?: {
+      title?: string
+      subtitle?: string
+      description?: string
+      cardTitle?: string
+      cardDescription?: string
+      icon?: { url?: string }
+    }
+    conceptSection?: {
+      title?: string
+      subtitle?: string
+      concepts?: Array<{
+        image?: { url?: string }
+        imageAlt?: string
+        title?: string
+        description?: string
+        showButton?: boolean
+        buttonText?: string
+        buttonHref?: string
+      }>
+    }
+    guidelineSection?: {
+      title?: string
+      subtitle?: string
+      description?: string
+    }
+    characterSection?: {
+      title?: string
+      subtitle?: string
+    }
+  }>(`${CMS_URL}/api/globals/sofchara-page?depth=1`)
+
+  if (!data) return null
+
+  const concepts: SofcharaPageConceptCard[] =
+    data.conceptSection?.concepts?.map((c) => ({
+      imagePath: resolveMediaUrl(c.image?.url),
+      imageAlt: c.imageAlt ?? '',
+      title: c.title ?? '',
+      description: c.description ?? '',
+      showButton: c.showButton ?? true,
+      buttonText: c.buttonText ?? '',
+      buttonHref: c.buttonHref ?? '',
+    })) ?? []
+
+  return {
+    pageHeader: {
+      imagePath: resolveMediaUrl(data.pageHeader?.image?.url),
+      alt: data.pageHeader?.alt ?? '',
+      title: data.pageHeader?.title ?? 'ソフきゃら！',
+    },
+    aboutSection: {
+      title: data.aboutSection?.title ?? 'ソフきゃら！',
+      subtitle: data.aboutSection?.subtitle ?? 'ABOUT SOFCHARA',
+      description: data.aboutSection?.description ?? '',
+      cardTitle: data.aboutSection?.cardTitle ?? '',
+      cardDescription: data.aboutSection?.cardDescription ?? '',
+      iconPath: resolveMediaUrl(data.aboutSection?.icon?.url),
+    },
+    conceptSection: {
+      title: data.conceptSection?.title ?? 'PROJECT CONCEPT',
+      subtitle: data.conceptSection?.subtitle ?? '企画の広がり',
+      concepts,
+    },
+    guidelineSection: {
+      title: data.guidelineSection?.title ?? '二次創作ガイドライン',
+      subtitle: data.guidelineSection?.subtitle ?? 'GUIDELINE',
+      description: data.guidelineSection?.description ?? '',
+    },
+    characterSection: {
+      title: data.characterSection?.title ?? 'キャラクター',
+      subtitle: data.characterSection?.subtitle ?? 'CHARACTER LIST',
+    },
+  }
+}
+
+// --- ガイドラインページ ---
+
+export type GuidelinePageData = {
+  title: string
+  subtitle: string
+  content: unknown
+}
+
+export async function getGuidelinePageData(): Promise<GuidelinePageData | null> {
+  const data = await fetchJson<{
+    title?: string
+    subtitle?: string
+    content?: unknown
+  }>(`${CMS_URL}/api/globals/guideline?depth=1`)
+
+  if (!data) return null
+
+  return {
+    title: data.title ?? 'GUIDELINE',
+    subtitle: data.subtitle ?? '二次創作ガイドライン',
+    content: data.content ?? null,
+  }
+}
+
+// --- ソフケンタウン ---
+
+export type SofkentownItemData = {
+  id: string
+  url: string
+  order: number
+  name: string
+  imagePath: string
+  description: unknown
+  relatedCharacters: {
+    id: string
+    name: string
+    imagePath: string
+  }[]
+}
+
+type SofkentownApiDoc = {
+  id?: number
+  order?: number
+  url?: string
+  name?: string
+  image?: { url?: string }
+  description?: unknown
+  relatedCharacters?: Array<
+    | {
+        id?: number
+        url?: string
+        jpName?: string
+        portraitImage?: { url?: string }
+        fullbodyImage?: { url?: string }
+      }
+    | number
+  >
+}
+
+function mapSofkentownDoc(doc: SofkentownApiDoc): SofkentownItemData {
+  const relatedCharacters = (doc.relatedCharacters ?? [])
+    .filter((c): c is Exclude<typeof c, number> => typeof c === 'object')
+    .map((c) => ({
+      id: c.url ?? String(c.id ?? ''),
+      name: c.jpName ?? '',
+      imagePath: resolveMediaUrl(
+        (typeof c.portraitImage === 'object' ? c.portraitImage?.url : undefined) ??
+          (typeof c.fullbodyImage === 'object' ? c.fullbodyImage?.url : undefined),
+      ),
+    }))
+    .filter((c) => c.name && c.imagePath)
+
+  return {
+    id: String(doc.id ?? ''),
+    url: doc.url ?? String(doc.id ?? ''),
+    order: doc.order ?? 0,
+    name: doc.name ?? '',
+    imagePath: resolveMediaUrl(typeof doc.image === 'object' ? doc.image?.url : undefined),
+    description: doc.description,
+    relatedCharacters,
+  }
+}
+
+export async function getSofkentownList(): Promise<SofkentownItemData[]> {
+  const data = await fetchJson<{ docs?: SofkentownApiDoc[] }>(
+    `${CMS_URL}/api/sofkentown?depth=2&limit=100&sort=order`,
+  )
+  return (data?.docs ?? []).map(mapSofkentownDoc)
+}
+
+export async function getSofkentownByUrl(url: string): Promise<SofkentownItemData | null> {
+  const data = await fetchJson<{ docs?: SofkentownApiDoc[] }>(
+    `${CMS_URL}/api/sofkentown?depth=2&where[url][equals]=${encodeURIComponent(url)}`,
+  )
+  const doc = data?.docs?.[0]
+  return doc ? mapSofkentownDoc(doc) : null
+}
+
+export async function getSofkentownsByCharacterUrl(
+  characterUrl: string,
+): Promise<SofkentownItemData[]> {
+  // まず全ソフケンタウンを取得し、relatedCharactersにこのキャラクターが含まれるものをフィルタ
+  const data = await fetchJson<{ docs?: SofkentownApiDoc[] }>(
+    `${CMS_URL}/api/sofkentown?depth=2&limit=100&sort=order`,
+  )
+
+  const allTowns = (data?.docs ?? []).map(mapSofkentownDoc)
+
+  // relatedCharactersにcharacterUrlを含むソフケンタウンをフィルタ
+  return allTowns.filter((town) => town.relatedCharacters.some((char) => char.id === characterUrl))
+}
+
+// --- サイト設定 ---
+
+export type SiteSettingsData = {
+  email: string
+  githubUrl: string
+  location: string
+}
+
+export async function getSiteSettings(): Promise<SiteSettingsData> {
+  const data = await fetchJson<{
+    contact?: {
+      email?: string
+      githubUrl?: string
+    }
+    location?: string
+  }>(`${CMS_URL}/api/globals/site-settings`)
+
+  return {
+    email: data?.contact?.email ?? '',
+    githubUrl: data?.contact?.githubUrl ?? '',
+    location: data?.location ?? '',
+  }
 }
 
 // --- トップページ統合取得 ---

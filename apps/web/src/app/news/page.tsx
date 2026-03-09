@@ -43,7 +43,7 @@ const NewsPage = async ({ searchParams }: NewsPageProps) => {
   const { pageHeader, newsOverview } = newsPageData
 
   return (
-    <PatternBackground>
+    <PatternBackground className="min-h-screen">
       <main>
         <PageHeader imagePath={pageHeader.imagePath}>
           <HeroLabel text={pageHeader.title} />

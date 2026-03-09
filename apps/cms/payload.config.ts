@@ -12,6 +12,7 @@ import { Media } from './contents/collections/Media'
 import { Users } from './contents/collections/users'
 import { NewsPage } from './contents/news'
 import { News } from './contents/news/NewsItem'
+import { SiteSettings } from './contents/SiteSettings'
 import { SofcharaPage } from './contents/sofchara'
 import { Characters } from './contents/sofchara/Character'
 import { Guideline } from './contents/sofchara/Guideline'
@@ -35,6 +36,11 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  logger: {
+    options: {
+      level: process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+    },
+  },
   routes: {
     admin: '/admin',
   },
@@ -46,6 +52,7 @@ export default buildConfig({
     suppressHydrationWarning: true,
   },
   globals: [
+    SiteSettings,
     AboutPage,
     TopVideo,
     Catchphrase,
@@ -78,7 +85,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: false,
+    push: process.env.NODE_ENV !== 'production',
   }),
   sharp,
 })

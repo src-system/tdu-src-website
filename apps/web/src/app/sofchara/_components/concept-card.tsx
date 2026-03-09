@@ -7,8 +7,9 @@ type ConceptCardProps = {
   imageAlt: string
   title: string
   description: string
-  buttonText: string
-  buttonHref: string
+  showButton?: boolean
+  buttonText?: string
+  buttonHref?: string
 }
 
 export const ConceptCard = ({
@@ -16,6 +17,7 @@ export const ConceptCard = ({
   imageAlt,
   title,
   description,
+  showButton = true,
   buttonText,
   buttonHref,
 }: ConceptCardProps) => {
@@ -29,9 +31,11 @@ export const ConceptCard = ({
         <div className="grow text-base text-charcoal leading-relaxed [&_p]:my-0">
           <Markdown content={description} />
         </div>
-        <div className="pt-2">
-          <LinkButton href={buttonHref} text={buttonText} />
-        </div>
+        {showButton && buttonHref && buttonText && (
+          <div className="pt-2">
+            <LinkButton href={buttonHref} text={buttonText} />
+          </div>
+        )}
       </div>
     </div>
   )

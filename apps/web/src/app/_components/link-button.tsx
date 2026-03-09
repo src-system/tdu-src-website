@@ -1,8 +1,8 @@
 'use client'
 
 import { ChevronRightIcon } from 'lucide-react'
-
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 type LinkButtonProps = {
   href: string
@@ -31,16 +31,23 @@ const colorStyles = {
 
 export const LinkButton = ({ href, text, color = 'forest' }: LinkButtonProps) => {
   const styles = colorStyles[color]
+  const pathname = usePathname()
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // ハッシュリンクの場合のみスムーズスクロールを適用
-    if (href.startsWith('#')) {
+    // ハッシュ部分を抽出
+    const hashIndex = href.indexOf('#')
+    if (hashIndex === -1) return
+
+    const targetId = href.substring(hashIndex + 1)
+    const hrefPath = href.substring(0, hashIndex) || pathname
+
+    // 同一ページ内のハッシュリンクの場合のみスムーズスクロールを適用
+    if (href.startsWith('#') || hrefPath === pathname) {
       e.preventDefault()
-      const targetId = href.substring(1)
       const element = document.getElementById(targetId)
 
       if (element) {
-        const offset = 100 // ヘッダーの高さ分のオフセット
+        const offset = 100
         const elementPosition = element.getBoundingClientRect().top
         const offsetPosition = elementPosition + window.pageYOffset - offset
 
@@ -48,6 +55,9 @@ export const LinkButton = ({ href, text, color = 'forest' }: LinkButtonProps) =>
           top: offsetPosition,
           behavior: 'smooth',
         })
+
+        // URLのハッシュを更新
+        window.history.pushState(null, '', `#${targetId}`)
       }
     }
   }

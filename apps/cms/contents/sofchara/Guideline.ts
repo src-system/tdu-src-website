@@ -3,6 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const Guideline: GlobalConfig = {
   slug: 'guideline',
   label: '二次創作ガイドライン',
+  access: { read: () => true },
   admin: {
     group: 'ソフキャラ',
     description: 'ガイドラインページ（/sofchara/guideline）',

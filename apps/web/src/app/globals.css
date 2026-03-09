@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "@tdu-src/theme/tokens.css";
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --background: var(--tdu-background);
   --foreground: var(--tdu-foreground);

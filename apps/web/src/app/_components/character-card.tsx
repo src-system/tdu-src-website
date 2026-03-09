@@ -5,7 +5,7 @@ import { Markdown } from '@/src/app/_components/markdown'
 export type CharacterCardData = {
   id: string
   name: string
-  description: string
+  description?: string
   imagePath: string
 }
 
@@ -40,10 +40,14 @@ export const CharacterCard = ({
         />
       </div>
       <div className="text-center">
-        <h3 className="font-bold text-lg text-charcoal">{name}</h3>
-        <div className="text-sm text-gray-500 [&_p]:my-0">
-          <Markdown content={description} />
-        </div>
+        <h3 className={`font-bold text-charcoal ${size === 'sm' ? 'text-sm' : 'text-lg'}`}>
+          {name}
+        </h3>
+        {description && size !== 'sm' && (
+          <div className="text-sm text-gray-500 [&_p]:my-0">
+            <Markdown content={description} />
+          </div>
+        )}
       </div>
     </Link>
   )

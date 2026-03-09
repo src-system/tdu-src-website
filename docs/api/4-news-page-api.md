@@ -25,15 +25,15 @@ Newsページ上部に表示されるヘッダー画像とタイトルです。
 | フィールド | Payload型 | 必須 | 備考 |
 |-----------|-----------|------|------|
 | pageHeader.image | upload (relationTo: media) | ✓ | ヘッダー画像（16:9推奨） |
-| pageHeader.alt | text | ✓ | 代替テキスト |
-| pageHeader.title | text | ✓ | ページタイトル |
+| pageHeader.alt | text | - | 代替テキスト |
+| pageHeader.title | text | - | ページタイトル（デフォルト: "新着情報"） |
 
 ### フィールド
 | フィールド | 型 | 必須 | 備考 |
 |-----------|-----|------|------|
 | image | image | ✓ | ヘッダー画像（16:9推奨） |
-| alt | string | ✓ | 画像の代替テキスト |
-| title | string | ✓ | ページタイトル |
+| alt | string | - | 画像の代替テキスト |
+| title | string | - | ページタイトル |
 
 ---
 
@@ -47,7 +47,7 @@ Newsセクションのタイトル・説明文です。
 |-----------|-----------|------|------|
 | newsOverview.title | text | - | defaultValue: "NEWS" |
 | newsOverview.subtitle | text | - | defaultValue: "お知らせ" |
-| newsOverview.description | textarea | ✓ | 説明文（改行対応） |
+| newsOverview.description | textarea | - | 説明文（改行対応） |
 
 ---
 
@@ -61,87 +61,90 @@ Newsセクションのタイトル・説明文です。
 - トップページ（最新3件）
 
 ### Payload定義
+
+| 項目 | 値 |
+|------|-----|
+| 種別 | Collection |
+| slug | `news` |
+| ファイル | `contents/news/NewsItem.ts` |
+| API | `GET /api/news` |
+
 | フィールド | Payload型 | 必須 | 備考 |
 |-----------|-----------|------|------|
 | title | text | ✓ | 記事タイトル |
-| date | date | ✓ | 公開日 |
-| category | select | ✓ | announcement, event, report, sofchara, work, game, web, sound, 2d, 3d, design |
-| summary | textarea | ✓ | 要約文 |
+| date | date | ✓ | 公開日（pickerAppearance: dayAndTime） |
+| category | select | ✓ | メインカテゴリー |
+| subcategory | select | - | 班（サブカテゴリー） |
+| summary | textarea | ✓ | 要約文（一覧で表示） |
 | thumbnail | upload (relationTo: media) | ✓ | サムネイル（16:9推奨） |
 | alt | text | ✓ | サムネイルの代替テキスト |
-| content | richText | ✓ | 本文 |
+| content | richText | ✓ | 本文（Lexical） |
 | author | text | - | 著者名 |
-| tags | array | - | tags[].tag |
 
-### フィールド
-| フィールド | 型 | 必須 | デフォルト値 | 備考 |
-|-----------|-----|------|------------|------|
-| title | string | - | "NEWS" | セクションタイトル |
-| subtitle | string | - | "お知らせ" | サブタイトル |
-| description | string | ✓ | - | 説明文（改行対応） |
-| items | NewsItem[ id, title, date, categories, summary, thumbnail, alt ] | ✓ | - | 記事の配列 (本文は取得しない) |
+### カテゴリー（category）
+| 値 | ラベル | 備考 |
+|----|--------|------|
+| announcement | お知らせ | 一般的なお知らせ |
+| event | イベント | イベント情報 |
+| report | 活動報告 | 活動報告 |
+| sofchara | ソフキャラ | ソフキャラ関連 |
+| work | 作品紹介 | 作品紹介 |
 
-※ 1ページ10件でクエリパラメータで取得する
+### サブカテゴリー（subcategory）- 班
+| 値 | ラベル | 備考 |
+|----|--------|------|
+| game | ゲームプログラミング | ゲーム班 |
+| web | Webアプリ | Web班 |
+| sound | サウンド | サウンド班 |
+| 2d | 2D | 2D班 |
+| 3d | 3D | 3D班 |
+| design | デザイン | デザイン班 |
 
-**NewsItem:**
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
-| id | string | ✓ | 記事ID（URL識別子） |
-| title | string | ✓ | 記事タイトル |
-| date | date | ✓ | 公開日 |
-| categories | CategoryType | ✓ | カテゴリー |
-| summary | string | ✓ | 要約文（記事一覧で表示） |
-| thumbnail | image | ✓ | サムネイル画像（16:9推奨） |
-| alt | string | ✓ | サムネイル画像の代替テキスト |
-| content | markdown | ✓ | 本文（Markdown、画像含む） |
-| author | string | - | 著者名（オプション） |
-| tags | string[] | - | タグ（オプション） |
+### フィルタリング
+| パラメータ | 備考 |
+|-----------|------|
+| `where[category][equals]={value}` | カテゴリーでフィルタ |
+| `where[subcategory][equals]={value}` | サブカテゴリー（班）でフィルタ |
+| `sort=-date` | 公開日の降順でソート |
+| `limit=10&page=1` | ページネーション（1ページ10件） |
 
-**CategoryType:**
-- `announcement` - お知らせ
-- `event` - イベント
-- `report` - 活動報告
-- `sofchara` - ソフキャラ
-- `work` - 作品紹介
-- `game` - ゲームプログラミング
-- `web` - Webアプリ
-- `sound` - サウンド
-- `2d` - 2D
-- `3d` - 3D
-- `design` - デザイン
-
-**注意:**
-- トップページでは最新3件のみ表示
-- 記事は公開日の降順で並べ替え
-- 記事一覧では`content` `author` は不要（詳細ページのみ使用）
+### 取得する値（一覧）
+| フィールド | 型 | 備考 |
+|-----------|-----|------|
+| id | string | 記事ID |
+| title | string | 記事タイトル |
+| date | string | 公開日（フォーマット済み） |
+| imagePath | string | サムネイル画像URL |
+| category | string | カテゴリーラベル |
+| subcategory | string | サブカテゴリーラベル（任意） |
+| summary | string | 要約文 |
 
 ---
 
-# `News/newsId` 記事詳細ページ
+## 4. 記事詳細ページ
 
 ### 概要
-各記事の詳細内容を表示するページです。記事ごとに個別のページを持ちます。
+各記事の詳細内容を表示するページです。
 
 ### 使用箇所
-- `/news/[newsId]` 各記事の詳細ページ
+- `/news/[newsId]`
 
-### フィールド
-**NewsItem:**
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
-| id | string | ✓ | 記事ID（URL識別子） |
-| title | string | ✓ | 記事タイトル |
-| date | date | ✓ | 公開日 |
-| categories | CategoryType | ✓ | カテゴリー |
-| summary | string | ✓ | 要約文（記事一覧で表示） |
-| thumbnail | image | ✓ | サムネイル画像（16:9推奨） |
-| alt | string | ✓ | サムネイル画像の代替テキスト |
-| content | markdown | ✓ | 本文（Markdown、画像含む） |
-| author | string | - | 著者名（オプション） |
+### API
+`GET /api/news/{id}?depth=1`
 
-```
+### 取得する値
+| フィールド | 型 | 備考 |
+|-----------|-----|------|
+| id | string | 記事ID |
+| title | string | 記事タイトル |
+| date | string | 公開日（フォーマット済み） |
+| imagePath | string | サムネイル画像URL |
+| category | string | カテゴリーラベル |
+| subcategory | string | サブカテゴリーラベル（任意） |
+| summary | string | 要約文 |
+| content | unknown (Lexical) | 本文（RichText） |
 
 **注意:**
-- `content`はMarkdownで記述可能（見出し、リスト、画像等）
-- 画像はMarkdown記法で埋め込み可能
-- `author`と`tags`はオプションで、データがない場合は非表示
+- `content`はLexicalエディタで編集、RichTextコンポーネントで表示
+- 画像はLexicalエディタで埋め込み可能
+- `author`はオプションで、データがない場合は非表示

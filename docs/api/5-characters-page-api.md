@@ -1,4 +1,10 @@
-# `/sofchara` - ソフキャラページ
+# ソフキャラページ API
+
+ソフキャラ関連ページで使用するデータの管理項目です。
+
+---
+
+# `/sofchara` - ソフキャラトップページ
 
 ソフキャラのトップページです。
 
@@ -6,15 +12,16 @@
 
 | 項目 | 値 |
 |------|-----|
-| 種別 | Global `sofchara-page` |
-| ファイル | `contents/sofchara/` |
+| 種別 | Global |
+| slug | `sofchara-page` |
+| ファイル | `contents/sofchara/index.ts` |
 | API | `GET /api/globals/sofchara-page` |
 
 ※ キャラクター一覧は `GET /api/characters` で取得
 
 ---
 
-## ページヘッダー（トップ画像）
+## 1. ページヘッダー（トップ画像）
 
 ### 概要
 ソフキャラページ上部に表示されるヘッダー画像とタイトルです。
@@ -23,17 +30,19 @@
 | フィールド | Payload型 | 必須 | 備考 |
 |-----------|-----------|------|------|
 | pageHeader.image | upload (relationTo: media) | ✓ | ヘッダー画像（16:9推奨） |
-| pageHeader.alt | text | ✓ | 代替テキスト |
-| pageHeader.title | text | ✓ | ページタイトル |
+| pageHeader.alt | text | - | 代替テキスト |
+| pageHeader.title | text | - | ページタイトル（デフォルト: "ソフきゃら！"） |
 
 ### フィールド
 | フィールド | 型 | 必須 | 備考 |
 |-----------|-----|------|------|
 | image | image | ✓ | ヘッダー画像（16:9推奨） |
-| alt | string | ✓ | 画像の代替テキスト |
-| title | string | ✓ | ページタイトル |
+| alt | string | - | 画像の代替テキスト |
+| title | string | - | ページタイトル |
 
-## Aboutセクション
+---
+
+## 2. Aboutセクション
 
 ### 概要
 「ソフきゃら！」企画の説明セクションです。
@@ -46,7 +55,7 @@
 | aboutSection.description | textarea | ✓ | 企画の説明文 |
 | aboutSection.cardTitle | text | ✓ | カード内のタイトル |
 | aboutSection.cardDescription | textarea | ✓ | カード内の文章 |
-| aboutSection.icon | upload (relationTo: media) | ✓ | カード内のアイコン |
+| aboutSection.icon | upload (relationTo: media) | - | カード内のアイコン |
 
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |
@@ -56,10 +65,11 @@
 | description | string | ✓ | - | 企画の説明文（改行対応） |
 | cardTitle | string | ✓ | - | カード内のタイトル |
 | cardDescription | string | ✓ | - | カード内の文章 |
-| icon | image | ✓ | - | カード内のアイコン |
+| iconPath | string | - | - | カード内のアイコンURL |
 
+---
 
-## 企画の広がりセクション
+## 3. 企画の広がりセクション（コンセプト）
 
 ### 概要
 二次創作、キャラクター、ソフケンタウンの3つのコンセプトを紹介するカードセクションです。
@@ -69,28 +79,36 @@
 |-----------|-----------|------|------|
 | conceptSection.title | text | - | defaultValue: "PROJECT CONCEPT" |
 | conceptSection.subtitle | text | - | defaultValue: "企画の広がり" |
-| conceptSection.concepts | array | ✓ | minRows: 3, maxRows: 3 |
+| conceptSection.concepts | array | ✓ | コンセプトカードの配列 |
 | conceptSection.concepts[].image | upload | ✓ | カード画像 |
-| conceptSection.concepts[].imageAlt | text | ✓ | 代替テキスト |
+| conceptSection.concepts[].imageAlt | text | - | 代替テキスト |
 | conceptSection.concepts[].title | text | ✓ | カードタイトル |
 | conceptSection.concepts[].description | textarea | ✓ | カードの説明 |
+| conceptSection.concepts[].showButton | checkbox | - | ボタン表示フラグ（デフォルト: true） |
+| conceptSection.concepts[].buttonText | text | - | ボタンテキスト |
+| conceptSection.concepts[].buttonHref | text | - | ボタンリンク先 |
 
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |
 |-----------|-----|------|------------|------|
 | title | string | - | "PROJECT CONCEPT" | セクションタイトル |
 | subtitle | string | - | "企画の広がり" | サブタイトル |
-| concepts | ConceptCard[] | ✓ | - | コンセプトカードの配列（3つ固定） |
+| concepts | ConceptCard[] | ✓ | - | コンセプトカードの配列 |
 
 **ConceptCard:**
 | フィールド | 型 | 必須 | 備考 |
 |-----------|-----|------|------|
-| image | image | ✓ | カード画像 |
-| imageAlt | string | ✓ | 画像の代替テキスト |
+| imagePath | string | ✓ | カード画像URL |
+| imageAlt | string | - | 画像の代替テキスト |
 | title | string | ✓ | カードタイトル |
 | description | string | ✓ | カードの説明 |
+| showButton | boolean | - | ボタン表示フラグ |
+| buttonText | string | - | ボタンテキスト |
+| buttonHref | string | - | ボタンリンク先 |
 
-## 二次創作ガイドラインセクション
+---
+
+## 4. 二次創作ガイドラインセクション
 
 ### 概要
 二次創作ガイドラインページへの誘導セクションです。
@@ -109,7 +127,9 @@
 | subtitle | string | - | "GUIDELINE" | サブタイトル |
 | description | string | ✓ | - | 説明文 |
 
-## キャラクター一覧
+---
+
+## 5. キャラクター一覧セクション
 
 ### 概要
 ソフキャラの一覧を表示するセクションです。
@@ -121,25 +141,14 @@
 ### Payload定義
 | フィールド | Payload型 | 必須 | 備考 |
 |-----------|-----------|------|------|
-| characterSection.title | text | - | defaultValue: "CHARACTERS" |
-| characterSection.subtitle | text | - | defaultValue: "キャラクター一覧" |
-| characters | Collection `characters` | - | `GET /api/characters` で取得 |
+| characterSection.title | text | - | defaultValue: "キャラクター" |
+| characterSection.subtitle | text | - | defaultValue: "CHARACTER LIST" |
 
 ### フィールド
 | フィールド | 型 | 必須 | デフォルト値 | 備考 |
 |-----------|-----|------|------------|------|
-| title | string | - | "CHARACTERS" | セクションタイトル |
-| subtitle | string | - | "キャラクター一覧" | サブタイトル |
-| characters | Character[] | ✓ | - | キャラクターの配列 |
-
-**Character（一覧用）:**
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
-| id | number | ✓ | 識別番号（表示順番） |
-| jpName | string | ✓ | 日本語でのキャラクター名 |
-| enName | string | ✓ | 英語でのキャラクター名 |
-| portraitImage | image | ✓ | 顔画像（アイコン用） |
-| url | string | ✓ | キャラクター詳細ページのURL |
+| title | string | - | "キャラクター" | セクションタイトル |
+| subtitle | string | - | "CHARACTER LIST" | サブタイトル |
 
 ---
 
@@ -148,63 +157,74 @@
 各キャラクターの詳細情報を表示するページです。
 
 ## Payload定義
-Collection `characters`（`contents/sofchara/Character.ts`）
-API: `GET /api/characters` で url でフィルタ、または `GET /api/characters/:id`
+
+| 項目 | 値 |
+|------|-----|
+| 種別 | Collection |
+| slug | `characters` |
+| ファイル | `contents/sofchara/Character.ts` |
+| API | `GET /api/characters?where[url][equals]={url}` |
 
 ## フィールド
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
-| id | number | ✓ | 識別番号 |
-| jpName | string | ✓ | 日本語でのキャラクター名 |
-| enName | string | ✓ | 英語でのキャラクター名 |
-| url | string | ✓ | URL識別子 |
-| fullbodyImage | image | ✓ | 全身画像 |
-| imageLabel | string | ✓ | デフォルト画像の説明文 |
-| portraitImage | image | ✓ | 顔画像 |
-| author | string | ✓ | 作者名 |
-| introduction | string | ✓ | キャラクター紹介文（簡潔） |
-| catchphrase | string | - | キャッチフレーズ（オプション） |
 
-**プロフィール情報:**
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
-| birthday | string | - | 誕生日（月/日形式）（オプション） |
-| gender | string | - | 性別（オプション） |
-| height | string | - | 身長（オプション） |
-| weight | string | - | 体重（オプション） |
+### 基本情報
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| order | number | ✓ | 表示順（重複不可） |
+| jpName | text | ✓ | 日本語名 |
+| enName | text | ✓ | 英語名 |
+| url | text | ✓ | URL識別子（ユニーク） |
+| fullbodyImage | upload | ✓ | 全身画像 |
+| portraitImage | upload | - | 顔画像（アイコン用） |
+| imageLabel | text | - | 画像の説明文 |
+| author | text | ✓ | 作者名 |
+| introduction | textarea | - | キャラクター紹介文（簡潔） |
+| catchphrase | text | - | キャッチフレーズ |
 
-**コンテンツ:**
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
-| description | markdown | ✓ | 詳細説明（Markdown対応） |
-| gallery | image[] | - | ギャラリー画像の配列（オプション） |
-| alternates | Alternate[] | - | 別衣装の配列（オプション） |
-| relations | Relation[] | - | ソフケンタウンとの関連性（オプション） |
+### プロフィール情報（profile グループ）
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| profile.birthday | text | - | 誕生日 |
+| profile.gender | text | - | 性別 |
+| profile.height | text | - | 身長 |
+| profile.weight | text | - | 体重 |
+| profile.likes | text | - | 好きなもの |
+| profile.dislikes | text | - | 苦手なもの |
 
-**二次創作ガイドライン（各キャラクター別）:**
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
-| rules.r18 | RuleLevel | ✓ | R-18表現（性的表現） |
-| rules.r18g | RuleLevel | ✓ | R-18G表現（残酷・グロ表現） |
-| rules.colabo | RuleLevel | ✓ | 外部キャラクターとの絡み |
-| rules.coupling | RuleLevel | ✓ | カップリング表現 |
-| rules.snsRolePlaying | RuleLevel | ✓ | SNSでのなりきり活動 |
-| rules.modification | RuleLevel | ✓ | 大きな改変 |
-| rules.others | markdown | - | その他の規約（オプション） |
+### 詳細コンテンツ
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| description | richText | - | 詳細説明（Lexical） |
+| gallery | array | - | ギャラリー画像 |
+| gallery[].image | upload | ✓ | 画像 |
+| gallery[].alt | text | - | 代替テキスト |
 
-**Alternate（別衣装）:**
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
-| id | string | ✓ | 衣装ID |
-| alternateName | string | ✓ | 衣装名 |
-| fullbodyImage | image | ✓ | 全身画像 |
-| portraitImage | image | ✓ | 顔画像 |
+### 別衣装（alternates）
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| alternates | array | - | 別衣装の配列 |
+| alternates[].alternateName | text | ✓ | 衣装名 |
+| alternates[].author | text | - | 作者名 |
+| alternates[].fullbodyImage | upload | ✓ | 全身画像 |
+| alternates[].portraitImage | upload | - | 顔画像 |
 
-**Relation（関連性）:**
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
-| sofkenTownId | string | ✓ | ソフケンタウンのID |
-| description | string | - | 関連性の説明（オプション） |
+### ソフケンタウンとの関連（relations）
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| relations | array | - | 関連性の配列 |
+| relations[].sofkentown | relationship | ✓ | ソフケンタウンへの参照 |
+| relations[].description | textarea | - | 関連性の説明 |
+
+### 二次創作ガイドライン（rules グループ）
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| rules.r18 | select | - | R-18表現（allowed/conditional/prohibited） |
+| rules.r18g | select | - | R-18G表現 |
+| rules.colabo | select | - | 外部キャラクターとの絡み |
+| rules.coupling | select | - | カップリング表現 |
+| rules.snsRolePlaying | select | - | SNSでのなりきり活動 |
+| rules.modification | select | - | 大きな改変 |
+| rules.others | richText | - | その他の規約 |
 
 **RuleLevel:**
 - `allowed` (◯) - 許可
@@ -218,41 +238,48 @@ API: `GET /api/characters` で url でフィルタ、または `GET /api/charact
 ソフキャラの二次創作ガイドラインページです。
 
 ## Payload定義
+
 | 項目 | 値 |
 |------|-----|
-| 種別 | Global `guideline` |
+| 種別 | Global |
+| slug | `guideline` |
 | ファイル | `contents/sofchara/Guideline.ts` |
 | API | `GET /api/globals/guideline` |
 
 ## フィールド
-| フィールド | 型 | 必須 | 備考 |
-|-----------|-----|------|------|
-| title | string | ✓ | ページタイトル |
-| content | markdown | ✓ | ガイドライン本文（Markdown対応） |
-| updatedAt | date | ✓ | 最終更新日 |
+| フィールド | Payload型 | 必須 | 備考 |
+|-----------|-----------|------|------|
+| title | text | - | ページタイトル（デフォルト: "GUIDELINE"） |
+| subtitle | text | - | サブタイトル（デフォルト: "二次創作ガイドライン"） |
+| content | richText | ✓ | ガイドライン本文（Lexical） |
 
 ---
 
 # `/sofchara/sofkentown` - ソフケンタウンページ
 
-ソフキャラの共通世界観「ソフケンタウン」の情報です。
+ソフキャラの共通世界観「ソフケンタウン」の一覧・詳細ページです。
+
+**詳細は `0-general-api.md` を参照してください。**
+
+## 概要
+- 一覧ページ: `/sofchara/sofkentown`
+- 詳細ページ: `/sofchara/sofkentown/[townId]`
 
 ## Payload定義
+
 | 項目 | 値 |
 |------|-----|
-| 種別 | Collection `sofkentown` |
+| 種別 | Collection |
+| slug | `sofkentown` |
 | ファイル | `contents/sofchara/Sofkentown.ts` |
 | API | `GET /api/sofkentown` |
 
-## フィールド
+## 主なフィールド
 | フィールド | 型 | 必須 | 備考 |
 |-----------|-----|------|------|
-| id | string | ✓ | 識別ID |
+| order | number | ✓ | 表示順 |
 | name | string | ✓ | 場所・設定の名前 |
-| image | image | - | イメージ画像（オプション） |
-| description | markdown | ✓ | 詳細説明（Markdown対応） |
-| relatedCharacters | number[] | - | 関連するキャラクターのID配列（オプション） |
-
-
-**注意:**
-- `relatedCharacters`は各キャラクターの`id`を参照
+| url | string | ✓ | URL名（半角英数字とハイフン） |
+| image | image | - | イメージ画像 |
+| description | richText | ✓ | 詳細説明 |
+| relatedCharacters | Character[] | - | 関連キャラクター |

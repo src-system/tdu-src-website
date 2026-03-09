@@ -17,6 +17,7 @@ const FAILED_ITEM_LABELS: Record<string, string> = {
   'news-data': 'ニュース記事',
   'characters-section': 'キャラクターセクション見出し',
   'characters-data': 'キャラクターデータ',
+  'sofkentown-data': 'ソフケンタウンデータ',
 }
 
 type ErrorPageProps = {
