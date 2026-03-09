@@ -1,3 +1,5 @@
+export const revalidate = 600 // 10分
+
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { ContentBlock } from '@/src/app/_components/content-block'
@@ -57,8 +59,16 @@ const SofcharaPage = async () => {
             }}
           />
         </div>
-        <div className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-mint/20 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 -right-16 h-72 w-72 rounded-full bg-forest/15 blur-3xl pointer-events-none" />
+        <div
+          className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-mint/20 blur-3xl pointer-events-none"
+          style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 256px' }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute -bottom-16 -right-16 h-72 w-72 rounded-full bg-forest/15 blur-3xl pointer-events-none"
+          style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 288px' }}
+          aria-hidden="true"
+        />
         <ContentSection>
           <ContentCard>
             <div className="space-y-8">

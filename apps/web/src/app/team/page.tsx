@@ -1,3 +1,5 @@
+export const revalidate = 1800 // 30分
+
 import { redirect } from 'next/navigation'
 import { ContentBlock } from '@/src/app/_components/content-block'
 import { ContentCard } from '@/src/app/_components/content-card'
@@ -48,10 +50,26 @@ const TeamListPage = async () => {
             backgroundSize: '250px',
           }}
         />
-        <div className="absolute top-40 -left-32 w-96 h-96 bg-mint/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 -right-32 w-80 h-80 bg-forest/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-leaf/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-40 right-1/3 w-64 h-64 bg-mint/15 rounded-full blur-3xl" />
+        <div
+          className="absolute top-40 -left-32 w-96 h-96 bg-mint/20 rounded-full blur-3xl"
+          style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 384px' }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute top-1/3 -right-32 w-80 h-80 bg-forest/15 rounded-full blur-3xl"
+          style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 320px' }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-leaf/10 rounded-full blur-3xl"
+          style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 288px' }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute bottom-40 right-1/3 w-64 h-64 bg-mint/15 rounded-full blur-3xl"
+          style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 256px' }}
+          aria-hidden="true"
+        />
         <div className="relative mx-auto max-w-6xl 2xl:max-w-7xl px-5 md:px-8 py-12 md:py-20">
           <div className="flex flex-col gap-8 md:gap-12">
             {teamIntroData.map((team, index) => (

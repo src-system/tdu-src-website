@@ -1,5 +1,5 @@
-/** CMS 更新を即時反映するため動的レンダリング */
-export const dynamic = 'force-dynamic'
+/** ISR: キャラクター詳細は30分ごとに再検証 */
+export const revalidate = 1800 // 30分
 
 import Image from 'next/image'
 import Link from 'next/link'

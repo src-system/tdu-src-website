@@ -1,3 +1,5 @@
+export const revalidate = 3600 // 1時間
+
 import { redirect } from 'next/navigation'
 import { ContentBlock } from '@/src/app/_components/content-block'
 import { ContentCard } from '@/src/app/_components/content-card'
@@ -63,8 +65,16 @@ const About = async () => {
         className="relative w-full bg-linear-to-b from-green-50 via-white to-white overflow-hidden"
       >
         <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-forest/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-mint/10 rounded-full blur-3xl" />
+          <div
+            className="absolute top-20 left-10 w-72 h-72 bg-forest/10 rounded-full blur-3xl"
+            style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 288px' }}
+            aria-hidden="true"
+          />
+          <div
+            className="absolute bottom-20 right-10 w-96 h-96 bg-mint/10 rounded-full blur-3xl"
+            style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 384px' }}
+            aria-hidden="true"
+          />
         </div>
         <div className="relative mx-auto max-w-6xl 2xl:max-w-7xl md:px-20 2xl:px-32 px-5 md:py-15 2xl:py-20 py-10">
           <ContentBlock

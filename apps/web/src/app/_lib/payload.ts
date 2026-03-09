@@ -3,12 +3,14 @@
  * トップページ・各セクションのコンテンツを取得
  */
 
+import { cache } from 'react'
+
 const CMS_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
 
 const isDev = process.env.NODE_ENV === 'development'
 
-/** CMS 更新を即時反映するため、常にキャッシュなしで取得 */
-const FETCH_OPTIONS = { cache: 'no-store' as RequestCache } as const
+/** ISR: デフォルトで60秒間キャッシュし、バックグラウンドで再検証 */
+const FETCH_OPTIONS = { next: { revalidate: 60 } } as const
 
 function resolveMediaUrl(url: string | null | undefined): string {
   if (!url) return ''
@@ -155,7 +157,7 @@ async function fetchCatchphrase(): Promise<CatchphraseData | null> {
   }
 }
 
-export async function getTopHeroData(): Promise<TopHeroFetchResult> {
+export const getTopHeroData = cache(async (): Promise<TopHeroFetchResult> => {
   const [topVideo, catchphrase] = await Promise.all([fetchTopVideo(), fetchCatchphrase()])
 
   const failedItems: ('top-video' | 'catchphrase')[] = []
@@ -171,7 +173,7 @@ export async function getTopHeroData(): Promise<TopHeroFetchResult> {
     topVideo: topVideo!,
     catchphrase: catchphrase!,
   }
-}
+})
 
 // --- コンテンツブロック（about, team, news, characters）---
 
@@ -195,7 +197,7 @@ export type ContentBlocksData = {
   characters: ContentBlockData
 }
 
-export async function getContentBlocks(): Promise<ContentBlocksData> {
+export const getContentBlocks = cache(async (): Promise<ContentBlocksData> => {
   const [aboutRes, teamRes, newsPageRes, sofcharaRes] = await Promise.all([
     fetchJson<{
       title?: string
@@ -243,7 +245,7 @@ export async function getContentBlocks(): Promise<ContentBlocksData> {
       description: sofcharaRes?.characterSection?.description ?? '',
     },
   }
-}
+})
 
 // --- Aboutページ ---
 
@@ -284,7 +286,7 @@ export type AboutPageData = {
   }
 }
 
-export async function getAboutPageData(): Promise<AboutPageData | null> {
+export const getAboutPageData = cache(async (): Promise<AboutPageData | null> => {
   const data = await fetchJson<{
     pageHeader?: {
       image?: number | { url?: string | null }
@@ -378,7 +380,7 @@ export async function getAboutPageData(): Promise<AboutPageData | null> {
       timeline: historyItems,
     },
   }
-}
+})
 
 // --- Newsページ ---
 
@@ -395,7 +397,7 @@ export type NewsPageData = {
   }
 }
 
-export async function getNewsPageData(): Promise<NewsPageData | null> {
+export const getNewsPageData = cache(async (): Promise<NewsPageData | null> => {
   const data = await fetchJson<{
     pageHeader?: {
       image?: number | { url?: string | null }
@@ -428,7 +430,7 @@ export async function getNewsPageData(): Promise<NewsPageData | null> {
       description: data.newsOverview?.description ?? '',
     },
   }
-}
+})
 
 // --- Teamページ ---
 
@@ -445,7 +447,7 @@ export type TeamPageData = {
   }
 }
 
-export async function getTeamPageData(): Promise<TeamPageData | null> {
+export const getTeamPageData = cache(async (): Promise<TeamPageData | null> => {
   const data = await fetchJson<{
     pageHeader?: {
       image?: number | { url?: string | null }
@@ -478,7 +480,7 @@ export async function getTeamPageData(): Promise<TeamPageData | null> {
       description: data.teamOverview?.description ?? '',
     },
   }
-}
+})
 
 // --- ニュース ---
 
@@ -589,7 +591,7 @@ export async function getNewsList(options?: {
   return result.docs
 }
 
-export async function getNewsItem(id: string): Promise<NewsItemData | null> {
+export const getNewsItem = cache(async (id: string): Promise<NewsItemData | null> => {
   const data = await fetchJson<{
     id?: number
     title?: string
@@ -618,7 +620,7 @@ export async function getNewsItem(id: string): Promise<NewsItemData | null> {
     summary: data.summary,
     content: data.content,
   }
-}
+})
 
 // --- チーム ---
 
@@ -662,7 +664,7 @@ export type TeamIntroData = {
   activities: string[]
 }
 
-export async function getTeamData(): Promise<TeamCardData[]> {
+export const getTeamData = cache(async (): Promise<TeamCardData[]> => {
   const results = await Promise.all(
     TEAM_SLUGS.map((slug) =>
       fetchJson<{
@@ -685,9 +687,9 @@ export async function getTeamData(): Promise<TeamCardData[]> {
       }
     })
     .filter((t) => t.teamName && t.imagePath)
-}
+})
 
-export async function getTeamIntroData(): Promise<TeamIntroData[]> {
+export const getTeamIntroData = cache(async (): Promise<TeamIntroData[]> => {
   const results = await Promise.all(
     TEAM_SLUGS.map((slug) =>
       fetchJson<{
@@ -720,7 +722,7 @@ export async function getTeamIntroData(): Promise<TeamIntroData[]> {
       }
     })
     .filter((t) => t.teamName && t.imagePath)
-}
+})
 
 export type TeamDetailData = {
   teamName: string
@@ -762,7 +764,7 @@ export type TeamDetailData = {
   }
 }
 
-export async function getTeamDetail(teamName: string): Promise<TeamDetailData | null> {
+export const getTeamDetail = cache(async (teamName: string): Promise<TeamDetailData | null> => {
   const slug = TEAM_SLUG_MAP[teamName]
   if (!slug) return null
 
@@ -918,7 +920,7 @@ export async function getTeamDetail(teamName: string): Promise<TeamDetailData | 
     softwares,
     gallery,
   }
-}
+})
 
 // --- キャラクター ---
 
@@ -1055,25 +1057,25 @@ function mapCharacterDoc(doc: CharacterApiDoc): CharacterData {
   }
 }
 
-export async function getCharacters(): Promise<CharacterData[]> {
+export const getCharacters = cache(async (): Promise<CharacterData[]> => {
   const data = await fetchJson<{ docs?: CharacterApiDoc[] }>(
     `${CMS_URL}/api/characters?depth=1&limit=100`,
   )
   return (data?.docs ?? []).map(mapCharacterDoc)
-}
+})
 
-export async function getCharacterByUrl(url: string): Promise<CharacterData | null> {
+export const getCharacterByUrl = cache(async (url: string): Promise<CharacterData | null> => {
   const data = await fetchJson<{ docs?: CharacterApiDoc[] }>(
     `${CMS_URL}/api/characters?depth=1&where[url][equals]=${encodeURIComponent(url)}`,
   )
   const doc = data?.docs?.[0]
   return doc ? mapCharacterDoc(doc) : null
-}
+})
 
-export async function getCharacterImages(): Promise<string[]> {
+export const getCharacterImages = cache(async (): Promise<string[]> => {
   const chars = await getCharacters()
   return chars.map((c) => c.imagePath).filter(Boolean)
-}
+})
 
 // --- ソフキャラページ ---
 
@@ -1117,7 +1119,7 @@ export type SofcharaPageData = {
   }
 }
 
-export async function getSofcharaPageData(): Promise<SofcharaPageData | null> {
+export const getSofcharaPageData = cache(async (): Promise<SofcharaPageData | null> => {
   const data = await fetchJson<{
     pageHeader?: {
       image?: { url?: string }
@@ -1198,7 +1200,7 @@ export async function getSofcharaPageData(): Promise<SofcharaPageData | null> {
       subtitle: data.characterSection?.subtitle ?? 'CHARACTER LIST',
     },
   }
-}
+})
 
 // --- ガイドラインページ ---
 
@@ -1208,7 +1210,7 @@ export type GuidelinePageData = {
   content: unknown
 }
 
-export async function getGuidelinePageData(): Promise<GuidelinePageData | null> {
+export const getGuidelinePageData = cache(async (): Promise<GuidelinePageData | null> => {
   const data = await fetchJson<{
     title?: string
     subtitle?: string
@@ -1222,7 +1224,7 @@ export async function getGuidelinePageData(): Promise<GuidelinePageData | null> 
     subtitle: data.subtitle ?? '二次創作ガイドライン',
     content: data.content ?? null,
   }
-}
+})
 
 // --- ソフケンタウン ---
 
@@ -1283,34 +1285,36 @@ function mapSofkentownDoc(doc: SofkentownApiDoc): SofkentownItemData {
   }
 }
 
-export async function getSofkentownList(): Promise<SofkentownItemData[]> {
+export const getSofkentownList = cache(async (): Promise<SofkentownItemData[]> => {
   const data = await fetchJson<{ docs?: SofkentownApiDoc[] }>(
     `${CMS_URL}/api/sofkentown?depth=2&limit=100&sort=order`,
   )
   return (data?.docs ?? []).map(mapSofkentownDoc)
-}
+})
 
-export async function getSofkentownByUrl(url: string): Promise<SofkentownItemData | null> {
+export const getSofkentownByUrl = cache(async (url: string): Promise<SofkentownItemData | null> => {
   const data = await fetchJson<{ docs?: SofkentownApiDoc[] }>(
     `${CMS_URL}/api/sofkentown?depth=2&where[url][equals]=${encodeURIComponent(url)}`,
   )
   const doc = data?.docs?.[0]
   return doc ? mapSofkentownDoc(doc) : null
-}
+})
 
-export async function getSofkentownsByCharacterUrl(
-  characterUrl: string,
-): Promise<SofkentownItemData[]> {
-  // まず全ソフケンタウンを取得し、relatedCharactersにこのキャラクターが含まれるものをフィルタ
-  const data = await fetchJson<{ docs?: SofkentownApiDoc[] }>(
-    `${CMS_URL}/api/sofkentown?depth=2&limit=100&sort=order`,
-  )
+export const getSofkentownsByCharacterUrl = cache(
+  async (characterUrl: string): Promise<SofkentownItemData[]> => {
+    // まず全ソフケンタウンを取得し、relatedCharactersにこのキャラクターが含まれるものをフィルタ
+    const data = await fetchJson<{ docs?: SofkentownApiDoc[] }>(
+      `${CMS_URL}/api/sofkentown?depth=2&limit=100&sort=order`,
+    )
 
-  const allTowns = (data?.docs ?? []).map(mapSofkentownDoc)
+    const allTowns = (data?.docs ?? []).map(mapSofkentownDoc)
 
-  // relatedCharactersにcharacterUrlを含むソフケンタウンをフィルタ
-  return allTowns.filter((town) => town.relatedCharacters.some((char) => char.id === characterUrl))
-}
+    // relatedCharactersにcharacterUrlを含むソフケンタウンをフィルタ
+    return allTowns.filter((town) =>
+      town.relatedCharacters.some((char) => char.id === characterUrl),
+    )
+  },
+)
 
 // --- サイト設定 ---
 
@@ -1320,7 +1324,7 @@ export type SiteSettingsData = {
   location: string
 }
 
-export async function getSiteSettings(): Promise<SiteSettingsData> {
+export const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
   const data = await fetchJson<{
     contact?: {
       email?: string
@@ -1334,7 +1338,7 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
     githubUrl: data?.contact?.githubUrl ?? '',
     location: data?.location ?? '',
   }
-}
+})
 
 // --- トップページ統合取得 ---
 
@@ -1364,7 +1368,7 @@ export type TopPageFetchResult =
   | { success: true; data: TopPageData }
   | { success: false; failedItems: TopPageFailedItem[] }
 
-export async function getTopPageData(): Promise<TopPageFetchResult> {
+export const getTopPageData = cache(async (): Promise<TopPageFetchResult> => {
   const [
     topVideo,
     catchphrase,
@@ -1525,4 +1529,4 @@ export async function getTopPageData(): Promise<TopPageFetchResult> {
       characters,
     },
   }
-}
+})

@@ -1,3 +1,5 @@
+export const revalidate = 3600 // 1時間
+
 import { Calendar, Tag } from 'lucide-react'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'

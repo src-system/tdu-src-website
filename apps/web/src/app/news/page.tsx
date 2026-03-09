@@ -1,3 +1,5 @@
+export const revalidate = 300 // 5分
+
 import { redirect } from 'next/navigation'
 import { ContentBlock } from '@/src/app/_components/content-block'
 import { ContentCard } from '@/src/app/_components/content-card'

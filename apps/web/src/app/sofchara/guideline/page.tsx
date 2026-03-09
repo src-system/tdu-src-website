@@ -1,3 +1,5 @@
+export const revalidate = 3600 // 1時間
+
 import { ChevronLeftIcon } from 'lucide-react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'

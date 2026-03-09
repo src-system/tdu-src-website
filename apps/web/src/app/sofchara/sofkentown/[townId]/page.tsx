@@ -1,3 +1,5 @@
+export const revalidate = 1800 // 30分
+
 import { MapPin } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'

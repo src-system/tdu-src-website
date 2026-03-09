@@ -1,6 +1,10 @@
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import { HeaderMenu } from './header-menu'
+
+const HeaderMenu = dynamic(() => import('./header-menu').then((mod) => mod.HeaderMenu), {
+  ssr: true,
+})
 
 export const Header = () => {
   return (

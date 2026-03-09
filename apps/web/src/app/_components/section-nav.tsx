@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export type NavSection = {
   id: string
@@ -40,7 +40,7 @@ export const SectionNav = ({ sections }: SectionNavProps) => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [sections])
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = useCallback((id: string) => {
     const element = document.getElementById(id)
     if (element) {
       const offsetPosition = element.offsetTop - 100
@@ -49,7 +49,7 @@ export const SectionNav = ({ sections }: SectionNavProps) => {
         behavior: 'smooth',
       })
     }
-  }
+  }, [])
 
   return (
     <nav

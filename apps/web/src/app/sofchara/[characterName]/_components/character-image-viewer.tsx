@@ -2,7 +2,7 @@
 
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 type Outfit = {
   name: string
@@ -23,59 +23,65 @@ export const CharacterImageViewer = ({ characterName, outfits }: CharacterImageV
   const startX = useRef<number | null>(null)
   const isDragging = useRef(false)
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setSelectedIndex((prev) => (prev > 0 ? prev - 1 : outfits.length - 1))
-  }
+  }, [outfits.length])
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setSelectedIndex((prev) => (prev < outfits.length - 1 ? prev + 1 : 0))
-  }
+  }, [outfits.length])
 
   // タッチイベント
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
     startX.current = e.touches[0].clientX
-  }
+  }, [])
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (startX.current === null) return
-    const diff = startX.current - e.touches[0].clientX
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) handleNext()
-      else handlePrev()
-      startX.current = null
-    }
-  }
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (startX.current === null) return
+      const diff = startX.current - e.touches[0].clientX
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) handleNext()
+        else handlePrev()
+        startX.current = null
+      }
+    },
+    [handleNext, handlePrev],
+  )
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = useCallback(() => {
     startX.current = null
-  }
+  }, [])
 
   // マウスドラッグイベント
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
     startX.current = e.clientX
     isDragging.current = true
-  }
+  }, [])
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging.current || startX.current === null) return
-    const diff = startX.current - e.clientX
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) handleNext()
-      else handlePrev()
-      startX.current = null
-      isDragging.current = false
-    }
-  }
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!isDragging.current || startX.current === null) return
+      const diff = startX.current - e.clientX
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) handleNext()
+        else handlePrev()
+        startX.current = null
+        isDragging.current = false
+      }
+    },
+    [handleNext, handlePrev],
+  )
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     startX.current = null
     isDragging.current = false
-  }
+  }, [])
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     startX.current = null
     isDragging.current = false
-  }
+  }, [])
 
   const showNavigation = outfits.length > 1
 

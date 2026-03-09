@@ -1,3 +1,5 @@
+export const revalidate = 1800 // 30分
+
 import { notFound } from 'next/navigation'
 import { ContentCard } from '@/src/app/_components/content-card'
 import { HeroLabel } from '@/src/app/_components/hero-label'

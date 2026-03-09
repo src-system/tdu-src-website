@@ -3,6 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'サイト設定',
+  access: { read: () => true },
   admin: {
     group: 'サイト全体',
     description: 'フッターなどで使用するサイト全体の設定',
