@@ -1,0 +1,33 @@
+{
+  "name": "tdu-src-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "docker compose up postgres -d --wait && pnpm --parallel --filter \"./apps/*\" dev",
+    "dev:local": "pnpm --parallel --filter \"./apps/*\" dev",
+    "dev:web": "pnpm --filter @tdu-src/web dev",
+    "dev:cms": "pnpm --filter @tdu-src/cms dev",
+    "build": "pnpm --filter @tdu-src/types build && pnpm --filter \"./apps/*\" build",
+    "build:web": "pnpm --filter @tdu-src/web build",
+    "build:cms": "pnpm --filter @tdu-src/cms build",
+    "start:web": "pnpm --filter @tdu-src/web start",
+    "start:cms": "pnpm --filter @tdu-src/cms start",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
+    "ci": "biome ci .",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "cms:migrate": "pnpm --filter @tdu-src/cms payload migrate",
+    "cms:migrate:create": "pnpm --filter @tdu-src/cms payload migrate:create",
+    "cms:migrate:create:ci": "pnpm --filter @tdu-src/cms payload migrate:create --force-accept-warning --skip-empty",
+    "cms:migrate:fresh": "pnpm --filter @tdu-src/cms payload migrate:fresh",
+    "cms:migrate:status": "pnpm --filter @tdu-src/cms payload migrate:status"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.13",
+    "lefthook": "^2.0.16",
+    "typescript": "^5"
+  }
+}

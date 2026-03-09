@@ -1,0 +1,26 @@
+/**
+ * TDU SRC デザイントークン
+ * web と cms で共通利用 - 色・スタイルの一元管理
+ */
+
+:root {
+  /* ブランドカラー */
+  --tdu-forest: #068200;
+  --tdu-leaf: #21b219;
+  --tdu-mint: #5dc757;
+  --tdu-charcoal: #454545;
+
+  /* 背景・前景 */
+  --tdu-background: #ffffff;
+  --tdu-foreground: #171717;
+
+  /* フォント（Google Fonts で読み込む名前） */
+  --tdu-font-sans: "Noto Sans JP", "Zen Maru Gothic", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tdu-background: #0a0a0a;
+    --tdu-foreground: #ededed;
+  }
+}

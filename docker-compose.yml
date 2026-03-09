@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: tdu-src-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-tdu_src}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  cms:
+    build:
+      context: .
+      dockerfile: apps/cms/Dockerfile
+    container_name: tdu-src-cms
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-tdu_src}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      NODE_ENV: ${NODE_ENV:-production}
+    ports:
+      - "${CMS_PORT:-3001}:3001"
+    volumes:
+      - cms_media:/app/apps/cms/media
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: tdu-src-web
+    restart: unless-stopped
+    depends_on:
+      - cms
+    environment:
+      NEXT_PUBLIC_CMS_URL: ${NEXT_PUBLIC_CMS_URL:-http://localhost:3001}
+      NODE_ENV: ${NODE_ENV:-production}
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+
+volumes:
+  postgres_data:
+  cms_media:

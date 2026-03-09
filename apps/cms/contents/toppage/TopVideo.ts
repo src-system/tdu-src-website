@@ -1,0 +1,36 @@
+import type { GlobalConfig } from 'payload'
+
+export const TopVideo: GlobalConfig = {
+  slug: 'top-video',
+  label: 'トップ動画',
+  access: {
+    read: () => true,
+  },
+  admin: {
+    group: 'トップページ',
+    description:
+      'トップページ上部に表示される背景動画と、動く部のロゴを表示するかの設定を行います。',
+  },
+  fields: [
+    {
+      name: 'video',
+      type: 'upload',
+      relationTo: 'media',
+      required: true,
+      filterOptions: {
+        mimeType: { contains: 'video' },
+      },
+      label: '動画',
+      admin: {
+        description: '16:9推奨、ループ再生',
+      },
+    },
+    {
+      name: 'logoEnabled',
+      type: 'checkbox',
+      required: true,
+      defaultValue: true,
+      label: '動く部のロゴを表示',
+    },
+  ],
+}
