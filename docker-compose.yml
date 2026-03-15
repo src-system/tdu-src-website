@@ -45,7 +45,8 @@ services:
     depends_on:
       - cms
     environment:
-      NEXT_PUBLIC_CMS_URL: http://cms:3001
+      NEXT_PUBLIC_CMS_URL: https://cms.tdu-src.com
+      CMS_INTERNAL_URL: http://cms:3001
       NODE_ENV: ${NODE_ENV:-production}
     ports:
       - "${WEB_PORT:-3000}:3000"

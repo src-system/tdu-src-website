@@ -5,7 +5,11 @@
 
 import { cache } from 'react'
 
-const CMS_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
+/** サーバーサイドAPIフェッチ用URL（Docker内部URL or localhost） */
+const CMS_URL = process.env.CMS_INTERNAL_URL || process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
+
+/** ブラウザからアクセス可能な公開URL（画像・動画のsrc属性に使用） */
+const CMS_PUBLIC_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -15,7 +19,7 @@ const FETCH_OPTIONS = { next: { revalidate: 60 } } as const
 function resolveMediaUrl(url: string | null | undefined): string {
   if (!url) return ''
   if (url.startsWith('http://') || url.startsWith('https://')) return url
-  const base = CMS_URL.replace(/\/$/, '')
+  const base = CMS_PUBLIC_URL.replace(/\/$/, '')
   return url.startsWith('/') ? `${base}${url}` : `${base}/${url}`
 }
 
