@@ -37,6 +37,39 @@ export const SiteSettings: GlobalConfig = {
             return true
           },
         },
+        {
+          name: 'xUrl',
+          type: 'text',
+          label: 'X (Twitter) URL',
+          admin: {
+            description: 'X (Twitter) のアカウントURL（例: https://x.com/tdu_src）',
+          },
+          validate: (value: string | null | undefined) => {
+            if (!value) return true
+            if (!value.startsWith('https://x.com/') && !value.startsWith('https://twitter.com/')) {
+              return 'X URLは https://x.com/ または https://twitter.com/ で始まる必要があります'
+            }
+            return true
+          },
+        },
+        {
+          name: 'youtubeUrl',
+          type: 'text',
+          label: 'YouTube URL',
+          admin: {
+            description: 'YouTubeチャンネルURL（例: https://www.youtube.com/@tdu-src）',
+          },
+          validate: (value: string | null | undefined) => {
+            if (!value) return true
+            if (
+              !value.startsWith('https://www.youtube.com/') &&
+              !value.startsWith('https://youtube.com/')
+            ) {
+              return 'YouTube URLは https://www.youtube.com/ で始まる必要があります'
+            }
+            return true
+          },
+        },
       ],
     },
     {

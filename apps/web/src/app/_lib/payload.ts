@@ -1326,6 +1326,8 @@ export const getSofkentownsByCharacterUrl = cache(
 export type SiteSettingsData = {
   email: string
   githubUrl: string
+  xUrl: string
+  youtubeUrl: string
   location: string
 }
 
@@ -1334,6 +1336,8 @@ export const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
     contact?: {
       email?: string
       githubUrl?: string
+      xUrl?: string
+      youtubeUrl?: string
     }
     location?: string
   }>(`${CMS_URL}/api/globals/site-settings`)
@@ -1341,6 +1345,8 @@ export const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
   return {
     email: data?.contact?.email ?? '',
     githubUrl: data?.contact?.githubUrl ?? '',
+    xUrl: data?.contact?.xUrl ?? '',
+    youtubeUrl: data?.contact?.youtubeUrl ?? '',
     location: data?.location ?? '',
   }
 })

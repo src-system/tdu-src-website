@@ -1,4 +1,4 @@
-import { Github, Mail, MapPin } from 'lucide-react'
+import { Github, Mail, MapPin, Twitter, Youtube } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getSiteSettingsFromApi } from '@/src/app/_lib/api'
@@ -20,6 +20,24 @@ export const Footer = async () => {
             href: siteSettings.githubUrl,
             icon: Github,
             label: 'GitHub',
+          },
+        ]
+      : []),
+    ...(siteSettings.xUrl
+      ? [
+          {
+            href: siteSettings.xUrl,
+            icon: Twitter,
+            label: 'X (Twitter)',
+          },
+        ]
+      : []),
+    ...(siteSettings.youtubeUrl
+      ? [
+          {
+            href: siteSettings.youtubeUrl,
+            icon: Youtube,
+            label: 'YouTube',
           },
         ]
       : []),
