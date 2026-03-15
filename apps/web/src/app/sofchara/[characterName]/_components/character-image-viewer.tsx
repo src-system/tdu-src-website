@@ -89,30 +89,28 @@ export const CharacterImageViewer = ({ characterName, outfits }: CharacterImageV
     <div className="flex flex-col items-center">
       <div className="flex gap-6 md:gap-10 items-start">
         {/* 左側: 衣装サムネイル（丸型・縦並び） */}
-        {showNavigation && (
-          <div className="flex flex-col gap-2">
-            {outfits.map((outfit, index) => (
-              <button
-                key={outfit.name}
-                type="button"
-                onClick={() => setSelectedIndex(index)}
-                className={`w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-3 ${
-                  index === selectedIndex
-                    ? 'border-forest ring-2 ring-forest/30'
-                    : 'border-gray-200 hover:border-gray-400'
-                } bg-gray-100 cursor-pointer transition-all duration-200`}
-              >
-                <Image
-                  src={outfit.portraitImagePath || outfit.fullbodyImagePath}
-                  alt={outfit.name}
-                  width={80}
-                  height={80}
-                  className="object-cover w-full h-full"
-                />
-              </button>
-            ))}
-          </div>
-        )}
+        <div className="flex flex-col gap-2">
+          {outfits.map((outfit, index) => (
+            <button
+              key={outfit.name}
+              type="button"
+              onClick={() => setSelectedIndex(index)}
+              className={`w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-3 ${
+                index === selectedIndex
+                  ? 'border-forest ring-2 ring-forest/30'
+                  : 'border-gray-200 hover:border-gray-400'
+              } bg-gray-100 cursor-pointer transition-all duration-200`}
+            >
+              <Image
+                src={outfit.portraitImagePath || outfit.fullbodyImagePath}
+                alt={outfit.name}
+                width={80}
+                height={80}
+                className="object-cover w-full h-full"
+              />
+            </button>
+          ))}
+        </div>
 
         {/* 右側: メインキャラ画像（スワイプ・ドラッグ対応） */}
         <div className="relative">

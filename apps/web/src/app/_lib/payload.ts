@@ -6,7 +6,8 @@
 import { cache } from 'react'
 
 /** サーバーサイドAPIフェッチ用URL（Docker内部URL or localhost） */
-const CMS_URL = process.env.CMS_INTERNAL_URL || process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
+const CMS_URL =
+  process.env.CMS_INTERNAL_URL || process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
 
 /** ブラウザからアクセス可能な公開URL（画像・動画のsrc属性に使用） */
 const CMS_PUBLIC_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
