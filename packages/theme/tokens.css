@@ -17,10 +17,3 @@
   /* フォント（Google Fonts で読み込む名前） */
   --tdu-font-sans: "Noto Sans JP", "Zen Maru Gothic", sans-serif;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --tdu-background: #0a0a0a;
-    --tdu-foreground: #ededed;
-  }
-}
