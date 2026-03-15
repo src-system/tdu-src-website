@@ -1,4 +1,4 @@
-export const revalidate = 600 // 10分
+export const revalidate = 300 // 5分
 
 import Image from 'next/image'
 import { redirect } from 'next/navigation'

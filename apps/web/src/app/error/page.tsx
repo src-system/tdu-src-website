@@ -1,4 +1,4 @@
-export const revalidate = 86400 // 24時間
+export const revalidate = 300 // 5分
 
 import { AlertTriangleIcon } from 'lucide-react'
 import { LinkButton } from '@/src/app/_components/link-button'

@@ -1,4 +1,4 @@
-export const revalidate = 3600 // 1時間
+export const revalidate = 300 // 5分
 
 import { ChevronLeftIcon } from 'lucide-react'
 import Link from 'next/link'

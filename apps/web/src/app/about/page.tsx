@@ -1,4 +1,4 @@
-export const revalidate = 3600 // 1時間
+export const revalidate = 300 // 5分
 
 import { redirect } from 'next/navigation'
 import { ContentBlock } from '@/src/app/_components/content-block'
