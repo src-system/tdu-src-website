@@ -5,6 +5,3 @@ packages:
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
-patchedDependencies:
-  '@payloadcms/ui': patches/@payloadcms__ui.patch
-

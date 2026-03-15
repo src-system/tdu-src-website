@@ -10,6 +10,7 @@ FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/package.json ./apps/web/
 COPY packages/types/package.json ./packages/types/
+COPY packages/theme/package.json ./packages/theme/
 
 RUN pnpm install --frozen-lockfile
 
@@ -26,6 +27,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/packages/types/node_modules ./packages/types/node_modules
 COPY packages/types/package.json packages/types/tsconfig.json ./packages/types/
 COPY packages/types/src ./packages/types/src
+
+COPY packages/theme/package.json packages/theme/tokens.css ./packages/theme/
 
 COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
 COPY apps/web ./apps/web
@@ -49,8 +52,11 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/apps/web/package.json ./apps/web/
 COPY --from=builder /app/apps/web/.next ./apps/web/.next
 COPY --from=builder /app/apps/web/public ./apps/web/public
+COPY --from=builder /app/apps/web/node_modules ./apps/web/node_modules
 COPY --from=builder /app/packages/types/dist ./packages/types/dist
 COPY --from=builder /app/node_modules ./node_modules
+
+RUN chown -R nextjs:nodejs ./apps/web/.next
 
 USER nextjs
 
@@ -61,4 +67,4 @@ ENV HOSTNAME="0.0.0.0"
 
 WORKDIR /app/apps/web
 
-CMD ["pnpm", "start"]
+CMD ["/bin/sh", "-c", "node_modules/.bin/next start"]

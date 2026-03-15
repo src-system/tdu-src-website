@@ -10,6 +10,7 @@ FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/cms/package.json ./apps/cms/
 COPY packages/types/package.json ./packages/types/
+COPY packages/theme/package.json ./packages/theme/
 
 RUN pnpm install --frozen-lockfile
 
@@ -26,6 +27,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/packages/types/node_modules ./packages/types/node_modules
 COPY packages/types/package.json packages/types/tsconfig.json ./packages/types/
 COPY packages/types/src ./packages/types/src
+
+COPY packages/theme/package.json packages/theme/tokens.css ./packages/theme/
 
 COPY --from=deps /app/apps/cms/node_modules ./apps/cms/node_modules
 COPY apps/cms ./apps/cms
@@ -48,9 +51,9 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/apps/cms/package.json ./apps/cms/
 COPY --from=builder /app/apps/cms/.next ./apps/cms/.next
+COPY --from=builder /app/apps/cms/node_modules ./apps/cms/node_modules
 COPY --from=builder /app/packages/types/dist ./packages/types/dist
 
-# public フォルダが存在する場合のみコピー（Next.js の静的ファイル用）
 RUN mkdir -p ./apps/cms/public
 COPY --from=builder /app/node_modules ./node_modules
 
@@ -62,7 +65,8 @@ EXPOSE 3001
 
 ENV PORT=3001
 ENV HOSTNAME="0.0.0.0"
+ENV NODE_OPTIONS="--no-deprecation"
 
 WORKDIR /app/apps/cms
 
-CMD ["pnpm", "start"]
+CMD ["/bin/sh", "-c", "node_modules/.bin/next start -p 3001"]

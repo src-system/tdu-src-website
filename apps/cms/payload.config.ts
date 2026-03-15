@@ -9,7 +9,7 @@ import { AboutPage } from './contents/about'
 import { Activities } from './contents/about/Activities'
 import { History } from './contents/about/History'
 import { Media } from './contents/collections/Media'
-import { Users } from './contents/collections/Users'
+import { Users } from './contents/collections/users'
 import { NewsPage } from './contents/news'
 import { News } from './contents/news/NewsItem'
 import { SiteSettings } from './contents/SiteSettings'
@@ -36,6 +36,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  serverURL: process.env.CMS_SERVER_URL || 'https://cms.tdu-src.com',
   logger: {
     options: {
       level: process.env.NODE_ENV === 'production' ? 'error' : 'warn',
@@ -85,7 +86,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: process.env.NODE_ENV !== 'production',
+    push: true,
   }),
   sharp,
 })

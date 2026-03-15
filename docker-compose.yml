@@ -30,6 +30,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-tdu_src}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
       NODE_ENV: ${NODE_ENV:-production}
+      CMS_SERVER_URL: ${CMS_SERVER_URL:-https://cms.tdu-src.com}
     ports:
       - "${CMS_PORT:-3001}:3001"
     volumes:
@@ -44,7 +45,7 @@ services:
     depends_on:
       - cms
     environment:
-      NEXT_PUBLIC_CMS_URL: ${NEXT_PUBLIC_CMS_URL:-http://localhost:3001}
+      NEXT_PUBLIC_CMS_URL: http://cms:3001
       NODE_ENV: ${NODE_ENV:-production}
     ports:
       - "${WEB_PORT:-3000}:3000"

@@ -128,9 +128,178 @@ pnpm cms:migrate:create    # 新規マイグレーション作成
 pnpm cms:migrate:status    # 状態確認
 ```
 
+## 本番デプロイ
+
+### 本番環境
+
+| 項目 | 内容 |
+|------|------|
+| サーバー | ConoHa VPS (Ubuntu) |
+| フロントエンド | https://tdu-src.com |
+| CMS管理画面 | https://cms.tdu-src.com/admin |
+| SSL | Let's Encrypt (Certbot) |
+| リバースプロキシ | Nginx |
+| コンテナ管理 | Docker Compose |
+
+### 初回デプロイ手順
+
+#### 1. 前提ソフトウェアのインストール
+
+```bash
+# nvm + Node.js
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+source ~/.bashrc
+nvm install 22
+nvm use 22
+
+# pnpm
+npm install -g pnpm
+
+# Docker (公式ドキュメントに従う)
+# Docker Compose v2 も必須
+```
+
+#### 2. リポジトリのセットアップ
+
+```bash
+git clone <repo-url> ~/tdu-src-website
+cd ~/tdu-src-website
+pnpm install
+```
+
+#### 3. 環境変数の設定
+
+`.env` を作成・編集する：
+
+```bash
+cp .env.example .env
+```
+
+```env
+# 外部公開URL（クライアントサイド用）
+NEXT_PUBLIC_CMS_URL=https://cms.tdu-src.com
+
+# DBポート（5432が使用中の場合は別ポートを指定）
+POSTGRES_PORT=5433
+
+# ホスト側からマイグレーションを実行するためのDB接続URL
+DATABASE_URL=postgresql://postgres:postgres@localhost:5433/tdu_src
+
+# Payload CMS シークレット（必ず変更すること）
+PAYLOAD_SECRET=<ランダムな文字列>
+```
+
+#### 4. Dockerコンテナのビルドと起動
+
+```bash
+sudo docker compose up -d --build
+```
+
+起動確認：
+
+```bash
+sudo docker ps
+sudo docker logs tdu-src-web --tail 30
+sudo docker logs tdu-src-cms --tail 30
+```
+
+#### 5. DBマイグレーションの実行
+
+コンテナ起動後、ホスト側から初回マイグレーションを実行する：
+
+```bash
+pnpm cms:migrate:create
+pnpm cms:migrate
+```
+
+> **注意**: `pnpm cms:migrate` はホスト側の Node.js + TypeScript 環境から実行する。
+> `.env` の `DATABASE_URL` がホスト側から接続できるポートを向いていることを確認すること。
+
+#### 6. Nginxの設定
+
+```bash
+# 設定ファイルをコピー
+sudo cp deploy/nginx/tdu-src.com.conf /etc/nginx/sites-available/tdu-src.com.conf
+sudo cp deploy/nginx/cms.tdu-src.com.conf /etc/nginx/sites-available/cms.tdu-src.com.conf
+
+# シンボリックリンク（既存でない場合）
+sudo ln -sf /etc/nginx/sites-available/cms.tdu-src.com.conf /etc/nginx/sites-enabled/
+
+# 設定テストとリロード
+sudo nginx -t && sudo nginx -s reload
+```
+
+#### 7. SSL証明書の取得（cms.tdu-src.com）
+
+事前に `cms.tdu-src.com` のDNS AレコードをサーバーのパブリックIPに設定しておくこと。
+
+```bash
+sudo certbot --nginx -d cms.tdu-src.com
+```
+
+### 再デプロイ手順（コード変更時）
+
+```bash
+cd ~/tdu-src-website
+git pull
+sudo docker compose up -d --build
+```
+
+スキーマ変更があった場合はマイグレーションも実行：
+
+```bash
+pnpm cms:migrate:create
+pnpm cms:migrate
+```
+
+### コンテナ管理コマンド
+
+```bash
+# 状態確認
+sudo docker ps
+
+# ログ確認
+sudo docker logs tdu-src-web --tail 50
+sudo docker logs tdu-src-cms --tail 50
+sudo docker logs tdu-src-postgres --tail 50
+
+# 再起動
+sudo docker compose restart
+
+# 停止
+sudo docker compose down
+```
+
+### トラブルシューティング
+
+#### 502 Bad Gateway（nginx側）
+
+- `upstream sent too big header` の場合：nginx設定の `location /` ブロックに以下が含まれているか確認
+  ```nginx
+  proxy_buffer_size 128k;
+  proxy_buffers 4 256k;
+  proxy_busy_buffers_size 256k;
+  ```
+  含まれていなければ `deploy/nginx/tdu-src.com.conf` を再コピーしてnginxをリロード
+
+- `upstream timed out` の場合：コンテナが起動中か `sudo docker ps` で確認
+
+#### DBマイグレーションエラー
+
+- `relation "xxx" does not exist`：マイグレーションが未実行。`pnpm cms:migrate` を実行
+- ポート接続エラー：`.env` の `DATABASE_URL` のポートが `POSTGRES_PORT` と一致しているか確認
+
+#### Dockerのポート競合
+
+```bash
+# 使用中のポートを確認
+ss -tlnp | grep <port>
+```
+
+`.env` の `POSTGRES_PORT` を変更して `docker compose down && docker compose up -d --build`
+
 ## ドキュメント
 
-- [セットアップガイド](docs/SETUP.md)
 - [API仕様書](docs/api/)
 
 ## ライセンス
