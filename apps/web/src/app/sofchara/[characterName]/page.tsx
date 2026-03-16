@@ -215,9 +215,7 @@ const CharacterDetailPage = async ({ params }: Props) => {
           <div className="mb-10">
             <div className="flex items-center gap-4 mb-6">
               <div className="flex-1 h-px bg-forest" />
-              <span className="text-lg md:text-xl font-bold text-forest">
-                関連するソフケンタウン
-              </span>
+              <span className="text-lg md:text-xl font-bold text-forest">関連する舞台設定</span>
               <div className="flex-1 h-px bg-forest" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
