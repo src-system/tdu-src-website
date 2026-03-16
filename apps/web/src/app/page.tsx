@@ -19,10 +19,10 @@ import { WaveSection } from '@/src/app/_components/wave-section'
 import { getTopPageData } from '@/src/app/_lib/payload'
 
 const HOME_SECTIONS = [
-  { id: 'about', label: 'ABOUT' },
-  { id: 'team', label: 'TEAM' },
-  { id: 'news', label: 'NEWS' },
-  { id: 'characters', label: 'CHARACTERS' },
+  { id: 'about', label: '活動内容' },
+  { id: 'team', label: '班紹介' },
+  { id: 'news', label: 'お知らせ' },
+  { id: 'characters', label: 'ソフきゃら！' },
 ] as const satisfies NavSection[]
 
 const Home = async () => {

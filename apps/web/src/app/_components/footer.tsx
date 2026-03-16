@@ -6,7 +6,7 @@ import { getSiteSettingsFromApi } from '@/src/app/_lib/api'
 const footerLinks = [
   { href: '/about', label: 'About', sublabel: 'ソフトウェア研究部とは？' },
   { href: '/team', label: 'Team', sublabel: '班紹介' },
-  { href: '/news', label: 'NEWS', sublabel: '新着情報' },
+  { href: '/news', label: 'NEWS', sublabel: 'お知らせ' },
   { href: '/sofchara', label: 'CHARACTERS', sublabel: 'ソフきゃら！' },
 ]
 

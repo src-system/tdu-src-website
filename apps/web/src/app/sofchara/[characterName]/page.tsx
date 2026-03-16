@@ -79,7 +79,9 @@ const CharacterDetailPage = async ({ params }: Props) => {
         {/* 戻るリンク + タイトル */}
         <div className="mb-6">
           <BackToListLink />
-          <CharacterTitle enName={character.enName} name={character.name} />
+          <div className="mt-3">
+            <CharacterTitle enName={character.enName} name={character.name} />
+          </div>
         </div>
 
         {/* キャラクター表示エリア */}
@@ -111,7 +113,7 @@ const CharacterDetailPage = async ({ params }: Props) => {
             PROFILE
           </p>
           {character.introduction && (
-            <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-6">
+            <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-6 whitespace-pre-line">
               {character.introduction}
             </p>
           )}
@@ -145,6 +147,12 @@ const CharacterDetailPage = async ({ params }: Props) => {
                   <div>
                     <span className="text-gray-400">誕生日</span>
                     <p className="text-gray-700 font-medium">{character.profile.birthday}</p>
+                  </div>
+                )}
+                {character.profile.age && (
+                  <div>
+                    <span className="text-gray-400">年齢</span>
+                    <p className="text-gray-700 font-medium">{character.profile.age}</p>
                   </div>
                 )}
               </div>

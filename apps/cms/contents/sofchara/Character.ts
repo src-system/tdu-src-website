@@ -90,7 +90,7 @@ export const Characters: CollectionConfig = {
     },
     {
       name: 'catchphrase',
-      type: 'text',
+      type: 'textarea',
       label: 'キャッチフレーズ',
     },
     {
@@ -105,6 +105,11 @@ export const Characters: CollectionConfig = {
           admin: {
             description: '月/日形式',
           },
+        },
+        {
+          name: 'age',
+          type: 'text',
+          label: '年齢',
         },
         {
           name: 'gender',

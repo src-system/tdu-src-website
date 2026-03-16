@@ -427,7 +427,7 @@ export const getNewsPageData = cache(async (): Promise<NewsPageData | null> => {
     pageHeader: {
       imagePath: pageHeaderImage,
       alt: data.pageHeader?.alt ?? '',
-      title: data.pageHeader?.title ?? '新着情報',
+      title: data.pageHeader?.title ?? 'お知らせ',
     },
     newsOverview: {
       title: data.newsOverview?.title ?? 'NEWS',
@@ -953,6 +953,7 @@ export type CharacterGalleryItem = {
 
 export type CharacterProfile = {
   birthday?: string
+  age?: string
   gender?: string
   height?: string
   weight?: string

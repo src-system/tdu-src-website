@@ -32,8 +32,8 @@ const SofcharaPage = async () => {
   }
 
   const sections: NavSection[] = [
-    { id: 'about', label: pageData.aboutSection.title || 'ソフきゃら！' },
-    { id: 'concept', label: pageData.conceptSection.subtitle || '企画の広がり' },
+    { id: 'about', label: 'ソフきゃら！' },
+    { id: 'concept', label: '企画の広がり' },
     { id: 'guideline', label: 'ガイドライン' },
     { id: 'characters', label: 'キャラクター' },
   ]

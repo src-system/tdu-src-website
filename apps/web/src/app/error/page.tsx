@@ -15,7 +15,7 @@ const FAILED_ITEM_LABELS: Record<string, string> = {
   'about-page': 'Aboutページ',
   'team-section': 'Teamセクション',
   'team-data': '班カードデータ',
-  'news-section': 'Newsセクション見出し',
+  'news-section': 'お知らせセクション見出し',
   'news-data': 'ニュース記事',
   'characters-section': 'キャラクターセクション見出し',
   'characters-data': 'キャラクターデータ',

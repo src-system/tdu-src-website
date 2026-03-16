@@ -53,6 +53,8 @@ const TeamDetailPage = async ({ params }: Props) => {
                   images={aboutSection.images}
                 />
 
+                <div className="mt-3" />
+
                 {leaderInterview && (
                   <TeamLeaderInterviewSection
                     title={leaderInterview.title}

@@ -95,7 +95,7 @@ export const CharacterImageViewer = ({ characterName, outfits }: CharacterImageV
               key={outfit.name}
               type="button"
               onClick={() => setSelectedIndex(index)}
-              className={`w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-3 ${
+              className={`w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden border-3 ${
                 index === selectedIndex
                   ? 'border-forest ring-2 ring-forest/30'
                   : 'border-gray-200 hover:border-gray-400'
@@ -104,8 +104,8 @@ export const CharacterImageViewer = ({ characterName, outfits }: CharacterImageV
               <Image
                 src={outfit.portraitImagePath || outfit.fullbodyImagePath}
                 alt={outfit.name}
-                width={80}
-                height={80}
+                width={112}
+                height={112}
                 className="object-cover w-full h-full"
               />
             </button>
@@ -129,7 +129,7 @@ export const CharacterImageViewer = ({ characterName, outfits }: CharacterImageV
           <div
             role="img"
             aria-label={`${characterName} - ${selectedOutfit.name}`}
-            className="relative w-72 h-96 md:w-96 md:h-[500px] cursor-grab active:cursor-grabbing select-none"
+            className="relative w-80 h-[420px] md:w-[480px] md:h-[640px] cursor-grab active:cursor-grabbing select-none"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
