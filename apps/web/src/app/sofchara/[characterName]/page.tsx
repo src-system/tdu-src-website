@@ -33,7 +33,7 @@ const RULE_LABELS: Record<keyof Omit<CharacterRules, 'others'>, string> = {
   colabo: '「ソフきゃら！」外のキャラクターとの絡み（コラボ）',
   coupling: 'カップリング表現',
   snsRolePlaying: 'SNSでのなりきり活動',
-  modification: '大きなキャラクターとのお話改変（下記・人外化・神話設定化など）',
+  modification: '元のキャラクターと分かる範囲での大きな改変（TS・人外化・体型変化など）',
 }
 
 const RULE_DISPLAY: Record<string, { label: string; className: string }> = {
