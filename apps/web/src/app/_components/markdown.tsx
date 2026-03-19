@@ -99,7 +99,7 @@ export const Markdown = ({ content }: MarkdownProps) => {
                 width={800}
                 height={600}
                 style={{ width: '100%', height: 'auto' }}
-                className="rounded-lg my-4"
+                className="rounded-lg my-8 mx-4"
               />
             ) : null,
           hr: () => <hr className="my-8 border-t-2 border-gray-200" />,
