@@ -32,9 +32,9 @@ const About = async () => {
     <main>
       <SectionNav
         sections={[
-          { id: 'about', label: 'ABOUT' },
-          { id: 'activity', label: 'Activity' },
-          { id: 'history', label: 'History' },
+          { id: 'about', label: 'ソフトウェア研究部とは？' },
+          { id: 'activity', label: '活動内容' },
+          { id: 'history', label: '歴史' },
         ]}
       />
       <PageHeader imagePath={pageHeader.imagePath || '/images/about.png'}>
