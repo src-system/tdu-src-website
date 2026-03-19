@@ -90,6 +90,15 @@ export const Markdown = ({ content }: MarkdownProps) => {
               {children}
             </a>
           ),
+          img: ({ src, alt }) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={src}
+              alt={alt ?? ''}
+              className="max-w-full h-auto rounded-lg my-4"
+              loading="lazy"
+            />
+          ),
           hr: () => <hr className="my-8 border-t-2 border-gray-200" />,
           details: ({ children }) => (
             <details className="my-4 border border-gray-300 rounded-lg p-4">{children}</details>

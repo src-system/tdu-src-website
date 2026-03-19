@@ -8,7 +8,20 @@ type LexicalNode = {
   fields?: { url?: string; newTab?: boolean }
   url?: string
   newTab?: boolean
+  value?: {
+    url?: string
+    alt?: string
+  }
   [key: string]: unknown
+}
+
+const CMS_PUBLIC_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
+
+function resolveMediaUrl(url: string | null | undefined): string {
+  if (!url) return ''
+  if (url.startsWith('http://') || url.startsWith('https://')) return url
+  const base = CMS_PUBLIC_URL.replace(/\/$/, '')
+  return url.startsWith('/') ? `${base}${url}` : `${base}/${url}`
 }
 
 /** Lexicalコンテンツが有効か検証（parseEditorStateエラー防止） */
@@ -93,6 +106,17 @@ function nodeToMarkdown(node: LexicalNode): string {
     return `[${childMd}](${url})`
   }
   if (type === 'linebreak') return '\n'
+
+  // 画像（upload）ノードのハンドリング
+  if (type === 'upload') {
+    const value = node.value as { url?: string; alt?: string } | undefined
+    const url = resolveMediaUrl(value?.url)
+    const alt = value?.alt ?? ''
+    if (url) {
+      return `![${alt}](${url})\n\n`
+    }
+    return ''
+  }
 
   return childMd
 }
