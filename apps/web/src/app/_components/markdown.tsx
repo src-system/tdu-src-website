@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeRaw from 'rehype-raw'
@@ -90,15 +91,17 @@ export const Markdown = ({ content }: MarkdownProps) => {
               {children}
             </a>
           ),
-          img: ({ src, alt }) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={src}
-              alt={alt ?? ''}
-              className="max-w-full h-auto rounded-lg my-4"
-              loading="lazy"
-            />
-          ),
+          img: ({ src, alt }) =>
+            src && typeof src === 'string' ? (
+              <Image
+                src={src}
+                alt={alt ?? ''}
+                width={800}
+                height={600}
+                style={{ width: '100%', height: 'auto' }}
+                className="rounded-lg my-4"
+              />
+            ) : null,
           hr: () => <hr className="my-8 border-t-2 border-gray-200" />,
           details: ({ children }) => (
             <details className="my-4 border border-gray-300 rounded-lg p-4">{children}</details>
