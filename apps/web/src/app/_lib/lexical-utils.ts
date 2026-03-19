@@ -17,6 +17,47 @@ type LexicalNode = {
 
 const CMS_PUBLIC_URL = process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'
 
+function getYoutubeEmbedUrl(url: string): string | null {
+  try {
+    const u = new URL(url)
+    let videoId: string | null = null
+    if (u.hostname === 'youtu.be') {
+      videoId = u.pathname.slice(1).split('/')[0]
+    } else if (u.hostname.includes('youtube.com')) {
+      videoId = u.searchParams.get('v')
+    }
+    if (!videoId) return null
+    const start = u.searchParams.get('t')
+    return `https://www.youtube.com/embed/${videoId}${start ? `?start=${start}` : ''}`
+  } catch {
+    return null
+  }
+}
+
+function getSoundcloudEmbedUrl(url: string): string | null {
+  try {
+    const u = new URL(url)
+    if (u.hostname === 'soundcloud.com' || u.hostname === 'www.soundcloud.com') {
+      return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true`
+    }
+  } catch {
+    return null
+  }
+  return null
+}
+
+function toEmbedHtml(url: string): string | null {
+  const youtubeEmbed = getYoutubeEmbedUrl(url)
+  if (youtubeEmbed) {
+    return `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:1rem 0;border-radius:0.5rem;"><iframe src="${youtubeEmbed}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:0.5rem;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe></div>\n\n`
+  }
+  const soundcloudEmbed = getSoundcloudEmbedUrl(url)
+  if (soundcloudEmbed) {
+    return `<iframe src="${soundcloudEmbed}" width="100%" height="166" style="margin:1rem 0;border:0;border-radius:0.5rem;" scrolling="no" allow="autoplay"></iframe>\n\n`
+  }
+  return null
+}
+
 function resolveMediaUrl(url: string | null | undefined): string {
   if (!url) return ''
   if (url.startsWith('http://') || url.startsWith('https://')) return url
@@ -100,9 +141,15 @@ function nodeToMarkdown(node: LexicalNode): string {
         : ''
     }\n\n`
   }
-  if (type === 'link') {
+  if (type === 'link' || type === 'autolink') {
     const fields = node.fields as { url?: string; newTab?: boolean } | undefined
     const url = fields?.url ?? node.url ?? '#'
+    // リンクテキストが URL と同じ（単独で貼り付けた URL）場合は embed に変換
+    const trimmedChild = childMd.trim()
+    if (trimmedChild === url || trimmedChild === '') {
+      const embedHtml = toEmbedHtml(url)
+      if (embedHtml) return embedHtml
+    }
     return `[${childMd}](${url})`
   }
   if (type === 'linebreak') return '\n'
