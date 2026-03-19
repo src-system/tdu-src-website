@@ -49,11 +49,11 @@ function getSoundcloudEmbedUrl(url: string): string | null {
 function toEmbedHtml(url: string): string | null {
   const youtubeEmbed = getYoutubeEmbedUrl(url)
   if (youtubeEmbed) {
-    return `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:1rem 0;border-radius:0.5rem;"><iframe src="${youtubeEmbed}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:0.5rem;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe></div>\n\n`
+    return `<div style="display:flex;justify-content:center;margin:1rem 0;"><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;width:100%;max-width:640px;border-radius:0.5rem;"><iframe src="${youtubeEmbed}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:0.5rem;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe></div></div>\n\n`
   }
   const soundcloudEmbed = getSoundcloudEmbedUrl(url)
   if (soundcloudEmbed) {
-    return `<iframe src="${soundcloudEmbed}" width="100%" height="166" style="margin:1rem 0;border:0;border-radius:0.5rem;" scrolling="no" allow="autoplay"></iframe>\n\n`
+    return `<div style="display:flex;justify-content:center;margin:1rem 0;"><iframe src="${soundcloudEmbed}" width="100%" height="166" style="max-width:640px;border:0;border-radius:0.5rem;" scrolling="no" allow="autoplay"></iframe></div>\n\n`
   }
   return null
 }
