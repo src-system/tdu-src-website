@@ -105,14 +105,16 @@ export const Markdown = ({ content }: MarkdownProps) => {
           ),
           img: ({ src, alt }) =>
             src && typeof src === 'string' ? (
-              <Image
-                src={src}
-                alt={alt ?? ''}
-                width={480}
-                height={360}
-                style={{ width: '100%', height: 'auto' }}
-                className="rounded-lg my-6 max-w-sm md:max-w-md"
-              />
+              <span className="flex justify-center my-6">
+                <Image
+                  src={src}
+                  alt={alt ?? ''}
+                  width={480}
+                  height={360}
+                  style={{ width: '100%', height: 'auto' }}
+                  className="rounded-lg max-w-sm md:max-w-4xl"
+                />
+              </span>
             ) : null,
           hr: () => <hr className="my-8 border-t-2 border-gray-200" />,
           details: ({ children }) => (
