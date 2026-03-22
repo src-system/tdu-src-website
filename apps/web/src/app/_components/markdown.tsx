@@ -96,10 +96,10 @@ export const Markdown = ({ content }: MarkdownProps) => {
               <Image
                 src={src}
                 alt={alt ?? ''}
-                width={800}
-                height={600}
+                width={480}
+                height={360}
                 style={{ width: '100%', height: 'auto' }}
-                className="rounded-lg my-8"
+                className="rounded-lg my-6 max-w-sm md:max-w-md"
               />
             ) : null,
           hr: () => <hr className="my-8 border-t-2 border-gray-200" />,
