@@ -46,6 +46,27 @@ function getSoundcloudEmbedUrl(url: string): string | null {
   return null
 }
 
+function getTwitterEmbedHtml(url: string): string | null {
+  try {
+    const u = new URL(url)
+    // twitter.com または x.com のステータスURLを検出
+    if (
+      (u.hostname === 'twitter.com' ||
+        u.hostname === 'www.twitter.com' ||
+        u.hostname === 'x.com' ||
+        u.hostname === 'www.x.com') &&
+      u.pathname.includes('/status/')
+    ) {
+      // Twitter公式の埋め込み形式（blockquote）を生成
+      // スクリプトはRichTextコンポーネントで1回だけ読み込む
+      return `<div style="display:flex;justify-content:center;margin:1rem 0;"><blockquote class="twitter-tweet" data-dnt="true"><a href="${url}"></a></blockquote></div>\n\n`
+    }
+  } catch {
+    return null
+  }
+  return null
+}
+
 function toEmbedHtml(url: string): string | null {
   const youtubeEmbed = getYoutubeEmbedUrl(url)
   if (youtubeEmbed) {
@@ -54,6 +75,10 @@ function toEmbedHtml(url: string): string | null {
   const soundcloudEmbed = getSoundcloudEmbedUrl(url)
   if (soundcloudEmbed) {
     return `<div style="display:flex;justify-content:center;margin:1rem 0;"><iframe src="${soundcloudEmbed}" width="100%" height="166" style="max-width:640px;border:0;border-radius:0.5rem;" scrolling="no" allow="autoplay"></iframe></div>\n\n`
+  }
+  const twitterEmbed = getTwitterEmbedHtml(url)
+  if (twitterEmbed) {
+    return twitterEmbed
   }
   return null
 }
@@ -190,7 +215,7 @@ function nodeToMarkdown(node: LexicalNode): string {
       }
     }
 
-    return markdown + '\n'
+    return `${markdown}\n`
   }
 
   if (type === 'tablerow' || type === 'tablecell') {

@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { Markdown } from '@/src/app/_components/markdown'
 import { isValidLexicalContent, lexicalToMarkdown } from '@/src/app/_lib/lexical-utils'
 
@@ -10,15 +11,46 @@ type RichTextProps = {
   className?: string
 }
 
+declare global {
+  interface Window {
+    twttr?: {
+      widgets: {
+        load: (element?: HTMLElement) => void
+      }
+    }
+  }
+}
+
 /** Payload の Lexical richText を Markdown コンポーネントで表示 */
 export const RichText = ({ content, className = '' }: RichTextProps) => {
-  if (!isValidLexicalContent(content)) return null
+  const containerRef = useRef<HTMLDivElement>(null)
 
-  const markdown = lexicalToMarkdown(content)
+  const markdown = isValidLexicalContent(content) ? lexicalToMarkdown(content) : ''
+  const hasTwitterEmbed = markdown.includes('twitter-tweet')
+
+  useEffect(() => {
+    if (!hasTwitterEmbed) return
+
+    // Twitter ウィジェットスクリプトを読み込み
+    const loadTwitterWidget = () => {
+      if (window.twttr) {
+        window.twttr.widgets.load(containerRef.current ?? undefined)
+      } else {
+        const script = document.createElement('script')
+        script.src = 'https://platform.twitter.com/widgets.js'
+        script.async = true
+        script.charset = 'utf-8'
+        document.body.appendChild(script)
+      }
+    }
+
+    loadTwitterWidget()
+  }, [hasTwitterEmbed])
+
   if (!markdown.trim()) return null
 
   return (
-    <div className={`rich-text max-w-none ${className}`}>
+    <div ref={containerRef} className={`rich-text max-w-none ${className}`}>
       <Markdown content={markdown} />
     </div>
   )
