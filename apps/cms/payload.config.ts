@@ -36,7 +36,11 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-  serverURL: process.env.CMS_SERVER_URL || 'https://cms.tdu-src.com',
+  // ローカル開発では CMS_SERVER_URL 未設定だと本番 URL になり、セッションと不一致で 403 になることがある
+  serverURL:
+    process.env.CMS_SERVER_URL ||
+    process.env.NEXT_PUBLIC_CMS_URL ||
+    'https://cms.tdu-src.com',
   logger: {
     options: {
       level: process.env.NODE_ENV === 'production' ? 'error' : 'warn',
@@ -88,7 +92,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: true,
+    push: process.env.PAYLOAD_DATABASE_PUSH === 'true',
   }),
   sharp,
 })
