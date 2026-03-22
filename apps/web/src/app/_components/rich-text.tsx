@@ -31,20 +31,35 @@ export const RichText = ({ content, className = '' }: RichTextProps) => {
   useEffect(() => {
     if (!hasTwitterEmbed) return
 
-    // Twitter ウィジェットスクリプトを読み込み
-    const loadTwitterWidget = () => {
-      if (window.twttr) {
-        window.twttr.widgets.load(containerRef.current ?? undefined)
-      } else {
-        const script = document.createElement('script')
-        script.src = 'https://platform.twitter.com/widgets.js'
-        script.async = true
-        script.charset = 'utf-8'
-        document.body.appendChild(script)
+    const scriptSrc = 'https://platform.twitter.com/widgets.js'
+    const renderWidgets = () => {
+      window.twttr?.widgets.load(containerRef.current ?? undefined)
+    }
+
+    if (window.twttr?.widgets) {
+      renderWidgets()
+      return
+    }
+
+    const existingScript = document.querySelector<HTMLScriptElement>(`script[src="${scriptSrc}"]`)
+    if (existingScript) {
+      existingScript.addEventListener('load', renderWidgets, { once: true })
+      return () => {
+        existingScript.removeEventListener('load', renderWidgets)
       }
     }
 
-    loadTwitterWidget()
+    // Twitter ウィジェットスクリプトを読み込み、ロード後に明示的に描画
+    const script = document.createElement('script')
+    script.src = scriptSrc
+    script.async = true
+    script.charset = 'utf-8'
+    script.addEventListener('load', renderWidgets, { once: true })
+    document.body.appendChild(script)
+
+    return () => {
+      script.removeEventListener('load', renderWidgets)
+    }
   }, [hasTwitterEmbed])
 
   if (!markdown.trim()) return null

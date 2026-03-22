@@ -49,11 +49,23 @@ export const Markdown = ({ content }: MarkdownProps) => {
           li: ({ children }) => (
             <li className="text-base md:text-xl leading-relaxed font-medium">{children}</li>
           ),
-          blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-forest pl-4 my-4 italic text-charcoal">
-              {children}
-            </blockquote>
-          ),
+          blockquote: ({ children, className, ...props }) => {
+            if (className?.includes('twitter-tweet')) {
+              return (
+                <blockquote className={className} {...props}>
+                  {children}
+                </blockquote>
+              )
+            }
+            return (
+              <blockquote
+                className={`border-l-4 border-forest pl-4 my-4 italic text-charcoal ${className ?? ''}`}
+                {...props}
+              >
+                {children}
+              </blockquote>
+            )
+          },
           pre: ({ children }) => (
             <pre className="bg-[#f6f8fa] border border-[#f6f8fa] rounded-lg p-4 my-4 overflow-x-auto">
               {children}
