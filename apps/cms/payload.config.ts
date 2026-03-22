@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { EXPERIMENTAL_TableFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { translations } from '@payloadcms/translations/all'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
@@ -73,7 +73,9 @@ export default buildConfig({
     TeamDesign,
   ],
   collections: [Activities, History, News, Characters, Sofkentown, Users, Media],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [...defaultFeatures, EXPERIMENTAL_TableFeature()],
+  }),
   i18n: {
     supportedLanguages: { ja },
     fallbackLanguage: 'ja',
