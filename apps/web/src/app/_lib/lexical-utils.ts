@@ -165,6 +165,38 @@ function nodeToMarkdown(node: LexicalNode): string {
     return ''
   }
 
+  // テーブルノードのハンドリング
+  if (type === 'table') {
+    const rows = children.filter((c) => c.type === 'tablerow')
+    if (rows.length === 0) return ''
+
+    let markdown = ''
+    let isFirstRow = true
+
+    for (const row of rows) {
+      const cells = (row.children ?? []).filter(isValidNode)
+      const cellContents = cells.map((cell) => {
+        const cellMd = (cell.children ?? []).filter(isValidNode).map(nodeToMarkdown).join('').trim()
+        // パイプ文字と改行をエスケープ
+        return cellMd.replace(/\|/g, '\\|').replace(/\n/g, ' ')
+      })
+
+      markdown += `| ${cellContents.join(' | ')} |\n`
+
+      // 最初の行の後にセパレータを追加（マークダウンテーブル形式）
+      if (isFirstRow) {
+        markdown += `| ${cells.map(() => '---').join(' | ')} |\n`
+        isFirstRow = false
+      }
+    }
+
+    return markdown + '\n'
+  }
+
+  if (type === 'tablerow' || type === 'tablecell') {
+    return childMd
+  }
+
   return childMd
 }
 
