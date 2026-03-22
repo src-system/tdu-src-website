@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 const menuItems = [
-  { href: '/about', label: 'About', sublabel: 'ソフトウェア研究部とは？' },
-  { href: '/team', label: 'Team', sublabel: '班紹介' },
+  { href: '/about', label: 'ABOUT', sublabel: 'ソフトウェア研究部とは？' },
+  { href: '/team', label: 'TEAM', sublabel: '班紹介' },
   { href: '/news', label: 'NEWS', sublabel: 'お知らせ' },
   { href: '/sofchara', label: 'CHARACTERS', sublabel: 'ソフきゃら！' },
 ]
