@@ -38,9 +38,7 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   // ローカル開発では CMS_SERVER_URL 未設定だと本番 URL になり、セッションと不一致で 403 になることがある
   serverURL:
-    process.env.CMS_SERVER_URL ||
-    process.env.NEXT_PUBLIC_CMS_URL ||
-    'https://cms.tdu-src.com',
+    process.env.CMS_SERVER_URL || process.env.NEXT_PUBLIC_CMS_URL || 'https://cms.tdu-src.com',
   logger: {
     options: {
       level: process.env.NODE_ENV === 'production' ? 'error' : 'warn',
