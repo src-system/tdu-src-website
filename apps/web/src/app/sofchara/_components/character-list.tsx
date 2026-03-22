@@ -31,7 +31,7 @@ export const CharacterList = ({ characters }: CharacterListProps) => {
             href={`/sofchara/${character.id}`}
             className="group flex flex-col items-center gap-3"
           >
-            <div className="relative h-32 w-32 overflow-hidden rounded-full bg-gray-100 ring-2 ring-forest/10 transition-all duration-200 group-hover:ring-forest/30 md:h-44 md:w-44">
+            <div className="relative h-24 w-24 overflow-hidden rounded-full bg-gray-100 ring-2 ring-forest/10 transition-all duration-200 group-hover:ring-forest/30 md:h-36 md:w-36">
               <Image
                 src={character.imagePath}
                 alt={character.name}

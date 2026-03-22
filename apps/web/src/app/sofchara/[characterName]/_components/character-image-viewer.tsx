@@ -87,7 +87,7 @@ export const CharacterImageViewer = ({ characterName, outfits }: CharacterImageV
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex gap-6 md:gap-10 items-start">
+      <div className="flex gap-3 md:gap-10 items-start">
         {/* 左側: 衣装サムネイル（丸型・縦並び） */}
         <div className="flex flex-col gap-2">
           {outfits.map((outfit, index) => (
@@ -95,7 +95,7 @@ export const CharacterImageViewer = ({ characterName, outfits }: CharacterImageV
               key={outfit.name}
               type="button"
               onClick={() => setSelectedIndex(index)}
-              className={`w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden border-3 ${
+              className={`w-14 h-14 md:w-24 md:h-24 rounded-full overflow-hidden border-3 ${
                 index === selectedIndex
                   ? 'border-forest ring-2 ring-forest/30'
                   : 'border-gray-200 hover:border-gray-400'
@@ -129,7 +129,7 @@ export const CharacterImageViewer = ({ characterName, outfits }: CharacterImageV
           <div
             role="img"
             aria-label={`${characterName} - ${selectedOutfit.name}`}
-            className="relative w-80 h-[420px] md:w-[480px] md:h-[640px] cursor-grab active:cursor-grabbing select-none"
+            className="relative w-60 h-[320px] md:w-[360px] md:h-[480px] cursor-grab active:cursor-grabbing select-none"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
