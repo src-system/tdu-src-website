@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@payloadcms/richtext-lexical": "^3.6.1",
-    "@tdu-src/theme": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.10",
     "@tailwindcss/typography": "^0.5.19",
+    "@tdu-src/theme": "workspace:*",
     "@tdu-src/types": "workspace:*",
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.563.0",
@@ -23,6 +23,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-markdown": "^10.1.0",
+    "react-tweet": "^3.3.0",
     "rehype-highlight": "^7.0.2",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",

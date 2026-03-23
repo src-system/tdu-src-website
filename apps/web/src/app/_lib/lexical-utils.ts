@@ -46,37 +46,20 @@ function getSoundcloudEmbedUrl(url: string): string | null {
   return null
 }
 
-function normalizeUrlForComparison(value: string): string {
-  return value
-    .trim()
-    .replace(/^https?:\/\//, '')
-    .replace(/^www\./, '')
-    .replace(/\/$/, '')
-}
-
-function shouldEmbedFromLinkText(url: string, linkText: string): boolean {
-  const normalizedUrl = normalizeUrlForComparison(url)
-  const normalizedText = normalizeUrlForComparison(linkText)
-  return normalizedText === '' || normalizedText === normalizedUrl
-}
-
 function getTwitterEmbedHtml(url: string): string | null {
   try {
     const u = new URL(url)
-    const hostname = u.hostname.toLowerCase()
-    const isXHost = [
-      'twitter.com',
-      'www.twitter.com',
-      'x.com',
-      'www.x.com',
-      'mobile.twitter.com',
-    ].includes(hostname)
-    // twitter.com または x.com のステータスURLを検出
-    if (isXHost && u.pathname.includes('/status/')) {
-      const normalizedEmbedUrl = `https://twitter.com${u.pathname}${u.search}${u.hash}`
-      // Twitter公式の埋め込み形式（blockquote）を生成
-      // スクリプトはRichTextコンポーネントで1回だけ読み込む
-      return `<div style="display:flex;justify-content:center;margin:1rem 0;"><blockquote class="twitter-tweet" data-dnt="true" data-align="center"><a href="${normalizedEmbedUrl}">${normalizedEmbedUrl}</a></blockquote></div>\n\n`
+    if (
+      (u.hostname === 'twitter.com' ||
+        u.hostname === 'www.twitter.com' ||
+        u.hostname === 'x.com' ||
+        u.hostname === 'www.x.com') &&
+      u.pathname.includes('/status/')
+    ) {
+      const tweetId = u.pathname.split('/status/')[1]?.split('/')[0]
+      if (tweetId) {
+        return `<tweet-embed tweet-id="${tweetId}"></tweet-embed>\n\n`
+      }
     }
   } catch {
     return null
@@ -100,33 +83,6 @@ function toEmbedHtml(url: string): string | null {
   return null
 }
 
-function convertStandaloneEmbedLines(markdown: string): string {
-  const lines = markdown.split('\n')
-  const converted: string[] = []
-
-  for (const line of lines) {
-    const trimmed = line.trim()
-    if (!trimmed) {
-      converted.push(line)
-      continue
-    }
-
-    // URL 単体行のみ embed 化（文中URLはそのまま）
-    const isSingleUrl = /^https?:\/\/\S+$/.test(trimmed)
-    if (isSingleUrl) {
-      const embedHtml = toEmbedHtml(trimmed)
-      if (embedHtml) {
-        converted.push(embedHtml.trimEnd())
-        continue
-      }
-    }
-
-    converted.push(line)
-  }
-
-  return converted.join('\n')
-}
-
 function resolveMediaUrl(url: string | null | undefined): string {
   if (!url) return ''
   if (url.startsWith('http://') || url.startsWith('https://')) return url
@@ -146,16 +102,6 @@ export function isValidLexicalContent(
 
 function isValidNode(node: unknown): node is LexicalNode {
   return node != null && typeof node === 'object' && (node as LexicalNode).type != null
-}
-
-function nodeToPlainText(node: LexicalNode): string {
-  const type = String(node.type ?? '')
-  const children = (node.children ?? []).filter(isValidNode)
-
-  if (type === 'text') return node.text ?? ''
-  if (type === 'linebreak') return '\n'
-
-  return children.map(nodeToPlainText).join('')
 }
 
 function nodeToMarkdown(node: LexicalNode): string {
@@ -223,9 +169,9 @@ function nodeToMarkdown(node: LexicalNode): string {
   if (type === 'link' || type === 'autolink') {
     const fields = node.fields as { url?: string; newTab?: boolean } | undefined
     const url = fields?.url ?? node.url ?? '#'
-    // リンクテキストが URL と同等（スキーム有無差分を含む）なら embed に変換
-    const plainLinkText = children.map(nodeToPlainText).join('').trim()
-    if (shouldEmbedFromLinkText(url, plainLinkText)) {
+    // リンクテキストが URL と同じ（単独で貼り付けた URL）場合は embed に変換
+    const trimmedChild = childMd.trim()
+    if (trimmedChild === url || trimmedChild === '') {
       const embedHtml = toEmbedHtml(url)
       if (embedHtml) return embedHtml
     }
@@ -283,5 +229,5 @@ export function lexicalToMarkdown(content: unknown): string {
   if (!isValidLexicalContent(content)) return ''
   const children = content.root.children.filter((node): node is LexicalNode => isValidNode(node))
   const md = children.map(nodeToMarkdown).join('')
-  return convertStandaloneEmbedLines(md).trim()
+  return md.trim()
 }

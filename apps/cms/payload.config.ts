@@ -3,8 +3,12 @@ import { fileURLToPath } from 'node:url'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { EXPERIMENTAL_TableFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { translations } from '@payloadcms/translations/all'
+import type { SharpDependency } from 'payload'
 import { buildConfig } from 'payload'
-import sharp from 'sharp'
+import _sharp from 'sharp'
+
+const sharp = _sharp as unknown as SharpDependency
+
 import { AboutPage } from './contents/about'
 import { Activities } from './contents/about/Activities'
 import { History } from './contents/about/History'

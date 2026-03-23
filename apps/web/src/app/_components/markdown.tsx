@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
+import { TweetEmbed } from '@/src/app/_components/tweet-embed'
 
 type MarkdownProps = {
   content: string
@@ -49,23 +50,11 @@ export const Markdown = ({ content }: MarkdownProps) => {
           li: ({ children }) => (
             <li className="text-base md:text-xl leading-relaxed font-medium">{children}</li>
           ),
-          blockquote: ({ children, className, ...props }) => {
-            if (className?.includes('twitter-tweet')) {
-              return (
-                <blockquote className={className} {...props}>
-                  {children}
-                </blockquote>
-              )
-            }
-            return (
-              <blockquote
-                className={`border-l-4 border-forest pl-4 my-4 italic text-charcoal ${className ?? ''}`}
-                {...props}
-              >
-                {children}
-              </blockquote>
-            )
-          },
+          blockquote: ({ children }) => (
+            <blockquote className="border-l-4 border-forest pl-4 my-4 italic text-charcoal">
+              {children}
+            </blockquote>
+          ),
           pre: ({ children }) => (
             <pre className="bg-[#f6f8fa] border border-[#f6f8fa] rounded-lg p-4 my-4 overflow-x-auto">
               {children}
@@ -105,17 +94,18 @@ export const Markdown = ({ content }: MarkdownProps) => {
           ),
           img: ({ src, alt }) =>
             src && typeof src === 'string' ? (
-              <span className="flex justify-center my-6">
-                <Image
-                  src={src}
-                  alt={alt ?? ''}
-                  width={480}
-                  height={360}
-                  style={{ width: '100%', height: 'auto' }}
-                  className="rounded-lg max-w-sm md:max-w-4xl"
-                />
-              </span>
+              <Image
+                src={src}
+                alt={alt ?? ''}
+                width={480}
+                height={360}
+                style={{ width: '100%', height: 'auto' }}
+                className="rounded-lg my-6 max-w-sm md:max-w-md"
+              />
             ) : null,
+          // @ts-expect-error カスタムHTML要素はReactの型定義に含まれないが rehypeRaw で通過する
+          'tweet-embed': ({ 'tweet-id': tweetId }: { 'tweet-id'?: string }) =>
+            tweetId ? <TweetEmbed tweetId={tweetId} /> : null,
           hr: () => <hr className="my-8 border-t-2 border-gray-200" />,
           details: ({ children }) => (
             <details className="my-4 border border-gray-300 rounded-lg p-4">{children}</details>
