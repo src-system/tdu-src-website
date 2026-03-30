@@ -148,14 +148,34 @@ function nodeToMarkdown(node: LexicalNode): string {
     const isOrdered = node.listType === 'number'
     const items = children
       .map((c) => {
-        const itemMd = c.children?.filter(isValidNode).map(nodeToMarkdown).join('').trim()
-        return isOrdered ? `1. ${itemMd}` : `- ${itemMd}`
+        const indent = typeof c.indent === 'number' ? c.indent : 0
+        const indentStr = '  '.repeat(indent)
+
+        const validChildren = c.children?.filter(isValidNode) ?? []
+        const inlineChildren = validChildren.filter((n) => n.type !== 'list')
+        const nestedLists = validChildren.filter((n) => n.type === 'list')
+
+        const inlineMd = inlineChildren.map(nodeToMarkdown).join('').trim()
+        const prefix = isOrdered ? `1. ` : `- `
+        let result = `${indentStr}${prefix}${inlineMd}`
+
+        for (const nestedList of nestedLists) {
+          const nestedMd = nodeToMarkdown(nestedList).trim()
+          const indentedNested = nestedMd
+            .split('\n')
+            .map((line) => `${indentStr}  ${line}`)
+            .join('\n')
+          result += `\n${indentedNested}`
+        }
+
+        return result
       })
       .join('\n')
     return `${items}\n\n`
   }
   if (type === 'listitem') return childMd
-  if (type === 'blockquote') {
+  if (type === 'horizontalrule') return '---\n\n'
+  if (type === 'blockquote' || type === 'quote') {
     const trimmed = childMd.trim()
     return `${
       trimmed
